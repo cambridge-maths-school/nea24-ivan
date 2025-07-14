@@ -2,12 +2,30 @@
 \title{NEA Proposal - IvanChain}
 \author{Ivan Leung}
 \date{June 2025}
+
+
 \usepackage[colorlinks=true, linkcolor=black, urlcolor=blue, citecolor=black]{hyperref}
 \usepackage[edges]{forest}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{fancyhdr}
+\usepackage{microtype}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\setlength{\parskip}{\medskipamount}
+\setlength{\parindent}{0pt}
+\usepackage{babel}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amstext}
+\usepackage{varioref}
+% \usepackage[unicode=true,pdfusetitle, bookmarks=true,bookmarksnumbered=false,bookmarksopen=false, breaklinks=false,pdfborder={0 0 0},backref=false,colorlinks=false] {hyperref}
+\usepackage{setspace}
+\usepackage{cleveref}
+\usepackage{icomma}
+\usepackage{tabu,booktabs}
 
-\graphicspath{{./assets/}}
+\graphicspath{{./images/}}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta}
 \usepackage[scaled]{helvet}
@@ -17,6 +35,12 @@
 \setlength{\parskip}{1em}
 
 \begin{document}
+\fancyhead[L]{Ivan Leung}
+\fancyhead[C]{Candidate Number: XXXXXX}
+\fancyhead[R]{Centre: 22245}
+\fancyfoot[L]{H446}
+\fancyfoot[R]{2026}
+\pagestyle{fancy}
 \maketitle
 \newpage
 \tableofcontents
@@ -92,8 +116,8 @@ The platform can be extended to include more features, such as:
 The figure below shows the user interface design of different sections of the platform, including the Introduction Page, Main Page, Users Page, Chains Page, Mining Page, Transactions Page, and the Settings Page.
 
 \begin{figure}[H]
-  \centering
-  \includegraphics[width=1.2\textwidth]{images/ui.jpeg}
+  \centering 
+  \includegraphics[width=1.2\textwidth]{ui.jpeg}
   \caption{User interface of the blockchain simulator.}
   \label{fig:user-interface}
 \end{figure}

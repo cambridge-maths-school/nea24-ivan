@@ -1,3 +1,4 @@
+\babel@toc {nil}{}\relax 
 \contentsline {section}{\numberline {1}Analysis}{3}{section.1}%
 \contentsline {subsection}{\numberline {1.1}The Problem}{3}{subsection.1.1}%
 \contentsline {subsection}{\numberline {1.2}Stakeholders}{4}{subsection.1.2}%

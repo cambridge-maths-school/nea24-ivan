@@ -73,3 +73,11 @@ Project Proposal:
   - Animate how transactions are created, signed, and sent through the network
   - Show the mining process live, including trying different nonces
   - Display logs of what’s happening in the network and blockchain for better understanding
+
+
+
+Building and running code
+- run in development with `bun index.html`
+- build with `bun build ./index.html --outdir=dist`
+- run a build with `bunx --bun serve dist`
+- live website is at https://your-url-here.deno.dev using Deno Deploy
