@@ -1,14 +1,4 @@
-\documentclass[12pt, a4paper]{article}
-\title{NEA Proposal - IvanChain}
-\author{Ivan Leung}
-\date{June 2025}
-
-
-\usepackage[colorlinks=true, linkcolor=black, urlcolor=blue, citecolor=black]{hyperref}
-\usepackage[edges]{forest}
-\usepackage{graphicx}
-\usepackage{float}
-\usepackage{fancyhdr}
+\documentclass[12pt, a4paper]{scrartcl}
 \usepackage{microtype}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -19,32 +9,56 @@
 \usepackage{amsmath}
 \usepackage{amstext}
 \usepackage{varioref}
-% \usepackage[unicode=true,pdfusetitle, bookmarks=true,bookmarksnumbered=false,bookmarksopen=false, breaklinks=false,pdfborder={0 0 0},backref=false,colorlinks=false] {hyperref}
+\usepackage[unicode=true,pdfusetitle,
+bookmarks=true,bookmarksnumbered=false,bookmarksopen=false, breaklinks=false,pdfborder={0 0 0},backref=false,colorlinks=false]{hyperref}
+\usepackage{graphicx}
 \usepackage{setspace}
 \usepackage{cleveref}
 \usepackage{icomma}
 \usepackage{tabu,booktabs}
-
-\graphicspath{{./images/}}
-\usepackage{tikz}
-\usetikzlibrary{arrows.meta}
+\usepackage{fancyhdr}
 \usepackage[scaled]{helvet}
 \renewcommand\familydefault{\sfdefault}
+\hypersetup{colorlinks=true, linkcolor=black, urlcolor=blue, citecolor=black}
 
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{1em}
+\graphicspath{{./images/}}
+\widowpenalties=3 10000 10000 150
 
 \begin{document}
+
+% headers and footers
 \fancyhead[L]{Ivan Leung}
-\fancyhead[C]{Candidate Number: XXXXXX}
+\fancyhead[C]{Candidate Number: 4022}
 \fancyhead[R]{Centre: 22245}
 \fancyfoot[L]{H446}
 \fancyfoot[R]{2026}
 \pagestyle{fancy}
-\maketitle
+
+% Title Page
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    {\Huge\bfseries Computer Science NEA\\[0.5em] IvanChain \par}
+    \vspace{2cm}
+    {\Large\textbf{Candidate Name:} Ivan Leung \par}
+    \vspace{0.5cm}
+    {\Large\textbf{Candidate Number:} 4022 \par}
+    \vspace{0.5cm}
+    {\Large\textbf{Centre Number:} 22245 \par}
+    \vspace{0.5cm}
+    {\Large\textbf{Exam Board:} OCR \par}
+    \vspace{0.5cm}
+    {\Large\textbf{Course Code:} H446 \par}
+    \vspace{2cm}
+    {\Large\textbf{Date:} June 2025 \par}
+    \vfill
+\end{titlepage}
+
 \newpage
 \tableofcontents
 \newpage
+
+% Content
 
 \section{Analysis}
 \label{sec:introduction}
@@ -77,6 +91,10 @@ This means that the more cryptocurrency a miner holds, the more likely they are 
 This process is less resource-intensive and does not require specialized hardware, making it more accessible to a wider range of users.
 This algorithm is used in many newer cryptocurrencies, such as Ethereum 2.0, which is transitioning from PoW to PoS.
 
+
+Research in Blockchain Technology:
+\\
+This \href{https://youtu.be/bBC-nXj3Ng4?si=7UgRxuPQdJOzkzG4}{video}  by \href{https://www.youtube.com/@3blue1brown}{3Blue1Brown}
 
 \newpage
 \subsection{Features}
@@ -117,7 +135,7 @@ The figure below shows the user interface design of different sections of the pl
 
 \begin{figure}[H]
   \centering 
-  \includegraphics[width=1.2\textwidth]{ui.jpeg}
+  \includegraphics[width=1.1\textwidth]{ui.jpeg}
   \caption{User interface of the blockchain simulator.}
   \label{fig:user-interface}
 \end{figure}
