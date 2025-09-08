@@ -130,13 +130,16 @@ Despite many people are investing in cryptocurrency markets, most of them do not
 People who will be using the system, including developers, users, and administrators. This also includes the people who would like to invest in cryptocurrencies, allowing them to learn about the technology and how it works. By understanding the underlying principles of blockchain
 
 == Research <research>
-Blockchain is a distributed ledger technology that allows secure and transparent transactions without the need for a central authority. This creates a secure, members-only network, ensuring accurate and timely data access. It is often used in technologies such as cryptocurrencies, supply chain management, and Non-Fungible Tokens (NFT). Blockchains are decentralized, meaning that they are not controlled by a single entity, and they are immutable, meaning that once data is added to the blockchain, it cannot be changed or deleted. This also means it can only be stored in a peer to peer network, which is a network of computers that are connected to each other and can communicate with each other.
+Blockchain is a distributed ledger technology that allows secure and transparent transactions without the need for a central authority. This creates a secure, members-only network, ensuring accurate and timely data access. It is often used in technologies such as cryptocurrencies, supply chain management, and Non-Fungible Tokens (NFT). Blockchains are decentralized, meaning that they are not controlled by a single entity, and they are immutable, meaning that once data is added to the blockchain, it cannot be changed or deleted. This also means it can only be stored in a peer to peer network, which is a network of computers that are connected to each other and can communicate with each other, and they all have equal status.
 
 Mining is the process of adding transactions to the blockchain, and it is done by solving complex mathematical problems. This process is known as Proof of Work (PoW), and it is used to secure the blockchain and prevent double spending. In PoW, miners compete to solve a mathematical problem, and the first miner to solve the problem gets to add the next block to the blockchain and is rewarded with a certain amount of cryptocurrency. This process is resource-intensive and requires a lot of computational power, which is why it is often done by specialized hardware known as ASICs (Application-Specific Integrated Circuits). This algorithm is used in many cryptocurrencies, such as Bitcoin and Litecoin, to secure the blockchain and prevent double spending. Proof of Stake (PoS) is an alternative to PoW, where miners are chosen to add the next block to the blockchain based on the amount of cryptocurrency they hold. This means that the more cryptocurrency a miner holds, the more likely they are to be chosen to add the next block to the blockchain. This process is less resource-intensive and does not require specialized hardware, making it more accessible to a wider range of users. This algorithm is used in many newer cryptocurrencies, such as Ethereum 2.0, which is transitioning from PoW to PoS.
 
 
 Research in Blockchain Technology: \
-This #link("https://youtu.be/bBC-nXj3Ng4?si=7UgRxuPQdJOzkzG4")[video] by #link("https://www.youtube.com/@3blue1brown")[3Blue1Brown]
+This #link("https://youtu.be/bBC-nXj3Ng4?si=7UgRxuPQdJOzkzG4")[video] by #link("https://www.youtube.com/@3blue1brown")[3Blue1Brown] explains how blockchain technologies work behind the scene and different algoriths to power it
+
+I found this blockchain simulator CLI on GitHub (https://github.com/0xs34n/blockchain)
+#image("image.png")
 
 == Features <features>
 The platform will have the following features:
