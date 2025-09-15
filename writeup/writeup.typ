@@ -79,57 +79,16 @@ footer: line(length:100%) + context[
   Qualification code: H446\
   Year: 2026
 ]
+
+
 #outline()
 
-
-// Reference a figure such as @thingy by its name, which generates a dynamic figure number.
-
-// #figure(
-//   image("image.png", width: 60%),
-//   caption: [A cute looking dog],
-// )<thingy> // notice the <thingy> referenced as @thingy and appears as "Figure x"
-
-// a 2nd level heading
-
-= Footnotes
-
-// add footnotes easily
-I researched collision detection[#footnote[http://www.mathsuniverse.com/particles]] and the papers[#footnote[http://www.mathsuniverse.com/x]][#footnote[http://www.mathsuniverse.com/y]] show up in footnotes...
-
-= Maths
-
-Add maths like this:
-
-$ 7.32 beta + sum_(i=0)^nabla Q_i / 2 $
-
-$ v := vec(x_1, x_2, x_3) $
-
-$ y = 2x^2 + 4x + 5 $
-
-And you can put them in a figure:
-
-#figure($ y = 2x^2 + 4x + 5 $, caption: [_A quadratic equation_])
-
-This should be after a page break. Yes
-
-/*
-  You can break your writeup into one file per section/iteration then include them into a master document with:
-
-  #include "iteration-1.typ"
-  #include "iteration=2.typ"
-
-  ... etc
-*/
-
-
 = Analysis <sec:introduction>
-== The Problem <the-problem>
+== Initial Problem <the-problem>
 Despite many people are investing in cryptocurrency markets, most of them do not understand how blockchain technology (the technology which powers cryptocurrencies) works, and there is a lack of educational resources available to help them learn. The goal is to create a platform where users can learn about blockchain technology, how it works, and how to use it.
 
-== Stakeholders <stakeholders>
-People who will be using the system, including developers, users, and administrators. This also includes the people who would like to invest in cryptocurrencies, allowing them to learn about the technology and how it works. By understanding the underlying principles of blockchain
-
-== Research <research>
+According to fenews.co.uk[#footnote[https://www.fenews.co.uk/skills/cryptocurrency-should-part-of-the-national-curriculum/]], 
+== Research
 Blockchain is a distributed ledger technology that allows secure and transparent transactions without the need for a central authority. This creates a secure, members-only network, ensuring accurate and timely data access. It is often used in technologies such as cryptocurrencies, supply chain management, and Non-Fungible Tokens (NFT). Blockchains are decentralized, meaning that they are not controlled by a single entity, and they are immutable, meaning that once data is added to the blockchain, it cannot be changed or deleted. This also means it can only be stored in a peer to peer network, which is a network of computers that are connected to each other and can communicate with each other, and they all have equal status.
 
 Mining is the process of adding transactions to the blockchain, and it is done by solving complex mathematical problems. This process is known as Proof of Work (PoW), and it is used to secure the blockchain and prevent double spending. In PoW, miners compete to solve a mathematical problem, and the first miner to solve the problem gets to add the next block to the blockchain and is rewarded with a certain amount of cryptocurrency. This process is resource-intensive and requires a lot of computational power, which is why it is often done by specialized hardware known as ASICs (Application-Specific Integrated Circuits). This algorithm is used in many cryptocurrencies, such as Bitcoin and Litecoin, to secure the blockchain and prevent double spending. Proof of Stake (PoS) is an alternative to PoW, where miners are chosen to add the next block to the blockchain based on the amount of cryptocurrency they hold. This means that the more cryptocurrency a miner holds, the more likely they are to be chosen to add the next block to the blockchain. This process is less resource-intensive and does not require specialized hardware, making it more accessible to a wider range of users. This algorithm is used in many newer cryptocurrencies, such as Ethereum 2.0, which is transitioning from PoW to PoS.
@@ -140,6 +99,38 @@ This #link("https://youtu.be/bBC-nXj3Ng4?si=7UgRxuPQdJOzkzG4")[video] by #link("
 
 I found this blockchain simulator CLI on GitHub (https://github.com/0xs34n/blockchain)
 #image("image.png")
+== Initial Features
+The solution will be developed in an agile way. This means that it will be developed in different iterations. The analysis of requirements has been done in this section (Section 1).
+In each iterations I will 
+- Design the prototype for that iteration
+- Build the prototype
+- Asking for User Feedback
+- Refine prototype
+Each feature of the solution might be improved throughout the iterations
+== Intital Sucessful Criteria
+These are the initial Success Criteria (SC) which is what I am aiming for while developing a MVP (Minimum Viable Product). As I am developing in an agile methodology, the Success Critea might be ammended or new Success Criteria might be added in the process of iterations.
+#table(
+  columns: (auto, auto, auto),
+  inset: 10pt,
+  align: horizon,
+  table.header(
+    [*SC*], [*Target*], [*Parameters*],
+  ),
+  $ pi h (D^2 - d^2) / 4 $,
+  [
+    $h$: height \
+    $D$: outer radius \
+    $d$: inner radius
+  ],
+  $ sqrt(2) / 12 a^3 $,
+  [$a$: edge length]
+)
+== Stakeholders <stakeholders>
+People who will be using the system, including developers, users, and administrators. This also includes the people who would like to invest in cryptocurrencies, allowing them to learn about the technology and how it works. By understanding the underlying principles of blockchain
+=== Survey
+=== Interview
+
+== Research <research>
 
 == Features <features>
 The platform will have the following features:
@@ -183,18 +174,22 @@ The platform can be extended to include more features, such as:
 
 - Introducing multiple chains and visualising the conflict
 
-= Design <design>
-== Structure <structure>
-== User Interface <user-interface>
+= Iterations
+== Iteration 1
+===  Design
 The figure below shows the user interface design of different sections of the platform, including the Introduction Page, Main Page, Users Page, Chains Page, Mining Page, Transactions Page, and the Settings Page.
 
 #figure(image("images/ui.jpeg", width: 110%), caption: [
   User interface of the blockchain simulator.
 ])
 <fig:user-interface>
-
 == Decomposition <decomposition>
+TODO:Justify for decomposition
+== Iteration 2
+== Iteration 3
+== Iteration 4
+== Iteration 5
 == Algorithms <algorithms>
 == Test Data <test-data>
-= Development <development>
+== Data Validation
 = Evaluation <evaluation>
