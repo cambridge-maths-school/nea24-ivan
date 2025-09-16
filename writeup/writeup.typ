@@ -36,14 +36,17 @@
     Candidate Number: 4022
     #h(1fr)
     Centre Number: 22245
-  ] + line(length:100%),
-footer: line(length:100%) + context[
-  H446
-  #h(1fr)
-  Page #counter(page).display("1 of 1", both: true)
-  #h(1fr)
-  2026
-])
+  ]
+    + line(length: 100%),
+  footer: line(length: 100%)
+    + context [
+      H446
+      #h(1fr)
+      Page #counter(page).display("1 of 1", both: true)
+      #h(1fr)
+      2026
+    ],
+)
 
 // format code blocks with line numbers
 #show raw.where(block: true): code => {
@@ -84,10 +87,10 @@ footer: line(length:100%) + context[
 #outline()
 
 = Analysis <sec:introduction>
-== Initial Problem <the-problem>
+== The Problem <the-problem>
 Despite many people are investing in cryptocurrency markets, most of them do not understand how blockchain technology (the technology which powers cryptocurrencies) works, and there is a lack of educational resources available to help them learn. The goal is to create a platform where users can learn about blockchain technology, how it works, and how to use it.
 
-According to fenews.co.uk[#footnote[https://www.fenews.co.uk/skills/cryptocurrency-should-part-of-the-national-curriculum/]], 
+According to fenews.co.uk[#footnote[https://www.fenews.co.uk/skills/cryptocurrency-should-part-of-the-national-curriculum/]],
 == Research
 Blockchain is a distributed ledger technology that allows secure and transparent transactions without the need for a central authority. This creates a secure, members-only network, ensuring accurate and timely data access. It is often used in technologies such as cryptocurrencies, supply chain management, and Non-Fungible Tokens (NFT). Blockchains are decentralized, meaning that they are not controlled by a single entity, and they are immutable, meaning that once data is added to the blockchain, it cannot be changed or deleted. This also means it can only be stored in a peer to peer network, which is a network of computers that are connected to each other and can communicate with each other, and they all have equal status.
 
@@ -97,11 +100,13 @@ Mining is the process of adding transactions to the blockchain, and it is done b
 Research in Blockchain Technology: \
 This #link("https://youtu.be/bBC-nXj3Ng4?si=7UgRxuPQdJOzkzG4")[video] by #link("https://www.youtube.com/@3blue1brown")[3Blue1Brown] explains how blockchain technologies work behind the scene and different algoriths to power it
 
-I found this blockchain simulator CLI on GitHub (https://github.com/0xs34n/blockchain)
-#image("image.png")
+I found this blockchain simulator CLI on GitHub (https://github.com/0xs34n/blockchain). I have downloaded
+#image("images/SeanCLI.png")
+#image("images/SeanP2P.png")
+In this image, Sean's Blockchain simulator has shown the connection between different ports in local host. However, there is not any features that allow different ports to interact, like trading blocks. It also doesn't allow user to see other's user blocks.
 == Initial Features
 The solution will be developed in an agile way. This means that it will be developed in different iterations. The analysis of requirements has been done in this section (Section 1).
-In each iterations I will 
+In each iterations I will
 - Design the prototype for that iteration
 - Build the prototype
 - Asking for User Feedback
@@ -113,9 +118,7 @@ These are the initial Success Criteria (SC) which is what I am aiming for while 
   columns: (auto, auto, auto),
   inset: 10pt,
   align: horizon,
-  table.header(
-    [*SC*], [*Target*], [*Parameters*],
-  ),
+  table.header([*SC*], [*Target*], [*Parameters*]),
   $ pi h (D^2 - d^2) / 4 $,
   [
     $h$: height \
@@ -123,15 +126,13 @@ These are the initial Success Criteria (SC) which is what I am aiming for while 
     $d$: inner radius
   ],
   $ sqrt(2) / 12 a^3 $,
-  [$a$: edge length]
+
+  [$a$: edge length],
 )
 == Stakeholders <stakeholders>
 People who will be using the system, including developers, users, and administrators. This also includes the people who would like to invest in cryptocurrencies, allowing them to learn about the technology and how it works. By understanding the underlying principles of blockchain
 === Survey
 === Interview
-
-== Research <research>
-
 == Features <features>
 The platform will have the following features:
 
@@ -176,7 +177,7 @@ The platform can be extended to include more features, such as:
 
 = Iterations
 == Iteration 1
-===  Design
+=== Design
 The figure below shows the user interface design of different sections of the platform, including the Introduction Page, Main Page, Users Page, Chains Page, Mining Page, Transactions Page, and the Settings Page.
 
 #figure(image("images/ui.jpeg", width: 110%), caption: [
@@ -185,11 +186,23 @@ The figure below shows the user interface design of different sections of the pl
 <fig:user-interface>
 == Decomposition <decomposition>
 TODO:Justify for decomposition
+
+=== Testing
+=== Evaluation
 == Iteration 2
+=== Testing
+=== Evaluation
 == Iteration 3
+=== Testing
+=== Evaluation
 == Iteration 4
+=== Testing
+=== Evaluation
 == Iteration 5
+=== Testing
+=== Evaluation
 == Algorithms <algorithms>
 == Test Data <test-data>
 == Data Validation
 = Evaluation <evaluation>
+// Data Validation
