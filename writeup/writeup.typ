@@ -70,7 +70,7 @@
 
 #align(center + horizon)[
   #set text(navy, size: 50pt)
-  *IvanChain*\
+  *BlockChain Simulator*\
   #set text(size: 20pt, style: "italic")
 ]
 
@@ -90,7 +90,7 @@
 == The Problem <the-problem>
 Despite many people are investing in cryptocurrency markets, most of them do not understand how blockchain technology (the technology which powers cryptocurrencies) works, and there is a lack of educational resources available to help them learn. The goal is to create a platform where users can learn about blockchain technology, how it works, and how to use it.
 
-According to fenews.co.uk[#footnote[https://www.fenews.co.uk/skills/cryptocurrency-should-part-of-the-national-curriculum/]],
+According to fenews.co.uk[#footnote[https://www.fenews.co.uk/skills/cryptocurrency-should-part-of-the-national-curriculum/]], around one quarter (24%) of British workers believe cryptocurrency should be taught in schools as part of the national curriculum. This is shown by a new study from cryptocurrency platform CoinBurp.
 == Research
 Blockchain is a distributed ledger technology that allows secure and transparent transactions without the need for a central authority. This creates a secure, members-only network, ensuring accurate and timely data access. It is often used in technologies such as cryptocurrencies, supply chain management, and Non-Fungible Tokens (NFT). Blockchains are decentralized, meaning that they are not controlled by a single entity, and they are immutable, meaning that once data is added to the blockchain, it cannot be changed or deleted. This also means it can only be stored in a peer to peer network, which is a network of computers that are connected to each other and can communicate with each other, and they all have equal status.
 
@@ -98,9 +98,9 @@ Mining is the process of adding transactions to the blockchain, and it is done b
 
 
 Research in Blockchain Technology: \
-This #link("https://youtu.be/bBC-nXj3Ng4?si=7UgRxuPQdJOzkzG4")[video] by #link("https://www.youtube.com/@3blue1brown")[3Blue1Brown] explains how blockchain technologies work behind the scene and different algoriths to power it
+This #link("https://youtu.be/bBC-nXj3Ng4?si=7UgRxuPQdJOzkzG4")[YouTube video] [#footnote[https://youtu.be/bBC-nXj3Ng4?si=7UgRxuPQdJOzkzG4]] by #link("https://www.youtube.com/@3blue1brown")[3Blue1Brown] explains how blockchain technologies work behind the scene and different algorithms to power it.
 
-I found this blockchain simulator CLI on GitHub (https://github.com/0xs34n/blockchain). I have downloaded
+I found this blockchain simulator Command Line Interface (CLI) on GitHub (https://github.com/0xs34n/blockchain) by Sean. I have forked the repository and ran it on my local machine using `node.js`. The simulator offers a basic understanding of blockchain technologies with features like possessing blockchains and connecting to peers in different networks. However, it doesn't contain features such as transactions of blockchains or the process of mining blockchains.
 #image("images/SeanCLI.png")
 #image("images/SeanP2P.png")
 In this image, Sean's Blockchain simulator has shown the connection between different ports in local host. However, there is not any features that allow different ports to interact, like trading blocks. It also doesn't allow user to see other's user blocks.
@@ -111,23 +111,23 @@ In each iterations I will
 - Build the prototype
 - Asking for User Feedback
 - Refine prototype
-Each feature of the solution might be improved throughout the iterations
-== Intital Sucessful Criteria
+Each feature of the solution might be improved throughout the iterations.
+
+In this BlockChain Simulator project, I will build a simplified model of BlockChain and mainly focusing on visualisation of different technologies, so that learners would be able to easily understand them.
+
+The final project will be running on a browser and has a Graphical User Interface (GUI). The project will be developed in HTML, CSS, and JavaScript with WebGL to gain control over the user's Graphical Processing Unit (GPU). This allows the code to be rendered faster and also better simulate how blockchains are being mined as this is usually being done by a crypto mining rig - a customised personal computer that uses GPUs to solve cryptographic equations and verify transactions on a blockchain.
+
+== Intital Sucess Criteria
 These are the initial Success Criteria (SC) which is what I am aiming for while developing a MVP (Minimum Viable Product). As I am developing in an agile methodology, the Success Critea might be ammended or new Success Criteria might be added in the process of iterations.
+
+Success Criteria
 #table(
   columns: (auto, auto, auto),
   inset: 10pt,
   align: horizon,
-  table.header([*SC*], [*Target*], [*Parameters*]),
-  $ pi h (D^2 - d^2) / 4 $,
-  [
-    $h$: height \
-    $D$: outer radius \
-    $d$: inner radius
-  ],
-  $ sqrt(2) / 12 a^3 $,
-
-  [$a$: edge length],
+  table.header([*SC*], [*Target*], [*Testing*]),
+  $ 1.1 $, [GUI], $ sqrt(2) / 12 a^3 $,
+  $ 1.2 $,
 )
 == Stakeholders <stakeholders>
 People who will be using the system, including developers, users, and administrators. This also includes the people who would like to invest in cryptocurrencies, allowing them to learn about the technology and how it works. By understanding the underlying principles of blockchain
