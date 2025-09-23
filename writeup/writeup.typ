@@ -212,7 +212,7 @@ A block is a container for transactions and metadata. Each block contains:
 + Multiple transactions from the mempool
 + Previous block hash — linking the block to its predecessor
 + Timestamp — recording creation time
-+ Nonce — adjusted during mining to solve the Proof-of-Work puzzle
++ Nonce — Number used Once; adjusted during mining to solve the Proof-of-Work puzzle
 + Block hash — a cryptographic hash of all block contents
 \
 4. Hashing
@@ -261,7 +261,7 @@ Output: Broadcast to network\
    - If valid, add to local mempool
    - If invalid, discard
 3. Node forwards T to all connected peers
-4. Repeat steps 2-3 for each peer`
+4. Iterate steps 2-3 for each peer`
 
 Block propagation in p2p network:\
 Input: Mined Block B\
@@ -273,14 +273,59 @@ Output: Network consensus\
    b. Transactions are valid
    c. Previous hash matches last block in local chain
 3. If valid, peer appends B to local blockchain
-4. Peer forwards B to its connected peers`
+4. Peer forwards B to all its connected peers until it reaches everyone in the network`
 
+7. Block linking and immutability 
+- Each block contains the hash of the previous block, forming a cryptographically linked chain.
+- Altering a block invalidates all subsequent blocks, making tampering computationally infeasible.
+- Only blocks meeting the Proof-of-Work and containing valid transactions are accepted by the network.
+
+Conceptual Flowchart:\
+I created the flowchart below to visualise the workflow of a blockchain. #image("blockchain_conceptual_flowchart.jpeg")
 == Existing models
 I found this blockchain simulator Command Line Interface (CLI) on GitHub (https://github.com/0xs34n/blockchain) by Sean. I have forked the repository and ran it on my local machine using `node.js`. The simulator offers a basic understanding of blockchain technologies with features like possessing blockchains and connecting to peers in different networks. However, it doesn't contain features such as transactions of blockchains or the process of mining blockchains.
 #image("images/SeanCLI.png")
 #image("images/SeanP2P.png")
 In this image, Sean's Blockchain simulator has shown the connection between different ports in local host. However, there is not any features that allow different ports to interact, like trading blocks. It also doesn't allow user to see other's user blocks.
 == Initial Features
+In this BlockChain Simulator project, I will build a simplified model of BlockChain and mainly focusing on visualisation of different technologies, so that learners would be able to easily understand them.
+
+The final project will be running on a browser and has a Graphical User Interface (GUI). The project will be developed in HTML, CSS, and TypeScript with GPU.js to gain control over the user's Graphical Processing Unit (GPU). This allows the code to be rendered faster and also better simulate how blockchains are being mined as this is usually being done by a crypto mining rig - a customised personal computer that uses GPUs to solve cryptographic equations and verify transactions on a blockchain.
+
+Features
+1. Core Blockchain Mechanics
+- Block structure \u{27F6} index, timestamp, list of transactions, previous hash, nonce, and current hash, implemented by Object Oriented Programming OOP
+- Hashing algorithm \u{27F6} simple SHA-256 function
+- Mining algorithm \u{27F6} find a nonce such that block hash starts with N zeros (difficulty)
+- Transaction system \u{27F6} sender, receiver, amount stored in a mempool before being mined, also implemented by OOP
+- Chain validation \u{27F6} check each block's previous_hash matches the last block's hash
+
+
+2. Network Simulation (Peer-to-Peer)
+- Each node has its own blockchain copy
+- Nodes are connected in an undirected graph
+- When a transaction or block is created, it is propagated to all nodes via Breadth First Search (BFS) or Depth First Search (DFS) traversal
+- New nodes can join by connecting to at least one existing node
+
+3. Visualisation
+- Blockchain view \u{27F6} show blocks as boxes linked in a chain.
+- Each block displays: index, hash, previous hash, transactions.
+- Mempool view \u{27F6} list of pending transactions waiting to be mined.
+
+
+4. Abstraction 
+- Ignoring Double Spending Issues during Chain Validation
+- No digital signatures (trust all transactions)
+- No forks (always extend the longest chain)
+- Assume honest nodes (no attackers)
+
+Controls (buttons):
+- "Add Transaction" \u{27F6} enter sender, receiver, amount
+- "Mine Block" \u{27F6} mines transactions into a block
+- "Propagate Transaction" \u{27F6} spreads it across nodes
+- Network view \u{27F6} graph of nodes (circles), with edges showing connections
+
+=== Project Management Methodology
 The solution will be developed in an agile way. This means that it will be developed in different iterations. The analysis of requirements has been done in this section (Section 1).
 In each iterations I will
 - Design the prototype for that iteration
@@ -288,10 +333,12 @@ In each iterations I will
 - Asking for User Feedback
 - Refine prototype
 Each feature of the solution might be improved throughout the iterations.
-
-In this BlockChain Simulator project, I will build a simplified model of BlockChain and mainly focusing on visualisation of different technologies, so that learners would be able to easily understand them.
-
-The final project will be running on a browser and has a Graphical User Interface (GUI). The project will be developed in HTML, CSS, and JavaScript with WebGL to gain control over the user's Graphical Processing Unit (GPU). This allows the code to be rendered faster and also better simulate how blockchains are being mined as this is usually being done by a crypto mining rig - a customised personal computer that uses GPUs to solve cryptographic equations and verify transactions on a blockchain.
+=== Technology 
+The simulator will run purely on client side code to reduce server costs and workload, improve scalability, and create a more interactive and responsive user experience\
+Frontend: HTML + CSS + JavaScript \ 
+Graph visualisation: canvas
+=== Device Compatibility 
+The blockchain simulator is designed to run entirely in the browser and therefore requires TypeScript support to function. It is optimised for modern desktop and laptop environments using Chromium-based browsers (Google Chrome, Microsoft Edge, Opera). Mobile browsers may support basic interaction, but performance and visualisation features are best experienced on computer systems. The device running to program should have at least a refresh rate of 60Hz to run the requestAnimationFrame() function in canvas to visualise blockchain workflow.
 
 == Intital Sucess Criteria
 These are the initial Success Criteria (SC) which is what I am aiming for while developing a MVP (Minimum Viable Product). As I am developing in an agile methodology, the Success Critea might be ammended or new Success Criteria might be added in the process of iterations.
@@ -306,53 +353,18 @@ Success Criteria
   $ 1.2 $,
 )
 == Stakeholders <stakeholders>
-People who will be using the system, including developers, users, and administrators. This also includes the people who would like to invest in cryptocurrencies, allowing them to learn about the technology and how it works. By understanding the underlying principles of blockchain
+Primary Stakeholders:
+\ \  Students: They are the main users of the simulator  
 === Survey
 === Interview
-== Features <features>
-The platform will have the following features:
-
-- Introduction to the platform, allowing users to learn about blockchain technology and how it works.
-- A graph representation of the users and their relationships, allowing users to see how they are connected to each other.
-- A visualisation of the blockchain, allowing users to see how the blockchains are connected to each other.
-
-- Allowing users to create a new block, add a transaction, and verify a transaction.
-
-- Allowing users to transact with each other, to move the blocks around between users.
-
-- Checking the blocks in a chain
-
-- Checking the users’ profiles
-
-- Adding users to the system
-
-- Settings page allowing users to modify the UI for better aesthetics, such as dark mode
-
-- Allow removing users from the system
-
-- Allowing users to view the transactions between users
-
-- Allowing users to make transactions between users.
-
-== Extensions <extensions>
-The platform can be extended to include more features, such as:
-
-- A visualisation of how blocks are created by Proof of Work (PoW), allowing users to see how blocks are added to the blockchain.
-
-- Implementing the Proof of Stake (PoS) algorithm, allowing users to see how blocks are added to the blockchain using PoS.
-
-- A tutorial system that allows users to learn about controlling the blockchain, such as how to create a new block, how to add a transaction, and how to verify a transaction.
-
-- A visualisation of what happens when a blockchain is forked, allowing users to see how the blockchain splits into two separate chains, and how this can be resolved.
-
-- Showing different users are mining at the same time and competing to add the next block to the blockchain.
-
-- Visualisation on how public and private key pairs play a role in the transaction process, including how they are used to sign transactions and verify ownership.
-
-- Introducing multiple chains and visualising the conflict
-
 = Iterations
 == Iteration 1
+In iteration 1, I will be doing proof of concept for Breadth First Search (BFS) and Depth First Search (DFS) so that I can later use them for visualising the broadcast of blockchain within the network.
+
+Breadth First Search is an algorithm to traverse an undirected graph.
+
+Depth First Serch is another algorithm to traverse an undirected graph.
+=== Goal
 === Design
 The figure below shows the user interface design of different sections of the platform, including the Introduction Page, Main Page, Users Page, Chains Page, Mining Page, Transactions Page, and the Settings Page.
 
