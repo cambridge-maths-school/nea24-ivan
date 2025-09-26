@@ -125,7 +125,6 @@ Algorithm flowchart - see next page
 #figure(
 move(dx:3em, dy:-10em)[
 #scale(x: 70%,y:70%)[
-  #align(center + top)[
   #diagram(
     node-stroke: 1pt,
     node((0, 0), [Start], corner-radius: 2pt, extrude: (0, 3)),
@@ -211,7 +210,7 @@ move(dx:3em, dy:-10em)[
     ),
     edge("d", "-|>", label-pos: 0.7),
     node((0, 11), [End], corner-radius: 2pt, extrude: (0, 3)),
-  )]]],
+  )]],
   caption: [Algorithm flowchart to validate a transaction]
   )
 

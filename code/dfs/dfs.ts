@@ -1,14 +1,18 @@
-let adjacencyList: object = {
-  A: ["C", "B"],
-  B: ["F", "A"],
-  C: ["A", "D", "E"],
-  D: ["C"],
-  E: ["C"],
-  F: ["B"],
+interface AList {
+  [key: string]: string[]
+}
+
+let adjacencyList: AList = {
+A: ["C", "B"],
+B: ["F", "A"],
+C: ["A", "D", "E"],
+D: ["C"],
+E: ["C"],
+F: ["B"],
 };
 
 function dfs_traverse(
-  adjacencyList: object,
+  adjacencyList: AList,
   node: string,
   visited: string[] = []
 ): string[] {
