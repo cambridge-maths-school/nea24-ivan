@@ -4,14 +4,37 @@
 #set heading(numbering: "1.")
 #show heading: set text(blue)
 
+// headers and footers
+#set par(spacing: 1em)
+#set page(
+  margin: (top: 2cm, bottom: 2cm),
+  header: [
+    Ivan Leung
+    #h(1fr)
+    Candidate Number: 4022
+    #h(1fr)
+    Centre Number: 22245
+    #v(-1.25em)
+  ]
+    + line(length: 100%),
+  footer: line(length: 100%)
+    + context [
+      #v(-1.25em)
+      H446
+      #h(1fr)
+      Page #counter(page).display("1 of 1", both: true)
+      #h(1fr)
+      2026
+    ],
+)
+
 // setting stuff
-#set par(
-  spacing: 2em,
-)
+#set par(spacing: 2em)
 #set list(
-  spacing: 1em,
-  indent: 2em,
+  spacing: 0.5em,
+  indent: 1em,
 )
+#show figure.caption: set text(size: 0.7em)
 
 // bigger headings
 #show heading.where(level: 1): set text(size: 30pt)
@@ -31,25 +54,6 @@
   it
 }
 
-// headers and footers
-#set page(
-  header: [
-    Ivan Leung
-    #h(1fr)
-    Candidate Number: 4022
-    #h(1fr)
-    Centre Number: 22245
-  ]
-    + line(length: 100%),
-  footer: line(length: 100%)
-    + context [
-      H446
-      #h(1fr)
-      Page #counter(page).display("1 of 1", both: true)
-      #h(1fr)
-      2026
-    ],
-)
 
 // format code blocks with line numbers
 #show raw.where(block: true): code => {
@@ -118,8 +122,10 @@ Input: Transaction T, Blockchain ledger L \
 Output: Valid or Invalid
 
 Algorithm flowchart - see next page
-
-#align(center)[
+#figure(
+move(dx:3em, dy:-10em)[
+#scale(x: 70%,y:70%)[
+  #align(center + top)[
   #diagram(
     node-stroke: 1pt,
     node((0, 0), [Start], corner-radius: 2pt, extrude: (0, 3)),
@@ -127,12 +133,12 @@ Algorithm flowchart - see next page
     node(
       (0, 1),
       align(center)[
-        Verify \ T.signature \ using sender's \ public key
+        Verify \ T.signature using sender's \ public key
       ],
       shape: diamond,
     ),
     edge("d,d", "-|>", [Valid], label-pos: 0.5),
-    edge("r,r", "-|>", [Invalid], label-pos: 0.4),
+    edge("r,r", "-|>", [Invalid], label-pos: 0.7),
     node(
       (2, 1),
       align(center)[
@@ -205,7 +211,9 @@ Algorithm flowchart - see next page
     ),
     edge("d", "-|>", label-pos: 0.7),
     node((0, 11), [End], corner-radius: 2pt, extrude: (0, 3)),
-  )]
+  )]]],
+  caption: [Algorithm flowchart to validate a transaction]
+  )
 
 3. Block and block structure
 A block is a container for transactions and metadata. Each block contains:
@@ -266,7 +274,6 @@ Output: Broadcast to network\
 Block propagation in p2p network:\
 Input: Mined Block B\
 Output: Network consensus\
-
 `1. Miner broadcasts B to connected peers
 2. Each peer verifies:
    a. Block hash meets difficulty
@@ -275,13 +282,19 @@ Output: Network consensus\
 3. If valid, peer appends B to local blockchain
 4. Peer forwards B to all its connected peers until it reaches everyone in the network`
 
+#[
+  #set par(spacing: 1em)
 7. Block linking and immutability 
 - Each block contains the hash of the previous block, forming a cryptographically linked chain.
 - Altering a block invalidates all subsequent blocks, making tampering computationally infeasible.
 - Only blocks meeting the Proof-of-Work and containing valid transactions are accepted by the network.
-
+]
 Conceptual Flowchart:\
-I created the flowchart below to visualise the workflow of a blockchain. #image("blockchain_conceptual_flowchart.jpeg")
+I created the flowchart below to visualise the workflow of a blockchain:
+#figure(
+  image("images/blockchain_conceptual_flowchart.png", width: 85%),
+  caption: [Conceptual flowchart of blockchain workflow.],
+)
 == Existing models
 I found this blockchain simulator Command Line Interface (CLI) on GitHub (https://github.com/0xs34n/blockchain) by Sean. I have forked the repository and ran it on my local machine using `node.js`. The simulator offers a basic understanding of blockchain technologies with features like possessing blockchains and connecting to peers in different networks. However, it doesn't contain features such as transactions of blockchains or the process of mining blockchains.
 #image("images/SeanCLI.png")
