@@ -371,12 +371,18 @@ Primary Stakeholders:
 === Interview
 = Iterations
 == Iteration 1
-In iteration 1, I will be doing proof of concept for Breadth First Search (BFS) and Depth First Search (DFS) so that I can later use them for visualising the broadcast of blockchain within the network.
+In Interation 1, I will be focusing on the proof of concept for the technologies that I will be using in my blockchain simulator.
+=== Goal
++ Proof of concept for Breadth First Search (BFS) and Depth First Search (DFS) so that I can later use them for visualising the broadcast of blockchain within the network.
++ 
 
+
+=== Proof of Concept: BFS
 Breadth First Search is an algorithm to traverse an undirected graph.
 
+=== Proof of Concept:DFS
 Depth First Serch is another algorithm to traverse an undirected graph.
-=== Goal
+
 === Design
 The figure below shows the user interface design of different sections of the platform, including the Introduction Page, Main Page, Users Page, Chains Page, Mining Page, Transactions Page, and the Settings Page.
 

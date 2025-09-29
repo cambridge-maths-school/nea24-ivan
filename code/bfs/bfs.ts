@@ -13,6 +13,24 @@ E: ["C"],
 F: ["B"],
 };
 
+let complicatedList: AList = {
+  A: ['C','H','I','N'],
+  B: ['D','H','I', 'J', 'K'],
+  C: ['A','E','L'],
+  D: ['B','E','G','L','M'],
+  E: ['C','D','G','J'],
+  F: ['G'],
+  G: ['D', 'E','F','H'],
+  H: ['A','B','G'],
+  I: ['A','B','M'],
+  J: ['B','E'],
+  K: ['B'],
+  L: ['C','D'],
+  M: ['D','I'],
+  N: ['A','O'],
+  O: ['N']
+}
+
 function bfs_traverse(
   adjacencyList: AList,
   startNode: string
@@ -35,4 +53,5 @@ function bfs_traverse(
 }
 
 console.log(bfs_traverse(adjacencyList, "A"));
+console.log(bfs_traverse(complicatedList, "M"))
 export { bfs_traverse };

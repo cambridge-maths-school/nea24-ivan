@@ -11,6 +11,25 @@ E: ["C"],
 F: ["B"],
 };
 
+let complicatedList: AList = {
+  A: ['C','H','I','N'],
+  B: ['D','H','I', 'J', 'K'],
+  C: ['A','E','L'],
+  D: ['B','E','G','L','M'],
+  E: ['C','D','G','J'],
+  F: ['G'],
+  G: ['D', 'E','F','H'],
+  H: ['A','B','G'],
+  I: ['A','B','M'],
+  J: ['B','E'],
+  K: ['B'],
+  L: ['C','D'],
+  M: ['D','I'],
+  N: ['A','O'],
+  O: ['N']
+}
+
+
 function dfs_traverse(
   adjacencyList: AList,
   node: string,
@@ -30,4 +49,5 @@ function dfs_traverse(
 }
 
 console.log(dfs_traverse(adjacencyList, "A"));
+console.log(dfs_traverse(complicatedList, "M"));
 export { dfs_traverse };
