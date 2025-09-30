@@ -1,4 +1,4 @@
-let NUM_WORKERS = 60;
+let NUM_WORKERS = 10;
 let CHUNK_SIZE = 50000;
 let nonceOffset = 0;
 let running = false;
@@ -16,7 +16,11 @@ function startMining(baseData, difficulty) {
   );
   for (let i = 0; i < NUM_WORKERS; i++) {
     // Spawning workers
-    let worker = new Worker("./worker.js", { type: "module" });
+    let worker = new Worker(
+      URL.createObjectURL(
+        new Blob(workers.js, { type: "module" })
+      )
+    );
 
     workers.push(worker);
     worker.onmessage = (e) => {

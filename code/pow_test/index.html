@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>Serverless Web Worker</title>
+  </head>
+  <body>
+    <script>
+      // // --- @Kaiido's original example starts here ---
+
+      // w = new Worker( //creating the worker and passing:
+      // URL.createObjectURL( //the url object from:
+      //         new Blob( //the blob with:
+      //             [`postMessage('works')`] //this simple script.
+      //         )
+      //     )
+      // );
+
+      // // set the events. Console.log was used in the original, changed out for alert instead.
+      // w.onmessage = (e)=>alert(e.data);
+      // w.onerror = alert;
+      // // Done, created the worker, set up events, see what happens.
+
+      // // --- end @Kaiido's answer ---
+    </script>
+    <script src="main.js" type="module"></script>
+  </body>
+</html>
