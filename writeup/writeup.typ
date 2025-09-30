@@ -299,15 +299,17 @@ I found this blockchain simulator Command Line Interface (CLI) on GitHub (https:
 #image("images/SeanCLI.png")
 #image("images/SeanP2P.png")
 In this image, Sean's Blockchain simulator has shown the connection between different ports in local host. However, there is not any features that allow different ports to interact, like trading blocks. It also doesn't allow user to see other's user blocks.
+
+Many of the simulators out allows you to change the content in a blockchain but this is not a realistic feature as in real life, once a block is mined and added to the blockchain, it is immutable and cannot be changed. This is misleading for learners as they might think that blocks in a blockchain can be changed.
 == Initial Features
 In this BlockChain Simulator project, I will build a simplified model of BlockChain and mainly focusing on visualisation of different technologies, so that learners would be able to easily understand them.
 
-The final project will be running on a browser and has a Graphical User Interface (GUI). The project will be developed in HTML, CSS, and TypeScript with GPU.js to gain control over the user's Graphical Processing Unit (GPU). This allows the code to be rendered faster and also better simulate how blockchains are being mined as this is usually being done by a crypto mining rig - a customised personal computer that uses GPUs to solve cryptographic equations and verify transactions on a blockchain.
+The final project will be running on a browser and has a Graphical User Interface (GUI). The project will be developed in HTML, CSS, and TypeScript with web workers. This allows the nonce to be rendered faster and also better simulate how blockchains are being mined as this is usually being done by a crypto mining rig - a customised personal computer that uses multicore CPU/GPU to solve cryptographic equations and verify transactions on a blockchain.
 
 Features
 1. Core Blockchain Mechanics
 - Block structure \u{27F6} index, timestamp, list of transactions, previous hash, nonce, and current hash, implemented by Object Oriented Programming OOP
-- Hashing algorithm \u{27F6} simple SHA-256 function
+- Hashing algorithm \u{27F6} a simplified SHA-256 function
 - Mining algorithm \u{27F6} find a nonce such that block hash starts with N zeros (difficulty)
 - Transaction system \u{27F6} sender, receiver, amount stored in a mempool before being mined, also implemented by OOP
 - Chain validation \u{27F6} check each block's previous_hash matches the last block's hash
@@ -378,10 +380,45 @@ In Interation 1, I will be focusing on the proof of concept for the technologies
 
 
 === Proof of Concept: BFS
-Breadth First Search is an algorithm to traverse an undirected graph.
+Breadth First Search is an algorithm to traverse an undirected graph. A BFS algorithm starts at a selected node (often referred to as the 'root' node in tree structures) and explores all its neighbouring nodes at the present depth prior to moving on to nodes at the next depth level. This approach ensures that all nodes at the current level are visited before any nodes at the next level are explored, making BFS particularly useful for finding the shortest path in unweighted graphs.
+
+==== Design of algorithm: BFS
+I used a queue data structure in my BFS algorithm to keep track of nodes to be explored. The algorithm begins by enqueuing the starting node and making it as visited. It then enters a loop where it dequeues a node, and enqueue all its unvisited neighbours, marking them as visited. This process continues until the queue is empty, meaning all reachable nodes have been visited.
 
 === Proof of Concept:DFS
-Depth First Serch is another algorithm to traverse an undirected graph.
+Depth First Serch is another algorithm to traverse an undirected graph. A DFS algorithm also starts at a selected node (the 'root' node) and explores as far as possible along each branch before backtracking. This means that DFS goes deep into the graph, visiting a node and then recursively visiting one of its unvisited neighbours until it reaches a node with no unvisited neighbours. At this point, the algorithm backtracks to the most recent node that has unvisited neighbours and continues the process until all nodes have been visited.
+
+==== Design of algorithm: DFS
+I used a stack data structure in my DFS algorithm to keep track of nodes to be explored. The algorithm begins by pushing the starting node onto the stack and marking it as visited. It then enters a loop where it pops a node from the stack, and pushes all its unvisited neighbours onto the stack, marking them as visited. This process continues until the stack is empty, meaning all reachable nodes have been visited.
+
+I decided to make use of the call stack and implement the DFS algorithm recursively. The algorithm starts at the root node, marks it as visited, and then recursively visits each unvisited neighbour. This continues until all nodes have been visited.
+
+=== Proof of Concept: Hashing
+Hashing is a fundamental concept in blockchain technology, used to ensure data integrity and security. A hash function takes an input (or 'message') and returns a fixed-size string of bytes. The output appears random and is unique to the specific input. Even a small change in the input will produce a significantly different hash, a property known as the avalanche effect. In blockchain, hashing is used to link blocks together, verify transactions, and secure data against tampering.
+BlockChain commonly uses the SHA-256 (Secure Hash Algorithm 256-bit) hashing algorithm. However, implementing SHA-256 from scratch is complex and beyond the scope of this project. Instead, I have created a simplified version of a hashing function that captures the essence of how hashing works in blockchain.
+
+==== Design of algorithm: Hashing
+My idea for the simplified hashing:
+Iterate over each character in the input string:
+- Multiply the current hash by 31; 31 is a prime number, chosen because multiplying by a prime reduces collisions and spreads the effect of each character across the final hash value.
+- Add the character's Unicode, ensuring each character uniquely influences the hash.
+- Mask with 0xffffffff to keep the result within 32 bits, simulating integer overflow; 0xffffffff—which in binary is 32 ones—keeps only the lowest 32 bits of a number, ensuring the hash behaves like a real 32-bit hash, remains fixed-size, deterministic, and avoids large-number rounding errors in JavaScript.
+- Convert the 32-bit integer to hexadecimal, producing a fixed-length string representation suitable for comparing against the difficulty target in the PoW simulation.
+- Disadvantage of simplication: As the result is constrained to 32 bits, this can lead to collisions (different inputs producing the same hash), which is a limitation of this simplified approach.
+
+=== Proof of Concept: Proof of Work Mining
+I have decided to implement a simplified version of the Proof of Work (PoW) mining algorithm to demonstrate the concept of mining in blockchain technology. The goal of PoW is to find a nonce (a number used once) such that when it is combined with the block's data and hashed, the resulting hash meets a specific difficulty target, typically defined by a certain number of leading zeros in its binary representation. 
+==== Design of algorithm: Proof of Work Mining
+To ensure the speed of mining and simulate the reality of mining rigs which uses multicore CPU/GPU to mine, I have decided to use web workers to implement the PoW mining algorithm. Web workers allow for running scripts in background threads, enabling concurrent execution without blocking the main thread. This is particularly useful for computationally intensive tasks like mining, as it allows the user interface to remain responsive while the mining process is ongoing.
+The PoW mining algorithm works as follows:
+1. The main thread initiates multiple web workers, each assigned a unique range of nonce values to test.
+2. Each worker receives the block data, difficulty level, starting nonce, and chunk size (the range of nonces to test).
+3. The worker iterates through its assigned nonce range, combining each nonce with the block data and computing the hash using the simplified hashing function.
+4. The hash is converted to binary, and the number of leading zeros is counted.
+5. If a hash meets or exceeds the difficulty target (i.e., has the required number of leading zeros), the worker sends a message back to the main thread with the valid nonce and hash.
+6. The main thread listens for messages from workers. Upon receiving a valid nonce, it terminates all other workers to stop further computation.
+7. The valid nonce and hash are then used to complete the block, which can be added to the blockchain.
+This approach effectively simulates the distributed nature of mining in a real blockchain network, where multiple miners work concurrently to find a valid nonce. By leveraging web workers, the mining process can be parallelized, significantly speeding up the search for a valid nonce.
 
 === Design
 The figure below shows the user interface design of different sections of the platform, including the Introduction Page, Main Page, Users Page, Chains Page, Mining Page, Transactions Page, and the Settings Page.
