@@ -3,7 +3,7 @@ import { serve } from "bun";
 serve({
   port: 3000,
   // Handle each incoming HTTP request
-  fetch(req) {
+  fetch(req: Request) {
     let url = new URL(req.url);
     let path = `.${url.pathname}`;
 
