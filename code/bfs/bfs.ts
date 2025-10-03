@@ -34,7 +34,7 @@ let complicatedList: AList = {
 function bfs_traverse(
   adjacencyList: AList,
   startNode: string
-) {
+): string[] {
   // enqueue starting node
   let queue: string[] = [startNode];
   let visited: string[] = [startNode];

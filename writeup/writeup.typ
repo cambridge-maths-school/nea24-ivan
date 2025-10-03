@@ -1,4 +1,5 @@
 #import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
+#import "@preview/subpar:0.2.2"
 #import fletcher.shapes: diamond
 
 #set heading(numbering: "1.")
@@ -14,12 +15,12 @@
     Candidate Number: 4022
     #h(1fr)
     Centre Number: 22245
-    #v(-1.25em)
+    #v(-0.5em)
   ]
     + line(length: 100%),
   footer: line(length: 100%)
     + context [
-      #v(-1.25em)
+      #v(-0.5em)
       H446
       #h(1fr)
       Page #counter(page).display("1 of 1", both: true)
@@ -29,7 +30,7 @@
 )
 
 // setting stuff
-#set par(spacing: 2em)
+// #set par(spacing: 2em)
 #set list(
   spacing: 0.5em,
   indent: 1em,
@@ -50,7 +51,7 @@
   it
 }
 #show heading.where(level: 2): it => {
-  pagebreak(weak: true)
+  // pagebreak(weak: true)
   it
 }
 
@@ -96,6 +97,7 @@
 = Analysis <sec:introduction>
 == The Problem <the-problem>
 Blockchain is a rapidly growing technology that underpins cryptocurrencies, NFTs, and secure digital record-keeping. Blockchain and Cryptography area mong the most in-demand STEM skills in the post-web economy. According to a new report from POST, UK Parliament, nearly half of engineering and tech businesses are struggling to recruit skilled talent. STEM skills shortages are costing the UK economy £1.5 billion per year [#footnote[source: medium (https://britblockchain.medium.com/uk-faces-stem-talent-shortage-as-demand-for-blockchain-skills-surges-says-parliamentary-report-ca626c0f5928)]]. Despite its increasing importance in finance, computing, and data security, understanding how blockchain works is conceptually challenging for most students. Key concepts such as distributed ledgers, mining, proof-of-work, hashing, and peer-to-peer networks are often abstract and difficult to visualise. This creates a barrier to learning, especially when students encounter blockchain only through media or cryptocurrency hype, without practical experience. Consequently, there is a need for an educational tool that allows students to interact with and visualise blockchain mechanics in a safe, simplified, and engaging way.
+#pagebreak()
 
 == Research
 Blockchain is a distributed ledger technology that records transactions across a network of nodes. Each block is a container for multiple transactions, linked to the previous block via a cryptographic hash. New blocks are added through mining, a process where participants solve a computational puzzle (Proof-of-Work). Miners are incentivized with rewards, such as cryptocurrency and transaction fees, for successfully adding a valid block to the chain.
@@ -105,114 +107,120 @@ Research in Blockchain Technology: \
 I gained knowledge on the blockchain technologies after watching this #link("https://youtu.be/bBC-nXj3Ng4?si=7UgRxuPQdJOzkzG4")[YouTube video] [#footnote[https://youtu.be/bBC-nXj3Ng4?si=7UgRxuPQdJOzkzG4]] by #link("https://www.youtube.com/@3blue1brown")[3Blue1Brown] which explains how blockchain technologies work behind the scene and different algorithms to power it. I also confirmed my knowledge with the winner of award of distinction in the Hong Kong BlockChain Olympiad - Lester Chong by asking him questions to clearly understand the concepts behind blockchain technologies.
 
 Here are my summary to some main concepts in Blockchain technology:
+#[
+  #set par(spacing: 1em)
+  1. Transactions
+  A transaction represents a transfer of value or information between users. Each transaction typically includes:
+  - Sender and receiver addresses
+  - Amount or data being transferred
+  - Digital signature to verify authenticity
+  Transactions are first broadcast to the network and stored in the mempool, a collection of unconfirmed transactions awaiting inclusion in a block.
+]
+\
+#[
+  #set par(spacing: 1em)
+  2. Transaction Validity
+  Transactions must satisfy several criteria before being considered valid. Miners only include valid transactions in blocks.
 
-1. Transactions
-
-A transaction represents a transfer of value or information between users. Each transaction typically includes:
-- Sender and receiver addresses
-- Amount or data being transferred
-- Digital signature to verify authenticity
-Transactions are first broadcast to the network and stored in the mempool, a collection of unconfirmed transactions awaiting inclusion in a block.
-
-2. Transaction Validity
-Transactions must satisfy several criteria before being considered valid. Miners only include valid transactions in blocks.
-
-Algorithm: Validate Transaction \
-Input: Transaction T, Blockchain ledger L \
-Output: Valid or Invalid
-
+  Algorithm: Validate Transaction \
+  Input: Transaction T, Blockchain ledger L \
+  Output: Valid or Invalid
+]
 Algorithm flowchart - see next page
 #figure(
-move(dx:3em, dy:-10em)[
-#scale(x: 70%,y:70%)[
-  #diagram(
-    node-stroke: 1pt,
-    node((0, 0), [Start], corner-radius: 2pt, extrude: (0, 3)),
-    edge("-|>"),
-    node(
-      (0, 1),
-      align(center)[
-        Verify \ T.signature using sender's \ public key
-      ],
-      shape: diamond,
-    ),
-    edge("d,d", "-|>", [Valid], label-pos: 0.5),
-    edge("r,r", "-|>", [Invalid], label-pos: 0.7),
-    node(
-      (2, 1),
-      align(center)[
-        Reject the \ transaction
-      ],
-      shape: rect,
-    ),
-    node(
-      (0, 3),
-      align(center)[
-        Check sender's \ balance
-      ],
-      shape: diamond,
-    ),
-    edge("r,r", "-|>", [If L\u{2264}T.amount], label-pos: 0.4),
-    edge("d,d", "-|>", [If L\u{2265}T.amount], label-pos: 0.4),
-    node(
-      (2, 3),
-      align(center)[
-        Reject the \ transaction
-      ],
-      shape: rect,
-    ),
-    node(
-      (0, 5),
-      align(center)[
-        Ensure T \ does not double-spend \ coins already spent \ in L
-      ],
-      shape: diamond,
-    ),
-    edge("d,d", "-|>", [No Double spending isues], label-pos: 0.5),
-    edge("r,r", "-|>", [Double\ spending\ detected], label-pos: 0.6),
-    node(
-      (2, 5),
-      align(center)[
-        Reject the \ transaction
-      ],
-      shape: rect,
-    ),
-    node(
-      (0, 7),
-      align(center)[
-        \ Check transaction \ structure (fields, \ format, protocol rules) \ ‎
-      ],
-      shape: diamond,
-    ),
-    edge("d,d", "-|>", [Valid], label-pos: 0.6),
-    edge("r,r", "-|>", [Invalid], label-pos: 0.7),
-    node(
-      (2, 7),
-      align(center)[
-        Reject the \ transaction
-      ],
-      shape: rect,
-    ),
-    node(
-      (0, 9),
-      align(center)[
-        All check pass
-      ],
-      shape: rect,
-    ),
-    edge("d", "-|>", label-pos: 0.7),
-    node(
-      (0, 10),
-      align(center)[
-        Add to mempool
-      ],
-      shape: rect,
-    ),
-    edge("d", "-|>", label-pos: 0.7),
-    node((0, 11), [End], corner-radius: 2pt, extrude: (0, 3)),
-  )]],
-  caption: [Algorithm flowchart to validate a transaction]
-  )
+  move(dx: 3em, dy: -10em)[
+    #scale(x: 70%, y: 70%)[
+      #diagram(
+        node-stroke: 1pt,
+        node((0, 0), [Start], corner-radius: 2pt, extrude: (0, 3)),
+        edge("-|>"),
+        node(
+          (0, 1),
+          align(center)[
+            Verify \ T.signature using sender's \ public key
+          ],
+          shape: diamond,
+        ),
+        edge("d,d", "-|>", [Valid], label-pos: 0.5),
+        edge("r,r", "-|>", [Invalid], label-pos: 0.7),
+        node(
+          (2, 1),
+          align(center)[
+            Reject the \ transaction
+          ],
+          shape: rect,
+        ),
+        node(
+          (0, 3),
+          align(center)[
+            Check sender's \ balance
+          ],
+          shape: diamond,
+        ),
+        edge("r,r", "-|>", [If L\u{2264}T.amount], label-pos: 0.4),
+        edge("d,d", "-|>", [If L\u{2265}T.amount], label-pos: 0.4),
+        node(
+          (2, 3),
+          align(center)[
+            Reject the \ transaction
+          ],
+          shape: rect,
+        ),
+        node(
+          (0, 5),
+          align(center)[
+            Ensure T \ does not double-spend \ coins already spent \ in L
+          ],
+          shape: diamond,
+        ),
+        edge("d,d", "-|>", [No Double spending isues], label-pos: 0.5),
+        edge("r,r", "-|>", [Double\ spending\ detected], label-pos: 0.6),
+        node(
+          (2, 5),
+          align(center)[
+            Reject the \ transaction
+          ],
+          shape: rect,
+        ),
+        node(
+          (0, 7),
+          align(center)[
+            \ Check transaction \ structure (fields, \ format, protocol rules) \ ‎
+          ],
+          shape: diamond,
+        ),
+        edge("d,d", "-|>", [Valid], label-pos: 0.6),
+        edge("r,r", "-|>", [Invalid], label-pos: 0.7),
+        node(
+          (2, 7),
+          align(center)[
+            Reject the \ transaction
+          ],
+          shape: rect,
+        ),
+        node(
+          (0, 9),
+          align(center)[
+            All check pass
+          ],
+          shape: rect,
+        ),
+        edge("d", "-|>", label-pos: 0.7),
+        node(
+          (0, 10),
+          align(center)[
+            Add to mempool
+          ],
+          shape: rect,
+        ),
+        edge("d", "-|>", label-pos: 0.7),
+        node((0, 11), [End], corner-radius: 2pt, extrude: (0, 3)),
+      )]],
+  caption: [Algorithm flowchart to validate a transaction],
+)
+\
+\
+
 
 3. Block and block structure
 A block is a container for transactions and metadata. Each block contains:
@@ -224,18 +232,18 @@ A block is a container for transactions and metadata. Each block contains:
 \
 4. Hashing
 
-Blocks are uniquely identified using a cryptographic hash function (e.g., SHA-256).\ 
+Blocks are uniquely identified using a cryptographic hash function (e.g., SHA-256).\
 Algorithm: Compute Block Hash
 Input: Block B (transactions, previous hash, timestamp, nonce)
 Output: Block hash H
 1. Concatenate block transactions, previous hash, timestamp, and nonce
 2. Apply SHA-256 hash function
-3. Output fixed-length hash 
+3. Output fixed-length hash
 Properties of cryptographic hashes:
 - Deterministic: Same input always produces the same hash
 - Irreversible: Impossible to deduce the original input from the hash
 - Sensitive: Any change in the input drastically changes the output (avalanche effect)
-
+\
 5. Mining and Proof of Work
 Mining involves finding a nonce so that the block hash meets a difficulty target, typically requiring a certain number of leading zeros in binary. One of the mining algorithm is the proof of work mining.
 
@@ -256,19 +264,25 @@ Output: Valid nonce, block hash\
 `
 
 When a valid nonce (an arbitrary number that can be used just once in a cryptographic communication) is found, the block is broadcast to the network for inclusion in the blockchain. There are also other mining algorithms such as the proof of stake algorithm.
+\
+\
 
 6. Peer to Peer network
-Blockchain relies on a decentralized peer-to-peer (P2P) network. Each node maintains a copy of the blockchain and independently verifies transactions and blocks.
+Blockchain relies on a decentralized peer-to-peer (P2P) network. Each node maintains a copy of the blockchain and independently verifies transactions and blocks.\
 
 Transaction propagation in P2P network:\
 Input: Transaction T\
 Output: Broadcast to network\
+Algorithm - see next page
+
 `1. User signs and sends T to a connected node
 2. Node verifies T:
    - If valid, add to local mempool
    - If invalid, discard
 3. Node forwards T to all connected peers
 4. Iterate steps 2-3 for each peer`
+\
+\
 
 Block propagation in p2p network:\
 Input: Mined Block B\
@@ -280,24 +294,29 @@ Output: Network consensus\
    c. Previous hash matches last block in local chain
 3. If valid, peer appends B to local blockchain
 4. Peer forwards B to all its connected peers until it reaches everyone in the network`
+\
+\
 
-#[
-  #set par(spacing: 1em)
-7. Block linking and immutability 
-- Each block contains the hash of the previous block, forming a cryptographically linked chain.
-- Altering a block invalidates all subsequent blocks, making tampering computationally infeasible.
-- Only blocks meeting the Proof-of-Work and containing valid transactions are accepted by the network.
-]
+  7. Block linking and immutability
+  - Each block contains the hash of the previous block, forming a cryptographically linked chain.
+  - Altering a block invalidates all subsequent blocks, making tampering computationally infeasible.
+  - Only blocks meeting the Proof-of-Work and containing valid transactions are accepted by the network.
+
 Conceptual Flowchart:\
 I created the flowchart below to visualise the workflow of a blockchain:
 #figure(
-  image("images/blockchain_conceptual_flowchart.png", width: 85%),
+  image("images/blockchain_conceptual_flowchart.png", width: 100%),
   caption: [Conceptual flowchart of blockchain workflow.],
 )
+#pagebreak()
 == Existing models
 I found this blockchain simulator Command Line Interface (CLI) on GitHub (https://github.com/0xs34n/blockchain) by Sean. I have forked the repository and ran it on my local machine using `node.js`. The simulator offers a basic understanding of blockchain technologies with features like possessing blockchains and connecting to peers in different networks. However, it doesn't contain features such as transactions of blockchains or the process of mining blockchains.
-#image("images/SeanCLI.png")
-#image("images/SeanP2P.png")
+#subpar.grid(
+figure(image("images/SeanCLI.png", width: 50%, height:20%)), <a>,
+figure(image("images/SeanP2P.png", width: 50%, height:20%)), <b>,
+columns: (1fr, 1fr),
+label: <full>
+)
 In this image, Sean's Blockchain simulator has shown the connection between different ports in local host. However, there is not any features that allow different ports to interact, like trading blocks. It also doesn't allow user to see other's user blocks.
 
 Many of the simulators out allows you to change the content in a blockchain but this is not a realistic feature as in real life, once a block is mined and added to the blockchain, it is immutable and cannot be changed. This is misleading for learners as they might think that blocks in a blockchain can be changed.
@@ -327,7 +346,7 @@ Features
 - Mempool view \u{27F6} list of pending transactions waiting to be mined.
 
 
-4. Abstraction 
+4. Abstraction
 - Ignoring Double Spending Issues during Chain Validation
 - No digital signatures (trust all transactions)
 - No forks (always extend the longest chain)
@@ -347,11 +366,11 @@ In each iterations I will
 - Asking for User Feedback
 - Refine prototype
 Each feature of the solution might be improved throughout the iterations.
-=== Technology 
+=== Technology
 The simulator will run purely on client side code to reduce server costs and workload, improve scalability, and create a more interactive and responsive user experience\
-Frontend: HTML + CSS + JavaScript \ 
+Frontend: HTML + CSS + JavaScript \
 Graph visualisation: canvas
-=== Device Compatibility 
+=== Device Compatibility
 The blockchain simulator is designed to run entirely in the browser and therefore requires TypeScript support to function. It is optimised for modern desktop and laptop environments using Chromium-based browsers (Google Chrome, Microsoft Edge, Opera). Mobile browsers may support basic interaction, but performance and visualisation features are best experienced on computer systems. The device running to program should have at least a refresh rate of 60Hz to run the requestAnimationFrame() function in canvas to visualise blockchain workflow.
 
 == Intital Sucess Criteria
@@ -368,15 +387,16 @@ Success Criteria
 )
 == Stakeholders <stakeholders>
 Primary Stakeholders:
-\ \  Students: They are the main users of the simulator  
+\ \  Students: They are the main users of the simulator
 === Survey
 === Interview
 = Iterations
 == Iteration 1
 In Interation 1, I will be focusing on the proof of concept for the technologies that I will be using in my blockchain simulator.
+=== Decomposing Iteration 1
 === Goal
 + Proof of concept for Breadth First Search (BFS) and Depth First Search (DFS) so that I can later use them for visualising the broadcast of blockchain within the network.
-+ 
++
 
 
 === Proof of Concept: BFS
@@ -384,6 +404,10 @@ Breadth First Search is an algorithm to traverse an undirected graph. A BFS algo
 
 ==== Design of algorithm: BFS
 I used a queue data structure in my BFS algorithm to keep track of nodes to be explored. The algorithm begins by enqueuing the starting node and making it as visited. It then enters a loop where it dequeues a node, and enqueue all its unvisited neighbours, marking them as visited. This process continues until the queue is empty, meaning all reachable nodes have been visited.
+
+To store the data, I used an adjacency list --- a data structure used to store a collection of unordered lists used to represent a finite graph.
+
+// Justify why BFS and DFS
 
 === Proof of Concept:DFS
 Depth First Serch is another algorithm to traverse an undirected graph. A DFS algorithm also starts at a selected node (the 'root' node) and explores as far as possible along each branch before backtracking. This means that DFS goes deep into the graph, visiting a node and then recursively visiting one of its unvisited neighbours until it reaches a node with no unvisited neighbours. At this point, the algorithm backtracks to the most recent node that has unvisited neighbours and continues the process until all nodes have been visited.
@@ -400,6 +424,7 @@ BlockChain commonly uses the SHA-256 (Secure Hash Algorithm 256-bit) hashing alg
 ==== Design of algorithm: Hashing
 My idea for the simplified hashing:
 Iterate over each character in the input string:
+- Set hash = 0
 - Multiply the current hash by 31; 31 is a prime number, chosen because multiplying by a prime reduces collisions and spreads the effect of each character across the final hash value.
 - Add the character's Unicode, ensuring each character uniquely influences the hash.
 - Mask with 0xffffffff to keep the result within 32 bits, simulating integer overflow; 0xffffffff—which in binary is 32 ones—keeps only the lowest 32 bits of a number, ensuring the hash behaves like a real 32-bit hash, remains fixed-size, deterministic, and avoids large-number rounding errors in JavaScript.
@@ -407,7 +432,7 @@ Iterate over each character in the input string:
 - Disadvantage of simplication: As the result is constrained to 32 bits, this can lead to collisions (different inputs producing the same hash), which is a limitation of this simplified approach.
 
 === Proof of Concept: Proof of Work Mining
-I have decided to implement a simplified version of the Proof of Work (PoW) mining algorithm to demonstrate the concept of mining in blockchain technology. The goal of PoW is to find a nonce (a number used once) such that when it is combined with the block's data and hashed, the resulting hash meets a specific difficulty target, typically defined by a certain number of leading zeros in its binary representation. 
+I have decided to implement a simplified version of the Proof of Work (PoW) mining algorithm to demonstrate the concept of mining in blockchain technology. The goal of PoW is to find a nonce (a number used once) such that when it is combined with the block's data and hashed, the resulting hash meets a specific difficulty target, typically defined by a certain number of leading zeros in its binary representation.
 ==== Design of algorithm: Proof of Work Mining
 To ensure the speed of mining and simulate the reality of mining rigs which uses multicore CPU/GPU to mine, I have decided to use web workers to implement the PoW mining algorithm. Web workers allow for running scripts in background threads, enabling concurrent execution without blocking the main thread. This is particularly useful for computationally intensive tasks like mining, as it allows the user interface to remain responsive while the mining process is ongoing.
 The PoW mining algorithm works as follows:

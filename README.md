@@ -1,16 +1,16 @@
 # nea24-ivan
 Hello World! 
-
+<!-- 
 Ideas:
 - Graph plotting application like desmos, including features that desmos doesnt have, e.g. Newton Raphson
 - Trajectory simulator
 - Block Chain: Including packet switching/circuit switching features; encryption
 - Neural Network for OCR from scratch
 - Virtual Machine
-
+ -->
 
 Project Proposal:
-
+<!-- 
 1. Graph Plotting Application (something looking like Desmos but more enhanced)
 - Allow users to input expressions like `y = sin(x)`, `y = x^2 + 3x - 4`, or implicit forms (`x^2 + y^2 = 25`).
 - Features to include:
@@ -43,9 +43,10 @@ Project Proposal:
 - Extensions:
   - Target hitting mini-game
   - Multi-projectile comparisons
-  - Trajectories on different planets (Mars, Moon, Earth, etc.)
+  - Trajectories on different planets (Mars, Moon, Earth, etc.) -->
 
-3. Blockchain & Networking Simulator
+<!-- 3.  -->
+Blockchain & Networking Simulator
 - Blockchain system
   - Blocks hold transaction details
   - Each block is linked securely to the previous one using hashes (e.g. SHA256)
