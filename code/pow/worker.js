@@ -2,7 +2,7 @@
 // function fakeHash(input) {
 //   var hash = 0;
 //   for (var i = 0; i < input.length; i++) {
-//     hash = (hash * 31 + input.charCodeAt(i)) & 0xffffffff;
+//     hash = (hash * 67 + input.charCodeAt(i)) & 0xffffffff;
 //   }
 //   return hash.toString(16).padStart(8, "0");
 // }

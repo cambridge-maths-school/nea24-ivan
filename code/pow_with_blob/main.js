@@ -17,7 +17,7 @@
 //       .concat(NUM_WORKERS)
 //   );
 //   var workerCode =
-//     '\n    function fakeHash(input) {\n      let hash = 0;\n      for (let i = 0; i < input.length; i++) {\n        hash = (hash * 31 + input.charCodeAt(i)) & 0xffffffff;\n      }\n      return hash.toString(16).padStart(8, "0");\n    }\n\n    self.onmessage = (e) => {\n      let { baseData, difficulty, startNonce, chunkSize } = e.data;\n      let prefix = "0".repeat(difficulty);\n      for (let i = 0; i < chunkSize; i++) {\n        let nonce = startNonce + i;\n        let hash = fakeHash(baseData + nonce);\n        if (hash.startsWith(prefix)) {\n          self.postMessage({ nonce, hash });\n          break;\n        }\n      }\n    };\n';
+//     '\n    function fakeHash(input) {\n      let hash = 0;\n      for (let i = 0; i < input.length; i++) {\n        hash = (hash * 67 + input.charCodeAt(i)) & 0xffffffff;\n      }\n      return hash.toString(16).padStart(8, "0");\n    }\n\n    self.onmessage = (e) => {\n      let { baseData, difficulty, startNonce, chunkSize } = e.data;\n      let prefix = "0".repeat(difficulty);\n      for (let i = 0; i < chunkSize; i++) {\n        let nonce = startNonce + i;\n        let hash = fakeHash(baseData + nonce);\n        if (hash.startsWith(prefix)) {\n          self.postMessage({ nonce, hash });\n          break;\n        }\n      }\n    };\n';
 //   var _loop_1 = function (i) {
 //     var blob = new Blob([workerCode], { type: "application/javascript" });
 //     var worker = new Worker(URL.createObjectURL(blob));

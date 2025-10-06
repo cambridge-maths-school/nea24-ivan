@@ -297,10 +297,10 @@ Output: Network consensus\
 \
 \
 
-  7. Block linking and immutability
-  - Each block contains the hash of the previous block, forming a cryptographically linked chain.
-  - Altering a block invalidates all subsequent blocks, making tampering computationally infeasible.
-  - Only blocks meeting the Proof-of-Work and containing valid transactions are accepted by the network.
+7. Block linking and immutability
+- Each block contains the hash of the previous block, forming a cryptographically linked chain.
+- Altering a block invalidates all subsequent blocks, making tampering computationally infeasible.
+- Only blocks meeting the Proof-of-Work and containing valid transactions are accepted by the network.
 
 Conceptual Flowchart:\
 I created the flowchart below to visualise the workflow of a blockchain:
@@ -312,10 +312,10 @@ I created the flowchart below to visualise the workflow of a blockchain:
 == Existing models
 I found this blockchain simulator Command Line Interface (CLI) on GitHub (https://github.com/0xs34n/blockchain) by Sean. I have forked the repository and ran it on my local machine using `node.js`. The simulator offers a basic understanding of blockchain technologies with features like possessing blockchains and connecting to peers in different networks. However, it doesn't contain features such as transactions of blockchains or the process of mining blockchains.
 #subpar.grid(
-figure(image("images/SeanCLI.png", width: 50%, height:20%)), <a>,
-figure(image("images/SeanP2P.png", width: 50%, height:20%)), <b>,
-columns: (1fr, 1fr),
-label: <full>
+  figure(image("images/SeanCLI.png", width: 50%, height: 20%)), <a>,
+  figure(image("images/SeanP2P.png", width: 50%, height: 20%)), <b>,
+  columns: (1fr, 1fr),
+  label: <full>,
 )
 In this image, Sean's Blockchain simulator has shown the connection between different ports in local host. However, there is not any features that allow different ports to interact, like trading blocks. It also doesn't allow user to see other's user blocks.
 
@@ -373,6 +373,7 @@ Graph visualisation: canvas
 === Device Compatibility
 The blockchain simulator is designed to run entirely in the browser and therefore requires TypeScript support to function. It is optimised for modern desktop and laptop environments using Chromium-based browsers (Google Chrome, Microsoft Edge, Opera). Mobile browsers may support basic interaction, but performance and visualisation features are best experienced on computer systems. The device running to program should have at least a refresh rate of 60Hz to run the requestAnimationFrame() function in canvas to visualise blockchain workflow.
 
+#pagebreak()
 == Intital Sucess Criteria
 These are the initial Success Criteria (SC) which is what I am aiming for while developing a MVP (Minimum Viable Product). As I am developing in an agile methodology, the Success Critea might be ammended or new Success Criteria might be added in the process of iterations.
 
@@ -385,6 +386,7 @@ Success Criteria
   $ 1.1 $, [GUI], $ sqrt(2) / 12 a^3 $,
   $ 1.2 $,
 )
+#pagebreak()
 == Stakeholders <stakeholders>
 Primary Stakeholders:
 \ \  Students: They are the main users of the simulator
@@ -394,9 +396,12 @@ Primary Stakeholders:
 == Iteration 1
 In Interation 1, I will be focusing on the proof of concept for the technologies that I will be using in my blockchain simulator.
 === Decomposing Iteration 1
+#figure(image("images/iteration1_decompose.jpg"), caption:[Decomposing iteration 1])
+Here I have a brief decompostion of what I am going to do in iteration 1. Each leaf nodes of my diagram represents an algorithm or files that I have to work on. Further on in the iteration 1, each algorithms will be decomposed further and carefully designed.
 === Goal
 + Proof of concept for Breadth First Search (BFS) and Depth First Search (DFS) so that I can later use them for visualising the broadcast of blockchain within the network.
-+
++ Simplifying the SHA-256 hash function and implement it called the fakeHash() function
++ 
 
 
 === Proof of Concept: BFS
@@ -419,17 +424,27 @@ I decided to make use of the call stack and implement the DFS algorithm recursiv
 
 === Proof of Concept: Hashing
 Hashing is a fundamental concept in blockchain technology, used to ensure data integrity and security. A hash function takes an input (or 'message') and returns a fixed-size string of bytes. The output appears random and is unique to the specific input. Even a small change in the input will produce a significantly different hash, a property known as the avalanche effect. In blockchain, hashing is used to link blocks together, verify transactions, and secure data against tampering.
-BlockChain commonly uses the SHA-256 (Secure Hash Algorithm 256-bit) hashing algorithm. However, implementing SHA-256 from scratch is complex and beyond the scope of this project. Instead, I have created a simplified version of a hashing function that captures the essence of how hashing works in blockchain.
+BlockChain commonly uses the SHA-256 (Secure Hash Algorithm 256-bit) hashing algorithm. However, brute forcing SHA-256 is an incredibly computational heavy task. Instead, I have created a simplified version of a hashing function that captures the essence of how hashing works in blockchain.
 
 ==== Design of algorithm: Hashing
 My idea for the simplified hashing:
 Iterate over each character in the input string:
 - Set hash = 0
-- Multiply the current hash by 31; 31 is a prime number, chosen because multiplying by a prime reduces collisions and spreads the effect of each character across the final hash value.
-- Add the character's Unicode, ensuring each character uniquely influences the hash.
+- Multiply the current hash by 67; 67 is a prime number, chosen because multiplying by a prime reduces collisions and spreads the effect of each character across the final hash value.
+- Add the character's ASCII code, ensuring each character uniquely influences the hash.
 - Mask with 0xffffffff to keep the result within 32 bits, simulating integer overflow; 0xffffffff—which in binary is 32 ones—keeps only the lowest 32 bits of a number, ensuring the hash behaves like a real 32-bit hash, remains fixed-size, deterministic, and avoids large-number rounding errors in JavaScript.
 - Convert the 32-bit integer to hexadecimal, producing a fixed-length string representation suitable for comparing against the difficulty target in the PoW simulation.
 - Disadvantage of simplication: As the result is constrained to 32 bits, this can lead to collisions (different inputs producing the same hash), which is a limitation of this simplified approach.
+
+Example Data: 'cat'
++ The data is being split into individual characters 'c','a', and 't'
++ Initially the hash = 0, therefore the the updated hash will just be `0*67 + ASCII code 99 = 99`
++ Then the algorithm moves to the second character 'a' and multiply the current hash by 67 then add the ASCII code for 'a' which gives `new hash = 99 * 67 + 97 = 6730`
++ The algorithms repeats step 3 on the last character 't' (ASCII code of 116) giving `hash = 6730 * 67 + 116 = 451026`
++ Convert `451026` and `0xffffffff` (32 ones) into binary and apply a bitwise AND mask which doesnt make any difference since the hash of string `cat` doesn't exceed 32-bit
++ Convert `451026` into hexadecimal which gives `6e1d2`
++ Add 0's in front of `6e1d2` to form a 32 bit data which is 8 hexadecimal characters
+This process cannot be reversed as you wouldn't know how many characters there are or what the characters are when you work backwards.
 
 === Proof of Concept: Proof of Work Mining
 I have decided to implement a simplified version of the Proof of Work (PoW) mining algorithm to demonstrate the concept of mining in blockchain technology. The goal of PoW is to find a nonce (a number used once) such that when it is combined with the block's data and hashed, the resulting hash meets a specific difficulty target, typically defined by a certain number of leading zeros in its binary representation.
