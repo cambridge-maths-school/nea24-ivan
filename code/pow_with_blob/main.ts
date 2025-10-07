@@ -17,7 +17,7 @@ function startMining(baseData: string, difficulty: number) {
     `Starting mining with string="${baseData}", difficulty=${difficulty}, threads=${NUM_WORKERS}`
   );
 
-  let workerCode = `
+  let workerCode:string = `
     function fakeHash(input) {
       let hash = 0;
       for (let i = 0; i < input.length; i++) {
@@ -80,3 +80,5 @@ function stopMining() {
 // // Expose functions to the global scope
 (self as any).startMining = startMining;
 (self as any).stopMining = stopMining;
+
+startMining('William',2)

@@ -114,7 +114,7 @@ Here are my summary to some main concepts in Blockchain technology:
   - Sender and receiver addresses
   - Amount or data being transferred
   - Digital signature to verify authenticity
-  Transactions are first broadcast to the network and stored in the mempool, a collection of unconfirmed transactions awaiting inclusion in a block.
+  Transactions are first broadcast to the network and stored in the mempool, a collec tion of unconfirmed transactions awaiting inclusion in a block.
 ]
 \
 #[
@@ -312,14 +312,14 @@ I created the flowchart below to visualise the workflow of a blockchain:
 == Existing models
 I found this blockchain simulator Command Line Interface (CLI) on GitHub (https://github.com/0xs34n/blockchain) by Sean. I have forked the repository and ran it on my local machine using `node.js`. The simulator offers a basic understanding of blockchain technologies with features like possessing blockchains and connecting to peers in different networks. However, it doesn't contain features such as transactions of blockchains or the process of mining blockchains.
 #subpar.grid(
-  figure(image("images/SeanCLI.png", width: 50%, height: 20%)), <a>,
+  figure(image("images/SeanCLI.png", width: 140%, height: 60%)), <a>,
   figure(image("images/SeanP2P.png", width: 50%, height: 20%)), <b>,
   columns: (1fr, 1fr),
   label: <full>,
 )
 In this image, Sean's Blockchain simulator has shown the connection between different ports in local host. However, there is not any features that allow different ports to interact, like trading blocks. It also doesn't allow user to see other's user blocks.
 
-Many of the simulators out allows you to change the content in a blockchain but this is not a realistic feature as in real life, once a block is mined and added to the blockchain, it is immutable and cannot be changed. This is misleading for learners as they might think that blocks in a blockchain can be changed.
+Many of the simulators on the internet allows you to change the content in a blockchain but this is not a realistic feature as in real life, once a block is mined and added to the blockchain, it is immutable and cannot be changed. This is misleading for learners as they might think that blocks in a blockchain can be changed.
 == Initial Features
 In this BlockChain Simulator project, I will build a simplified model of BlockChain and mainly focusing on visualisation of different technologies, so that learners would be able to easily understand them.
 
@@ -357,6 +357,13 @@ Controls (buttons):
 - "Mine Block" \u{27F6} mines transactions into a block
 - "Propagate Transaction" \u{27F6} spreads it across nodes
 - Network view \u{27F6} graph of nodes (circles), with edges showing connections
+#pagebreak()
+=== Intial Design
+The figure below shows the user interface design of different sections of the platform, including the Introduction Page, Main Page, Users Page, Chains Page, Mining Page, Transactions Page, and the Settings Page.
+
+#figure(image("images/ui.jpeg", width: 110%), caption: [
+  Intial Design for User interface of the blockchain simulator.
+])
 
 === Project Management Methodology
 The solution will be developed in an agile way. This means that it will be developed in different iterations. The analysis of requirements has been done in this section (Section 1).
@@ -366,12 +373,19 @@ In each iterations I will
 - Asking for User Feedback
 - Refine prototype
 Each feature of the solution might be improved throughout the iterations.
+
+Abstracted plans for my iterations:
+- Iteration 1-2: Proof of Concept for the technologies that I will be using in the simulator
+- Iteration 3-4: Developing a Command Line Interface (CLI)
+- Iteration 5: Developing a Graphical User Interface (GUI) to visualise blockchain
+
 === Technology
 The simulator will run purely on client side code to reduce server costs and workload, improve scalability, and create a more interactive and responsive user experience\
 Frontend: HTML + CSS + JavaScript \
 Graph visualisation: canvas
 === Device Compatibility
 The blockchain simulator is designed to run entirely in the browser and therefore requires TypeScript support to function. It is optimised for modern desktop and laptop environments using Chromium-based browsers (Google Chrome, Microsoft Edge, Opera). Mobile browsers may support basic interaction, but performance and visualisation features are best experienced on computer systems. The device running to program should have at least a refresh rate of 60Hz to run the requestAnimationFrame() function in canvas to visualise blockchain workflow.
+// TODO: Justify TypeScript
 
 #pagebreak()
 == Intital Sucess Criteria
@@ -379,30 +393,35 @@ These are the initial Success Criteria (SC) which is what I am aiming for while 
 
 Success Criteria
 #table(
-  columns: (auto, auto, auto),
+  columns: (auto, auto, auto, auto),
   inset: 10pt,
   align: horizon,
-  table.header([*SC*], [*Target*], [*Testing*]),
-  $ 1.1 $, [GUI], $ sqrt(2) / 12 a^3 $,
+  table.header([*SC*], [*Target*], [*Justification (This is an SC because...)*], [*Testing*]),
+  $ 1.1 $, [GUI], $ sqrt(2) / 12 a^3 $, $ "Ewuation" $,
   $ 1.2 $,
 )
 #pagebreak()
 == Stakeholders <stakeholders>
 Primary Stakeholders:
-\ \  Students: They are the main users of the simulator
+\ \  Students: My blockchain simulator is aimed at A level student who would like to go beyond the standard A level . This will serve as a great resource for them to gain an insight of what blockchain is, how they can propagate
+\ \ Developer: As a developer myself, I will be a stakeholder myself
 === Survey
 === Interview
 = Iterations
 == Iteration 1
 In Interation 1, I will be focusing on the proof of concept for the technologies that I will be using in my blockchain simulator.
 === Decomposing Iteration 1
-#figure(image("images/iteration1_decompose.jpg"), caption:[Decomposing iteration 1])
+// To change: no require web browser console
+#figure(image("images/iteration1_decompose.jpg"), caption: [Decomposing iteration 1])
 Here I have a brief decompostion of what I am going to do in iteration 1. Each leaf nodes of my diagram represents an algorithm or files that I have to work on. Further on in the iteration 1, each algorithms will be decomposed further and carefully designed.
-=== Goal
+=== Main Goal
 + Proof of concept for Breadth First Search (BFS) and Depth First Search (DFS) so that I can later use them for visualising the broadcast of blockchain within the network.
-+ Simplifying the SHA-256 hash function and implement it called the fakeHash() function
-+ 
++ Simplifying the SHA-256 hash function and implement it called the fakeHash() function.
++ Using web workers, build a mining algorithm that uses the concept of nonce to find the hash of a block.
 
+// Justify why BFS and DFS
+==== BFS and DFS
+To simulate the blockchain propagation along the network, I have decided to use the Breadth First Search and Depth First Search (DFS) algorithms. This is because both algorithms are in the A level Computer Science specifications across multiple exam boards. This can help students to understand the blockchain technology easily by applying their prior knowledge in traversing/searching a graph to a new problem - blockchain network propagation.
 
 === Proof of Concept: BFS
 Breadth First Search is an algorithm to traverse an undirected graph. A BFS algorithm starts at a selected node (often referred to as the 'root' node in tree structures) and explores all its neighbouring nodes at the present depth prior to moving on to nodes at the next depth level. This approach ensures that all nodes at the current level are visited before any nodes at the next level are explored, making BFS particularly useful for finding the shortest path in unweighted graphs.
@@ -411,10 +430,34 @@ Breadth First Search is an algorithm to traverse an undirected graph. A BFS algo
 I used a queue data structure in my BFS algorithm to keep track of nodes to be explored. The algorithm begins by enqueuing the starting node and making it as visited. It then enters a loop where it dequeues a node, and enqueue all its unvisited neighbours, marking them as visited. This process continues until the queue is empty, meaning all reachable nodes have been visited.
 
 To store the data, I used an adjacency list --- a data structure used to store a collection of unordered lists used to represent a finite graph.
+==== Unit Test for BFS
+To make a unit test for my BFS algorithm, I have to firstly design some graphs and traversing them by hand, then convert them into adjacency list where I input the neighbouring nodes for each node so that the graph can be 'undestood' by the algorithm.
+===== Normal Test
+I have designed this basic tree (an abstract data type that is a graph that has a hierarchial structure) graph to test my algorithm.
+#figure(image("/writeup/images/basic_tree_graph.png", width: 45%), caption: [basic tree graph]) <tree_graph>
 
-// Justify why BFS and DFS
 
-=== Proof of Concept:DFS
+
+Since I am developing in TypeScript, I have to declare the type of my adjacency list. Therefore I have to create an interface for my adjacency lists. Considering my input being the nodes and its neighbours in an array of strings, I will require a key-value pair (). Therefore my type AList (adjancency list) takes in 2 parameters, the key as a string --- this will be the nodes and values as an array of strings --- this will be the neighbours in arrays of strings
+``` interface AList {
+  [key: string]: string[]
+}
+let adjacencyList: AList = {
+A: ["C", "B"],
+B: ["F", "A"],
+C: ["A", "D", "E"],
+D: ["C"],
+E: ["C"],
+F: ["B"],
+};
+```
+
+===== Boundary Test
+===== Erroneous Test
+
+==== Development of BFS
+
+=== Proof of Concept: DFS
 Depth First Serch is another algorithm to traverse an undirected graph. A DFS algorithm also starts at a selected node (the 'root' node) and explores as far as possible along each branch before backtracking. This means that DFS goes deep into the graph, visiting a node and then recursively visiting one of its unvisited neighbours until it reaches a node with no unvisited neighbours. At this point, the algorithm backtracks to the most recent node that has unvisited neighbours and continues the process until all nodes have been visited.
 
 ==== Design of algorithm: DFS
@@ -422,6 +465,11 @@ I used a stack data structure in my DFS algorithm to keep track of nodes to be e
 
 I decided to make use of the call stack and implement the DFS algorithm recursively. The algorithm starts at the root node, marks it as visited, and then recursively visits each unvisited neighbour. This continues until all nodes have been visited.
 
+==== Unit Test for DFS
+===== Normal Test
+I am using the same tree graph from BFS (@tree_graph) to test my DFS. However this time I will have to manually traverse it in a DFS algorithm.
+===== Boundary Test
+===== Erroneous Test
 === Proof of Concept: Hashing
 Hashing is a fundamental concept in blockchain technology, used to ensure data integrity and security. A hash function takes an input (or 'message') and returns a fixed-size string of bytes. The output appears random and is unique to the specific input. Even a small change in the input will produce a significantly different hash, a property known as the avalanche effect. In blockchain, hashing is used to link blocks together, verify transactions, and secure data against tampering.
 BlockChain commonly uses the SHA-256 (Secure Hash Algorithm 256-bit) hashing algorithm. However, brute forcing SHA-256 is an incredibly computational heavy task. Instead, I have created a simplified version of a hashing function that captures the essence of how hashing works in blockchain.
@@ -460,28 +508,25 @@ The PoW mining algorithm works as follows:
 7. The valid nonce and hash are then used to complete the block, which can be added to the blockchain.
 This approach effectively simulates the distributed nature of mining in a real blockchain network, where multiple miners work concurrently to find a valid nonce. By leveraging web workers, the mining process can be parallelized, significantly speeding up the search for a valid nonce.
 
-=== Design
-The figure below shows the user interface design of different sections of the platform, including the Introduction Page, Main Page, Users Page, Chains Page, Mining Page, Transactions Page, and the Settings Page.
-
-#figure(image("images/ui.jpeg", width: 110%), caption: [
-  User interface of the blockchain simulator.
-])
-<fig:user-interface>
-== Decomposition <decomposition>
-TODO:Justify for decomposition
-
 === Testing
 === Evaluation
+In this iteration I have done the proof of concept
+
+In this iteration the stakeholder would be me - the developer of the simulator, as there isn't a Minimal Viable Product (MVP) yet for the external stakeholders to review.
 == Iteration 2
+In Iteration 2, I will be continuing on Proof of Concept.
 === Testing
 === Evaluation
 == Iteration 3
+In Iteration 3, I will start to code a Command Line Interface (CLI) for my simulator.
 === Testing
 === Evaluation
 == Iteration 4
+In Iteration 4, I will finish off my Command Line Interface (CLI) for my simulator
 === Testing
 === Evaluation
 == Iteration 5
+In Iteration 5, I will be developing a
 === Testing
 === Evaluation
 == Algorithms <algorithms>
@@ -489,3 +534,6 @@ TODO:Justify for decomposition
 == Data Validation
 = Evaluation <evaluation>
 // Data Validation
+
+== Decomposition <decomposition>
+TODO:Justify for decomposition

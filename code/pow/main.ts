@@ -56,3 +56,5 @@
 // // // Expose functions to the global scope
 // (self as any).startMining = startMining;
 // (self as any).stopMining = stopMining;
+
+// startMining('william',2)
