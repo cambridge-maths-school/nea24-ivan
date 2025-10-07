@@ -35,7 +35,19 @@
   spacing: 0.5em,
   indent: 1em,
 )
+
+#show heading.where(level: 3): set heading(outlined: false)
+#show heading.where(level: 4): set heading(outlined: false)
+#show heading.where(level: 5): set heading(outlined: false)
+#show heading.where(level: 6): set heading(outlined: false)
+#show heading.where(level: 7): set heading(outlined: false)
+// removing numbering for headings >= level 3
 #show figure.caption: set text(size: 0.7em)
+#show heading.where(level: 3): set heading(numbering: none)
+#show heading.where(level: 4): set heading(numbering: none)
+#show heading.where(level: 5): set heading(numbering: none)
+#show heading.where(level: 6): set heading(numbering: none)
+#show heading.where(level: 7): set heading(numbering: none)
 
 // bigger headings
 #show heading.where(level: 1): set text(size: 30pt)
@@ -433,12 +445,16 @@ To store the data, I used an adjacency list --- a data structure used to store a
 ==== Unit Test for BFS
 To make a unit test for my BFS algorithm, I have to firstly design some graphs and traversing them by hand, then convert them into adjacency list where I input the neighbouring nodes for each node so that the graph can be 'undestood' by the algorithm.
 ===== Normal Test
-I have designed this basic tree (an abstract data type that is a graph that has a hierarchial structure) graph to test my algorithm.
-#figure(image("/writeup/images/basic_tree_graph.png", width: 45%), caption: [basic tree graph]) <tree_graph>
+I have designed the following basic tree (an abstract data type that is a graph that has a hierarchial structure) graph to test my algorithm (left). While traversing the graph with a BFS algorithm, I will start at node A (layer 1) and visit its neighbours C and B (layer 2). Then I will move on to layer 3 and visit F, D, and E. Therefore the order of visiting nodes will be A -> C -> B -> F -> D -> E (right).
+#subpar.grid(
+  figure(image("/writeup/images/basic_tree_graph.png", width: 100%), caption: [basic tree graph]), <a>,
+  figure(image("/writeup/images/bfs_tree_graph.png", width: 60%), caption: [BFS traversal of the basic tree graph]), <b>,
+  columns: (1fr, 1fr),
+  label: <normal-test>,
+)
 
 
-
-Since I am developing in TypeScript, I have to declare the type of my adjacency list. Therefore I have to create an interface for my adjacency lists. Considering my input being the nodes and its neighbours in an array of strings, I will require a key-value pair (). Therefore my type AList (adjancency list) takes in 2 parameters, the key as a string --- this will be the nodes and values as an array of strings --- this will be the neighbours in arrays of strings
+Since I am developing in TypeScript, I have to declare the type of my adjacency list. Therefore I have to create an interface for my adjacency lists. Considering my input being the nodes and its neighbours in an array of strings, I will require a key-value pair (). Therefore my type AList (adjancency list) takes in 2 parameters, the key as a string --- this will be the nodes and values as an array of strings --- this will be the neighbours in arrays of strings#pagebreak()
 ``` interface AList {
   [key: string]: string[]
 }
@@ -467,7 +483,7 @@ I decided to make use of the call stack and implement the DFS algorithm recursiv
 
 ==== Unit Test for DFS
 ===== Normal Test
-I am using the same tree graph from BFS (@tree_graph) to test my DFS. However this time I will have to manually traverse it in a DFS algorithm.
+I am using the same tree graph from BFS to test my DFS. However this time I will have to manually traverse it in a DFS algorithm.
 ===== Boundary Test
 ===== Erroneous Test
 === Proof of Concept: Hashing
