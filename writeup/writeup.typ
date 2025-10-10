@@ -403,13 +403,23 @@ The blockchain simulator is designed to run entirely in the browser and therefor
 == Intital Sucess Criteria
 These are the initial Success Criteria (SC) which is what I am aiming for while developing a MVP (Minimum Viable Product). As I am developing in an agile methodology, the Success Critea might be ammended or new Success Criteria might be added in the process of iterations.
 
-Success Criteria
+=== Success Criteria
 #table(
-  columns: (auto, auto, auto, auto),
+  columns: (auto, auto, auto, auto, auto),
   inset: 10pt,
   align: horizon,
-  table.header([*SC*], [*Target*], [*Justification (This is an SC because...)*], [*Testing*]),
-  $ 1.1 $, [GUI], $ sqrt(2) / 12 a^3 $, $ "Ewuation" $,
+  table.header([*Category*], [*SC*], [*Target*], [*Justification (This is an SC because...)*], [*Testing*]),
+  table.cell(
+    rowspan: 6,
+    align: center,
+    rotate(-90deg, reflow: true)[
+      *Graphical User Interface (GUI)*
+    ],
+  ),
+  $ 1.1 $,
+  [GUI],
+  $ sqrt(2) / 12 a^3 $,
+  $ "Ewuation" $,
   $ 1.2 $,
 )
 #pagebreak()
@@ -434,7 +444,7 @@ Here I have a brief decompostion of what I am going to do in iteration 1. Each l
 // Justify why BFS and DFS
 ==== BFS and DFS
 To simulate the blockchain propagation along the network, I have decided to use the Breadth First Search and Depth First Search (DFS) algorithms. This is because both algorithms are in the A level Computer Science specifications across multiple exam boards. This can help students to understand the blockchain technology easily by applying their prior knowledge in traversing/searching a graph to a new problem - blockchain network propagation.
-
+#pagebreak()
 === Proof of Concept: BFS
 Breadth First Search is an algorithm to traverse an undirected graph. A BFS algorithm starts at a selected node (often referred to as the 'root' node in tree structures) and explores all its neighbouring nodes at the present depth prior to moving on to nodes at the next depth level. This approach ensures that all nodes at the current level are visited before any nodes at the next level are explored, making BFS particularly useful for finding the shortest path in unweighted graphs.
 
@@ -443,33 +453,57 @@ I used a queue data structure in my BFS algorithm to keep track of nodes to be e
 
 To store the data, I used an adjacency list --- a data structure used to store a collection of unordered lists used to represent a finite graph.
 ==== Unit Test for BFS
-To make a unit test for my BFS algorithm, I have to firstly design some graphs and traversing them by hand, then convert them into adjacency list where I input the neighbouring nodes for each node so that the graph can be 'undestood' by the algorithm.
+For the unit test, I am making a new file `bfs.test.ts` and testing it using Bun. This allows me to test individual functions from the `bfs.ts` file by importing them into the test file.\ \
+To make a unit test for my BFS algorithm, I have to firstly design some graphs and traversing them by hand, then convert them into adjacency list where I input the neighbouring nodes for each node so that the graph can be 'undestood' by the algorithm
 ===== Normal Test
-I have designed the following basic tree (an abstract data type that is a graph that has a hierarchial structure) graph to test my algorithm (left). While traversing the graph with a BFS algorithm, I will start at node A (layer 1) and visit its neighbours C and B (layer 2). Then I will move on to layer 3 and visit F, D, and E. Therefore the order of visiting nodes will be A -> C -> B -> F -> D -> E (right).
+I have designed the following basic tree (an abstract data type that is a graph that has a hierarchial structure) graph to test my algorithm (left). While traversing the graph with a BFS algorithm, I will start at node A (layer 1) and visit its neighbours C and B (layer 2). Then I will move on to layer 3 and visit F, D, and E. Therefore one of the ways to traverse the graph with the BFS algorithms is with the order: A -> C -> B -> F -> D -> E (right).
 #subpar.grid(
   figure(image("/writeup/images/basic_tree_graph.png", width: 100%), caption: [basic tree graph]), <a>,
-  figure(image("/writeup/images/bfs_tree_graph.png", width: 60%), caption: [BFS traversal of the basic tree graph]), <b>,
+  figure(image("/writeup/images/bfs_tree_graph.png", width: 60%), caption: [BFS traversal of the basic tree graph]),
+  <b>,
+
   columns: (1fr, 1fr),
   label: <normal-test>,
 )
 
 
-Since I am developing in TypeScript, I have to declare the type of my adjacency list. Therefore I have to create an interface for my adjacency lists. Considering my input being the nodes and its neighbours in an array of strings, I will require a key-value pair (). Therefore my type AList (adjancency list) takes in 2 parameters, the key as a string --- this will be the nodes and values as an array of strings --- this will be the neighbours in arrays of strings#pagebreak()
+Since I am developing in TypeScript, I have to declare the type of my adjacency list. Therefore I have to create an interface for my adjacency lists. Considering my input being the nodes and its neighbours in an array of strings, I will require a key-value pair (a basic data structure that stores data as a collection of unique, constant keys and their corresponding, variable values). Therefore my type AList (adjancency list) takes in 2 parameters, the key as a string --- this will be the nodes and the values as an array of strings --- this will be the neighbours in arrays of strings. The interface can be defined as following --- see next page#pagebreak()
 ``` interface AList {
   [key: string]: string[]
 }
+```
+Writing the nodes from the basic tree graph in an adjacency list gives me:
+```
 let adjacencyList: AList = {
-A: ["C", "B"],
-B: ["F", "A"],
-C: ["A", "D", "E"],
-D: ["C"],
-E: ["C"],
-F: ["B"],
+  A: ["C", "B"],
+  B: ["F", "A"],
+  C: ["A", "D", "E"],
+  D: ["C"],
+  E: ["C"],
+  F: ["B"],
 };
 ```
+Now I have to design unit tests for my list. I have to consider that BFS allows multiple ways to traverse it as long as it finished traversing one layer of the nodes until it moves on to the next layer until all the nodes are traversed. I can allow this by splitting the list in layers and allowing them in any order. I can do this with using `slice` to split the traversed array of strings into layers, then sorting them using the `sort` function and check them against the traversed layer in order.
+```
+test("Normal List", () => {
+  let result = bfs_traverse(normalList, "A");
+  expect(result[0]).toBe("A");
+  let layer1 = result.slice(1, 3).sort();
+  expect(layer1).toEqual(["B", "C"]);
+  let layer2 = result.slice(3).sort();
+  expect(layer2).toEqual(["D", "E", "F"]);
+});
+```
+// Setting other starting nodes
+To further test my bfs algorithm whether it is capable of taking and processing more input nodes, I made another graph which is *a little bit* more complicated.
+
+As expected, initially, when no code has been made, the bfs test fails due to no such function being defined.
+#figure(image("images/bfs_test_error.png"),caption:[Error: bfs_traverse not found])
 
 ===== Boundary Test
+For boundary test I decided to make some special looking graphs such as a self looped graph, graph with only one node and graph with
 ===== Erroneous Test
+I decided to do erroneous testing with unexpected input types.
 
 ==== Development of BFS
 
@@ -489,6 +523,8 @@ I am using the same tree graph from BFS to test my DFS. However this time I will
 === Proof of Concept: Hashing
 Hashing is a fundamental concept in blockchain technology, used to ensure data integrity and security. A hash function takes an input (or 'message') and returns a fixed-size string of bytes. The output appears random and is unique to the specific input. Even a small change in the input will produce a significantly different hash, a property known as the avalanche effect. In blockchain, hashing is used to link blocks together, verify transactions, and secure data against tampering.
 BlockChain commonly uses the SHA-256 (Secure Hash Algorithm 256-bit) hashing algorithm. However, brute forcing SHA-256 is an incredibly computational heavy task. Instead, I have created a simplified version of a hashing function that captures the essence of how hashing works in blockchain.
+
+==== Research on the SHA-256 algorithm
 
 ==== Design of algorithm: Hashing
 My idea for the simplified hashing:
@@ -531,6 +567,15 @@ In this iteration I have done the proof of concept
 In this iteration the stakeholder would be me - the developer of the simulator, as there isn't a Minimal Viable Product (MVP) yet for the external stakeholders to review.
 == Iteration 2
 In Iteration 2, I will be continuing on Proof of Concept.
+
+
+// Making blocks as global objects so that it can be accessed throughout different part of the programme while keeping it modular
+// Justify modular coding
+// Not repeating code, improve readability, allowing future developers to be able pick things up straight away
+// Good for decomposed code
+// Easier to code and debug
+// Reducing risk of cascading bugs throughout the application
+// Easier to test
 === Testing
 === Evaluation
 == Iteration 3

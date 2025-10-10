@@ -32,6 +32,8 @@ let complicatedList: AList = {
   O: ["N"],
 };
 
+
+// Normal Test
 test("Normal List", () => {
   let result = bfs_traverse(normalList, "A");
   expect(result[0]).toBe("A");
@@ -53,3 +55,8 @@ test("Complicated List", () => {
   let layer4 = result.slice(14).sort();
   expect(layer4).toEqual(["O"]);
 });
+
+// Boundary Test
+
+
+// Erroneous Test
