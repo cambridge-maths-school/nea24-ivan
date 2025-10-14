@@ -458,8 +458,8 @@ To make a unit test for my BFS algorithm, I have to firstly design some graphs a
 ===== Normal Test
 I have designed the following basic tree (an abstract data type that is a graph that has a hierarchial structure) graph to test my algorithm (left). While traversing the graph with a BFS algorithm, I will start at node A (layer 1) and visit its neighbours C and B (layer 2). Then I will move on to layer 3 and visit F, D, and E. Therefore one of the ways to traverse the graph with the BFS algorithms is with the order: A -> C -> B -> F -> D -> E (right).
 #subpar.grid(
-  figure(image("/writeup/images/basic_tree_graph.png", width: 100%), caption: [basic tree graph]), <a>,
-  figure(image("/writeup/images/bfs_tree_graph.png", width: 60%), caption: [BFS traversal of the basic tree graph]),
+  figure(image("images/basic_tree_graph.png", width: 100%), caption: [basic tree graph]), <a>,
+  figure(image("images/bfs_tree_graph.png", width: 60%), caption: [BFS traversal of the basic tree graph]),
   <b>,
 
   columns: (1fr, 1fr),
@@ -581,6 +581,7 @@ I am using the same tree graph from BFS to test my DFS. However this time I will
 Hashing is a fundamental concept in blockchain technology, used to ensure data integrity and security. A hash function takes an input (or 'message') and returns a fixed-size string of bytes. The output appears random and is unique to the specific input. Even a small change in the input will produce a significantly different hash, a property known as the avalanche effect. In blockchain, hashing is used to link blocks together, verify transactions, and secure data against tampering.
 BlockChain commonly uses the SHA-256 (Secure Hash Algorithm 256-bit) hashing algorithm. However, brute forcing SHA-256 is an incredibly computational heavy task. Instead, I have created a simplified version of a hashing function that captures the essence of how hashing works in blockchain.
 
+#pagebreak()
 ==== Research on the SHA-256 algorithm
 
 ==== Design of algorithm: Hashing
