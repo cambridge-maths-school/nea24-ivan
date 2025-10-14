@@ -468,12 +468,13 @@ I have designed the following basic tree (an abstract data type that is a graph 
 
 
 Since I am developing in TypeScript, I have to declare the type of my adjacency list. Therefore I have to create an interface for my adjacency lists. Considering my input being the nodes and its neighbours in an array of strings, I will require a key-value pair (a basic data structure that stores data as a collection of unique, constant keys and their corresponding, variable values). Therefore my type AList (adjancency list) takes in 2 parameters, the key as a string --- this will be the nodes and the values as an array of strings --- this will be the neighbours in arrays of strings. The interface can be defined as following --- see next page#pagebreak()
-``` interface AList {
+```js
+ interface AList {
   [key: string]: string[]
 }
 ```
 Writing the nodes from the basic tree graph in an adjacency list gives me:
-```
+```js
 let adjacencyList: AList = {
   A: ["C", "B"],
   B: ["F", "A"],
@@ -495,10 +496,66 @@ test("Normal List", () => {
 });
 ```
 // Setting other starting nodes
-To further test my bfs algorithm whether it is capable of taking and processing more input nodes, I made another graph which is *a little bit* more complicated.
+To further test my bfs algorithm whether it is capable of taking and processing more input nodes, I made another graph which is *a little bit* more complicated. Then I traversed it with the starting node 'M'.
+#subpar.grid(
+  align(
+    horizon,
 
-As expected, initially, when no code has been made, the bfs test fails due to no such function being defined.
-#figure(image("images/bfs_test_error.png"),caption:[Error: bfs_traverse not found])
+    figure(
+      image("images/little_bit_more_complicated_graph.jpeg", width: 100%),
+      caption: [A bit more complicated tree graph],
+    ),
+  ),
+  <a>,
+
+  figure(
+    image("images/BFS_traversal_of_little_more_complicated_graph.png", width: 100%),
+    caption: [BFS traversal of the a bit more complicated graph],
+  ),
+  <b>,
+
+  columns: (1fr, 1fr),
+  label: <normal-test>,
+)
+The 'bit more complicated graph' can be represented by the following adjacency list arranged in alphabetical order:
+```js
+let complicatedList: AList = {
+  A: ["C", "H", "I", "N"],
+  B: ["D", "H", "I", "J", "K"],
+  C: ["A", "E", "L"],
+  D: ["B", "E", "G", "L", "M"],
+  E: ["C", "D", "G", "J"],
+  F: ["G"],
+  G: ["D", "E", "F", "H"],
+  H: ["A", "B", "G"],
+  I: ["A", "B", "M"],
+  J: ["B", "E"],
+  K: ["B"],
+  L: ["C", "D"],
+  M: ["D", "I"],
+  N: ["A", "O"],
+  O: ["N"],
+};
+```
+
+Using the same idea of splitting the graph into layers, I can make the test for the 'bit more complicated graph' with
+```js
+test("Complicated List", () => {
+  let result = dfs_traverse(complicatedList, "M");
+  expect(result[0]).toBe("M");
+  let layer1 = result.slice(1, 3).sort();
+  expect(layer1).toEqual(["D", "I"]);
+  let layer2 = result.slice(3, 8).sort();
+  expect(layer2).toEqual(["A", "B", "E", "G", "L"]);
+  let layer3 = result.slice(8, 14).sort();
+  expect(layer3).toEqual(["C", "F", "H", "J", "K", "N"]);
+  let layer4 = result.slice(14).sort();
+  expect(layer4).toEqual(["O"]);
+});
+```
+
+As expected, initially, when no code has been made, the bfs test fails due to no such function `bfs_traverse()` being defined.
+#figure(image("images/bfs_test_error.png"), caption: [Error: bfs_traverse not found])
 
 ===== Boundary Test
 For boundary test I decided to make some special looking graphs such as a self looped graph, graph with only one node and graph with
