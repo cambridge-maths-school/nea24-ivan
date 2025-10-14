@@ -36,14 +36,13 @@
   indent: 1em,
 )
 
-#show heading.where(level: 3): set heading(outlined: false)
 #show heading.where(level: 4): set heading(outlined: false)
 #show heading.where(level: 5): set heading(outlined: false)
 #show heading.where(level: 6): set heading(outlined: false)
 #show heading.where(level: 7): set heading(outlined: false)
 // removing numbering for headings >= level 3
 #show figure.caption: set text(size: 0.7em)
-#show heading.where(level: 3): set heading(numbering: none)
+// #show heading.where(level: 3): set heading(numbering: none)
 #show heading.where(level: 4): set heading(numbering: none)
 #show heading.where(level: 5): set heading(numbering: none)
 #show heading.where(level: 6): set heading(numbering: none)
@@ -459,8 +458,7 @@ To make a unit test for my BFS algorithm, I have to firstly design some graphs a
 I have designed the following basic tree (an abstract data type that is a graph that has a hierarchial structure) graph to test my algorithm (left). While traversing the graph with a BFS algorithm, I will start at node A (layer 1) and visit its neighbours C and B (layer 2). Then I will move on to layer 3 and visit F, D, and E. Therefore one of the ways to traverse the graph with the BFS algorithms is with the order: A -> C -> B -> F -> D -> E (right).
 #subpar.grid(
   figure(image("images/basic_tree_graph.png", width: 100%), caption: [basic tree graph]), <a>,
-  figure(image("images/bfs_tree_graph.png", width: 60%), caption: [BFS traversal of the basic tree graph]),
-  <b>,
+  figure(image("images/bfs_tree_graph.png", width: 60%), caption: [BFS traversal of the basic tree graph]), <b>,
 
   columns: (1fr, 1fr),
   label: <normal-test>,
@@ -485,7 +483,7 @@ let adjacencyList: AList = {
 };
 ```
 Now I have to design unit tests for my list. I have to consider that BFS allows multiple ways to traverse it as long as it finished traversing one layer of the nodes until it moves on to the next layer until all the nodes are traversed. I can allow this by splitting the list in layers and allowing them in any order. I can do this with using `slice` to split the traversed array of strings into layers, then sorting them using the `sort` function and check them against the traversed layer in order.
-```
+```jsa
 test("Normal List", () => {
   let result = bfs_traverse(normalList, "A");
   expect(result[0]).toBe("A");
@@ -583,7 +581,7 @@ BlockChain commonly uses the SHA-256 (Secure Hash Algorithm 256-bit) hashing alg
 
 #pagebreak()
 ==== Research on the SHA-256 algorithm
-
+Summarising this article about cyber security from #link("https://www.simplilearn.com/tutorials/cyber-security-tutorial/sha-256-algorithm")[simplilearn] #footnote[https://www.simplilearn.com/tutorials/cyber-security-tutorial/sha-256-algorithm], the SHA-256 algorithm works
 ==== Design of algorithm: Hashing
 My idea for the simplified hashing:
 Iterate over each character in the input string:
@@ -618,6 +616,8 @@ The PoW mining algorithm works as follows:
 7. The valid nonce and hash are then used to complete the block, which can be added to the blockchain.
 This approach effectively simulates the distributed nature of mining in a real blockchain network, where multiple miners work concurrently to find a valid nonce. By leveraging web workers, the mining process can be parallelized, significantly speeding up the search for a valid nonce.
 
+
+// Issues with Bun
 === Testing
 === Evaluation
 In this iteration I have done the proof of concept
