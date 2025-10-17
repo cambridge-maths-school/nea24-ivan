@@ -444,7 +444,7 @@ These are the initial Success Criteria (SC) which is what I am aiming for while 
   [Ensures robustness against accidental or malicious user actions; protects simulator from crashes and freezes],
   [Rapidly press input buttons or type random keys; confirm simulator does not crash],
 
-    $ 1.6 $,
+  $ 1.6 $,
   [Simulator can broadcast a newly mined block to all connected nodes using BFS traversal within 2 seconds],
   [Ensures updates propagate efficiently across the network; 2s chosen for real-time demonstration],
   [Mine a block on one node and verify all connected nodes receive it within 2 seconds],
@@ -454,8 +454,7 @@ These are the initial Success Criteria (SC) which is what I am aiming for while 
   [Ensures correctness of alternative traversal method; DFS may be slower but must reach all nodes reliably],
   [Mine a block on one node and verify all connected nodes receive it within 3 seconds],
 
-
-table.cell(
+  table.cell(
     rowspan: 6,
     align: center,
     rotate(-90deg, reflow: true)[
@@ -529,7 +528,7 @@ table.cell(
   [Ensures network consensus; DFS guarantees all nodes are visited, though order may differ],
   [Compare blockchains across all nodes after DFS broadcast; they must match exactly],
 
-table.cell(
+  table.cell(
     rowspan: 4,
     align: center,
     rotate(-90deg, reflow: true)[
@@ -552,11 +551,10 @@ table.cell(
   [Reduces CPU usage when not actively used; increases efficiency and prevents unnecessary computations],
   [Switch window focus; observe simulation pause],
 
-$ 4.4 $,
+  $ 4.4 $,
   [Memory usage \u{003C}50MB for 100 blocks stored in local storage],
   [Ensures efficient resource usage on a single computer; prevents crashes and keeps simulator responsive],
   [Monitor memory usage during simulation with 100 blocks in local storage],
-
 )
 #pagebreak()
 == Stakeholders <stakeholders>
@@ -581,7 +579,7 @@ Here I have a brief decompostion of what I am going to do in iteration 1. Each l
 ==== BFS and DFS
 To simulate the blockchain propagation along the network, I have decided to use the Breadth First Search and Depth First Search (DFS) algorithms. This is because both algorithms are in the A level Computer Science specifications across multiple exam boards. This can help students to understand the blockchain technology easily by applying their prior knowledge in traversing/searching a graph to a new problem - blockchain network propagation.
 #pagebreak()
-=== Proof of Concept: BFS
+=== Proof of Concept: BFS <BFS-unit-test>
 Breadth First Search is an algorithm to traverse an undirected graph. A BFS algorithm starts at a selected node (often referred to as the 'root' node in tree structures) and explores all its neighbouring nodes at the present depth prior to moving on to nodes at the next depth level. This approach ensures that all nodes at the current level are visited before any nodes at the next level are explored, making BFS particularly useful for finding the shortest path in unweighted graphs.
 
 ==== Design of algorithm: BFS
@@ -632,7 +630,7 @@ test("Normal List", () => {
 });
 ```
 
-I have also considered different starting nodes. For example, if I start at node 'B', the BFS traversal order could be B \u{2192} A \u{2192} F \u{2192} C \u{2192} D \u{2192} E. The unit test for starting at node 'B' would be: 
+I have also considered different starting nodes. For example, if I start at node 'B', the BFS traversal order could be B \u{2192} A \u{2192} F \u{2192} C \u{2192} D \u{2192} E. The unit test for starting at node 'B' would be:
 ```js
 test("Normal List", () => {
   let result = bfs_traverse(normalList, "B");
@@ -810,7 +808,7 @@ All of the boundary tests passed, including the 'Single Node Graph' and 'Disconn
 \
 Both erroneous tests, the 'Non-existent Start Node' and the 'unexpected input types', also initially failed for similar reasons: the code assumed that the start node would always exist in the adjacency list and that the inputs would be of valid types. When this assumption was violated, the algorithm tried to iterate over undefined, causing runtime errors.\
 
-#figure(image("images/bfs_fail_test_result.png", width: 50%), caption: [BFS Test Results - Some Boundary and Erroneous Test Failing])
+// #figure(image("images/bfs_fail_test_result.png", width: 50%), caption: [BFS Test Results - Some Boundary and Erroneous Test Failing])
 To fix these issues, I added a defensive check before iterating over neighbours. If a node does not exist in the adjacency list, the algorithm simply skips the neighbour loop, allowing it to safely return the starting node as visited. Additionally, a type check can be added at the start to handle completely invalid inputs gracefully, returning [null] if the input types are incorrect.\
 \
 To fix this, I added a defensive check at the start of the function before iterating over neighbours:
@@ -837,20 +835,51 @@ Depth-first search (DFS) explores a graph by moving as far as possible along eac
 I will use a stack data structure in my DFS algorithm to keep track of nodes to be explored. The algorithm begins by pushing the starting node onto the stack and marking it as visited. It then enters a loop where it pops a node from the stack, and pushes all its unvisited neighbours onto the stack, marking them as visited. This process continues until the stack is empty, meaning all reachable nodes have been visited.\
 \
 I decided to make use of the call stack and implement the DFS algorithm recursively. The algorithm starts at the root node, marks it as visited, and then recursively visits each unvisited neighbour. This continues until all nodes have been visited. Using recursion in DFS is justified because it naturally mirrors the algorithm's logic of exploring 'as deep as possible' along a branch before backtracking. The call stack inherently acts as the stack needed to keep track of nodes yet to be explored, so recursion simplifies the code and avoids manually managing a separate stack. It also makes the algorithm easier to read and understand, especially for complex graphs, since each recursive call represents the exploration of a node and its subtree. Recursion is particularly suitable for small to medium-sized graphs, like the ones in my simulator, because the depth of recursion is limited and won't cause stack overflow on a typical machine.\
+
+// Justify why it is pre order
 \
-I am also using the same adjacency list data structure as BFS to store the graph.
+I will also using the same adjacency list data structure as BFS to store the graph.
 ==== Unit Test for DFS
+Again I will be using Bun for the unit test, and the testing file will be called `dfs.test.ts`. This is used to test the `dfs_traverse()` function if it can accurately traverse the graph input with a Depth First Search algorithm.
 ===== Normal Test
-I am using the same tree graph from BFS to test my DFS. However this time I will have to manually traverse it in a DFS algorithm.
+I am using the same tree graph from BFS to test my DFS. However this time I will have to manually traverse it in a DFS algorithm. Since the graph is traversed with pre-order DFS, there is only one way to traverse the graph. The test is also less complicated to set up as only one case has to be considered. With the basic tree graph that we had, if the DFS traversal starts at node 'A', then the DFS traversal order is A \u{2192} C \u{2192} D \u{2192} E \u{2192} B \u{2192} F. Please find the dfs traversal on the next page.
+
+#subpar.grid(
+  figure(image("images/basic_tree_graph.png", width: 100%), caption: [basic tree graph]), <a>,
+  figure(image("images/dfs_tree_graph.jpeg", width: 76%), caption: [DFS traversal of the basic tree graph]), <b>,
+
+  columns: (1fr, 1fr),
+  label: <normal-test>,
+)
+
+The 'bit more complicated graph' also has to be traversed again with a DFS algorithm:
+#figure(
+  image("images/DFS_traversal_of_little_more_complicated_graph.jpeg", width: 50%),
+  caption: [DFS traversal of the a bit more complicated graph],
+)
+
+
 ===== Boundary Test
+I am using the same boundary tests for my DFS algorithm from my BFS test. Please refer back to unit test in @BFS-unit-test for the code of the tests (The `bfs_traverse()` function is replaced by the `dfs_traverse()` function). The tests includes:
+- Single Node Graph
+- Disconnected Graph
+- Empty Adjacency list
+- Cyclic Graph
+
 ===== Erroneous Test
+I am also using
+===== Test results
+Again, when nothing is created, the tests
 === Proof of Concept: Hashing
 Hashing is a fundamental concept in blockchain technology, used to ensure data integrity and security. A hash function takes an input (or 'message') and returns a fixed-size string of bytes. The output appears random and is unique to the specific input. Even a small change in the input will produce a significantly different hash, a property known as the avalanche effect. In blockchain, hashing is used to link blocks together, verify transactions, and secure data against tampering.
-BlockChain commonly uses the SHA-256 (Secure Hash Algorithm 256-bit) hashing algorithm. However, brute forcing SHA-256 is an incredibly computational heavy task. Instead, I have created a simplified version of a hashing function that captures the essence of how hashing works in blockchain.
+BlockChain commonly uses the SHA-256 (Secure Hash Algorithm 256-bit) hashing algorithm. However, brute forcing SHA-256 is an incredibly computational heavy task. Instead, I will be creating a simplified version of a hashing function that captures the essence of how hashing works in blockchain.
 
 #pagebreak()
 ==== Research on the SHA-256 algorithm
-Summarising this article about cyber security from #link("https://www.simplilearn.com/tutorials/cyber-security-tutorial/sha-256-algorithm")[simplilearn] #footnote[https://www.simplilearn.com/tutorials/cyber-security-tutorial/sha-256-algorithm], the SHA-256 algorithm works
+Summarising this article about cyber security from #link("https://www.simplilearn.com/tutorials/cyber-security-tutorial/sha-256-algorithm")[simplilearn] #footnote[https://www.simplilearn.com/tutorials/cyber-security-tutorial/sha-256-algorithm], the SHA-256 algorithm always hashes the results to 256 bits and the process is irreversible. This is done by:
++ Firstly padding bits (adding extra bits to the message so that the length is exactly 64 bits short of a multiple of 512)
++ Then add 64 bits of data now to make the final plaintet a multiple of 512. The added data is calculated by applying the modulus to your original cleartext
+
 ==== Design of algorithm: Hashing
 My idea for the simplified hashing:
 Iterate over each character in the input string:

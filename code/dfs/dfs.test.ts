@@ -1,3 +1,4 @@
+// @ts-ignore
 import { expect, test } from "bun:test";
 import { dfs_traverse } from "./dfs.ts";
 
