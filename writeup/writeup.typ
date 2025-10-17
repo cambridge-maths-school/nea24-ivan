@@ -395,8 +395,12 @@ The simulator will run purely on client side code to reduce server costs and wor
 Frontend: HTML + CSS + JavaScript \
 Graph visualisation: canvas
 === Device Compatibility
-The blockchain simulator is designed to run entirely in the browser and therefore requires TypeScript support to function. It is optimised for modern desktop and laptop environments using Chromium-based browsers (Google Chrome, Microsoft Edge, Opera). Mobile browsers may support basic interaction, but performance and visualisation features are best experienced on computer systems. The device running to program should have at least a refresh rate of 60Hz to run the requestAnimationFrame() function in canvas to visualise blockchain workflow.
-// TODO: Justify TypeScript
+The blockchain simulator is designed to run entirely in the browser and therefore requires JavaScript support to function. It is optimised for modern desktop and laptop environments using Chromium-based browsers (Google Chrome, Microsoft Edge, Opera). Mobile browsers may support basic interaction, but performance and visualisation features are best experienced on computer systems. The device running to program should have at least a refresh rate of 60Hz to run the requestAnimationFrame() function in canvas to visualise blockchain workflow.
+==== TypeScript
+I will be using TypeScript to develop my blockchain simulator. TypeScript is a superset of JavaScript that adds static types, interfaces, and other features to enhance code quality and maintainability. Here are some reasons why TypeScript is a good choice for this project:
++ Type Safety: TypeScript's static typing helps catch errors at compile time, reducing runtime bugs. This is especially important in a complex project like a blockchain simulator where data structures and algorithms need to be precise.
++ Sustainability: TypeScript's type system makes it easier to understand and maintain code over time. This is crucial for a project that may evolve with new features and improvements.
+However, the when the project gets onto a website, the TypeScript code will be transpiled into JavaScript so that it can run on all browsers. Therefore, users do not need to have TypeScript installed on their devices to run the blockchain simulator. Their browsers only have to support JavaScript.
 
 #pagebreak()
 == Intital Sucess Criteria
@@ -404,22 +408,155 @@ These are the initial Success Criteria (SC) which is what I am aiming for while 
 
 === Success Criteria
 #table(
-  columns: (auto, auto, auto, auto, auto),
+  columns: (64pt, 33pt, 100pt, auto, auto),
   inset: 10pt,
   align: horizon,
   table.header([*Category*], [*SC*], [*Target*], [*Justification (This is an SC because...)*], [*Testing*]),
   table.cell(
+    rowspan: 7,
+    align: center,
+    rotate(-90deg, reflow: true)[
+      *Functionality*
+    ],
+  ),
+  $ 1.1 $,
+  [Users can create a new block with a hash linked to the previous block within 1 second],
+  [Ensures blocks are linked correctly and the blockchain structure is maintained; 1 second chosen so that block creation is fast enough for interactive testing and demonstration],
+  [Click “Add Block” and verify `block.previousHash === previousBlock.hash` and block.hash calculated correctly],
+
+  $ 1.2 $,
+  [Users can add up to 10 transactions per block before mining],
+  [Ensures multiple transactions can be stored and tested; 10 transactions chosen as a reasonable limit for a small-scale simulator without overloading memory or UI],
+  [Add transactions and verify block.transactions.length matches number added],
+
+  $ 1.3 $,
+  [Mining a block produces a hash satisfying difficulty (\u{2264}2 leading zeros) and completes \u{003C}5s],
+  [Demonstrates mining process works correctly and efficiently; 2 zeros chosen as low difficulty for demonstration, 5s ensures responsiveness for users],
+  [Mine a block and check hash meets difficulty; measure mining time],
+
+  $ 1.4 $,
+  [Each block has a sequential index automatically assigned],
+  [Ensures proper ordering of blocks for clarity and prevents confusion; automatic indexing prevents user errors],
+  [Add multiple blocks and verify block.index === previousBlock.index + 1],
+
+  $ 1.5 $,
+  [Simulator handles unexpected user behaviour (keyboard smashing/spamming)],
+  [Ensures robustness against accidental or malicious user actions; protects simulator from crashes and freezes],
+  [Rapidly press input buttons or type random keys; confirm simulator does not crash],
+
+    $ 1.6 $,
+  [Simulator can broadcast a newly mined block to all connected nodes using BFS traversal within 2 seconds],
+  [Ensures updates propagate efficiently across the network; 2s chosen for real-time demonstration],
+  [Mine a block on one node and verify all connected nodes receive it within 2 seconds],
+
+  $ 1.7 $,
+  [Simulator can broadcast a newly mined block to all connected nodes using DFS traversal within 3 seconds],
+  [Ensures correctness of alternative traversal method; DFS may be slower but must reach all nodes reliably],
+  [Mine a block on one node and verify all connected nodes receive it within 3 seconds],
+
+
+table.cell(
     rowspan: 6,
     align: center,
     rotate(-90deg, reflow: true)[
       *Graphical User Interface (GUI)*
     ],
   ),
-  $ 1.1 $,
-  [GUI],
-  $ sqrt(2) / 12 a^3 $,
-  $ "Ewuation" $,
-  $ 1.2 $,
+  $ 2.1 $,
+  [Blocks visually display index, hash, previous hash, transactions on 100x100 pixel display],
+  [Ensures accessibility and usability across devices; 100x100 chosen as minimum usable resolution],
+  [Observe GUI or inspect DOM elements; verify visibility of all block data],
+
+  $ 2.2 $,
+  [Transaction input form accepts strings ≤100 characters; longer inputs rejected],
+  [Prevents invalid transaction data entry; 100 character limit chosen for readability and UI layout],
+  [Enter valid and invalid strings; confirm validation works],
+
+  $ 2.3 $,
+  [Chain validity visually indicated (green=valid, red=invalid)],
+  [Gives immediate feedback on blockchain integrity; visual feedback reduces user errors],
+  [Create a block and do validations; observe color change],
+
+  $ 2.4 $,
+  [Users can expand blocks to view transactions; expansion completes \u{003C}0.5s],
+  [Ensures users can inspect block details quickly; 0.5s chosen for fast but noticeable animation],
+  [Click block and verify transactions displayed; measure expansion time],
+
+  $ 2.5 $,
+  [GUI updates in \u{003C}1s after any user action (add transaction, mine block)],
+  [Ensures responsiveness and smooth interaction; 1 second ensures users see updates promptly without lag],
+  [Add transaction or mine block; measure GUI update time],
+
+  $ 2.6 $,
+  [GUI prevents spamming (>5 transactions/sec not allowed)],
+  [Prevents system overload and ensures usability; 5 per second chosen to allow quick entry but prevent crashing],
+  [Attempt to add >5 transactions/sec; verify only 5 are accepted],
+  table.cell(
+    rowspan: 6,
+    align: center,
+    rotate(-90deg, reflow: true)[
+      *Security and Integrity*
+    ],
+  ),
+
+  $ 3.1 $,
+  [Block hash matches its data exactly],
+  [Ensures blockchain security and integrity; prevents unnoticed tampering],
+  [Recalculate block hash and compare to stored hash],
+
+  $ 3.2 $,
+  [Tampering invalidates the chain],
+  [Demonstrates immutability of blockchain; crucial property of blockchain technology],
+  [Modify block data and run validation; check isChainValid() returns false],
+
+  $ 3.3 $,
+  [Mined blocks cannot have transactions altered],
+  [Ensures post-mining immutability; maintains trust in the blockchain],
+  [Attempt to edit mined transactions; confirm error shown],
+
+  $ 3.4 $,
+  [Input validation prevents invalid characters or excessively long strings],
+  [Prevents corruption of blockchain; protects integrity and UI],
+  [Enter invalid strings; verify input rejected],
+
+  $ 3.5 $,
+  [Nodes maintain consistent blockchain state after BFS broadcast],
+  [Ensures network consensus; BFS guarantees shortest-path propagation to all nodes],
+  [Compare blockchains across all nodes after BFS broadcast; they must match exactly],
+
+  $ 3.6 $,
+  [Nodes maintain consistent blockchain state after DFS broadcast],
+  [Ensures network consensus; DFS guarantees all nodes are visited, though order may differ],
+  [Compare blockchains across all nodes after DFS broadcast; they must match exactly],
+
+table.cell(
+    rowspan: 4,
+    align: center,
+    rotate(-90deg, reflow: true)[
+      *Performance and reliability*
+    ],
+  ),
+
+  $ 4.1 $,
+  [Blockchain state persists while simulator runs; saving/loading \u{003C}1s],
+  [Ensures continuity and reliability; 1s chosen as fast enough for user to continue interaction without noticeable delay],
+  [Reload simulator and verify blockchain is intact],
+
+  $ 4.2 $,
+  [Memory usage \u{003C}100MB for 100 blocks],
+  [Ensures efficient resource usage; prevents crashes and allows multiple sessions],
+  [Monitor memory usage during simulation],
+
+  $ 4.3 $,
+  [Simulator and GUI pause when window unfocused],
+  [Reduces CPU usage when not actively used; increases efficiency and prevents unnecessary computations],
+  [Switch window focus; observe simulation pause],
+
+$ 4.4 $,
+  [Memory usage \u{003C}50MB for 100 blocks stored in local storage],
+  [Ensures efficient resource usage on a single computer; prevents crashes and keeps simulator responsive],
+  [Monitor memory usage during simulation with 100 blocks in local storage],
+
 )
 #pagebreak()
 == Stakeholders <stakeholders>
@@ -448,14 +585,15 @@ To simulate the blockchain propagation along the network, I have decided to use 
 Breadth First Search is an algorithm to traverse an undirected graph. A BFS algorithm starts at a selected node (often referred to as the 'root' node in tree structures) and explores all its neighbouring nodes at the present depth prior to moving on to nodes at the next depth level. This approach ensures that all nodes at the current level are visited before any nodes at the next level are explored, making BFS particularly useful for finding the shortest path in unweighted graphs.
 
 ==== Design of algorithm: BFS
-I used a queue data structure in my BFS algorithm to keep track of nodes to be explored. The algorithm begins by enqueuing the starting node and making it as visited. It then enters a loop where it dequeues a node, and enqueue all its unvisited neighbours, marking them as visited. This process continues until the queue is empty, meaning all reachable nodes have been visited.
+The idea of layers in BFS refers to how nodes are explored based on their distance from the starting node. The first layer contains the starting node itself, the second layer includes all nodes directly connected to it, and each subsequent layer contains nodes that are one step further away. This structure means BFS explores the graph in concentric 'waves', moving outward one layer at a time. Each node is therefore assigned to a specific layer according to how many edges it takes to reach it from the start.
 
-To store the data, I used an adjacency list --- a data structure used to store a collection of unordered lists used to represent a finite graph.
+I will use a queue data structure in my BFS algorithm to keep track of nodes to be explored. The algorithm begins by enqueuing the starting node and marking it as visited. It then enters a loop where it dequeues a node and enqueues all its unvisited neighbours, marking them as visited. This process continues until the queue is empty, meaning all reachable nodes have been visited. To store the data, I used an adjacency list — a data structure used to store a collection of unordered lists used to represent a finite graph.
+
 ==== Unit Test for BFS
 For the unit test, I am making a new file `bfs.test.ts` and testing it using Bun. This allows me to test individual functions from the `bfs.ts` file by importing them into the test file.\ \
 To make a unit test for my BFS algorithm, I have to firstly design some graphs and traversing them by hand, then convert them into adjacency list where I input the neighbouring nodes for each node so that the graph can be 'undestood' by the algorithm
 ===== Normal Test
-I have designed the following basic tree (an abstract data type that is a graph that has a hierarchial structure) graph to test my algorithm (left). While traversing the graph with a BFS algorithm, I will start at node A (layer 1) and visit its neighbours C and B (layer 2). Then I will move on to layer 3 and visit F, D, and E. Therefore one of the ways to traverse the graph with the BFS algorithms is with the order: A -> C -> B -> F -> D -> E (right).
+I have designed the following basic tree (an abstract data type that is a graph that has a hierarchial structure) graph to test my algorithm (left). While traversing the graph with a BFS algorithm, I will start at node A (layer 1) and visit its neighbours C and B (layer 2). Then I will move on to layer 3 and visit F, D, and E. Therefore one of the ways to traverse the graph with the BFS algorithms is with the order: A \u{2192} C \u{2192} B \u{2192} F \u{2192} D \u{2192} E (right).
 #subpar.grid(
   figure(image("images/basic_tree_graph.png", width: 100%), caption: [basic tree graph]), <a>,
   figure(image("images/bfs_tree_graph.png", width: 60%), caption: [BFS traversal of the basic tree graph]), <b>,
@@ -465,7 +603,7 @@ I have designed the following basic tree (an abstract data type that is a graph 
 )
 
 
-Since I am developing in TypeScript, I have to declare the type of my adjacency list. Therefore I have to create an interface for my adjacency lists. Considering my input being the nodes and its neighbours in an array of strings, I will require a key-value pair (a basic data structure that stores data as a collection of unique, constant keys and their corresponding, variable values). Therefore my type AList (adjancency list) takes in 2 parameters, the key as a string --- this will be the nodes and the values as an array of strings --- this will be the neighbours in arrays of strings. The interface can be defined as following --- see next page#pagebreak()
+Since I am developing in TypeScript, I have to declare the type of my adjacency list. Therefore I have to create an interface for my adjacency lists. Considering my input being the nodes and its neighbours in an array of strings, I will require a key-value pair (a basic data structure that stores data as a collection of unique, constant keys and their corresponding, variable values). Therefore my type AList (adjancency list) takes in 2 parameters, the key as a string --- this will be the nodes and the values as an array of strings --- this will be the neighbours in arrays of strings. The interface can be defined as following:
 ```js
  interface AList {
   [key: string]: string[]
@@ -483,7 +621,7 @@ let adjacencyList: AList = {
 };
 ```
 Now I have to design unit tests for my list. I have to consider that BFS allows multiple ways to traverse it as long as it finished traversing one layer of the nodes until it moves on to the next layer until all the nodes are traversed. I can allow this by splitting the list in layers and allowing them in any order. I can do this with using `slice` to split the traversed array of strings into layers, then sorting them using the `sort` function and check them against the traversed layer in order.
-```jsa
+```js
 test("Normal List", () => {
   let result = bfs_traverse(normalList, "A");
   expect(result[0]).toBe("A");
@@ -493,7 +631,18 @@ test("Normal List", () => {
   expect(layer2).toEqual(["D", "E", "F"]);
 });
 ```
-// Setting other starting nodes
+
+I have also considered different starting nodes. For example, if I start at node 'B', the BFS traversal order could be B \u{2192} A \u{2192} F \u{2192} C \u{2192} D \u{2192} E. The unit test for starting at node 'B' would be: 
+```js
+test("Normal List", () => {
+  let result = bfs_traverse(normalList, "B");
+  expect(result[0]).toBe("B");
+  let layer1 = result.slice(1, 3).sort();
+  expect(layer1).toEqual(["A", "F"]);
+  let layer2 = result.slice(3).sort();
+  expect(layer2).toEqual(["C", "D", "E"]);
+});
+```#pagebreak()
 To further test my bfs algorithm whether it is capable of taking and processing more input nodes, I made another graph which is *a little bit* more complicated. Then I traversed it with the starting node 'M'.
 #subpar.grid(
   align(
@@ -535,8 +684,8 @@ let complicatedList: AList = {
   O: ["N"],
 };
 ```
-
-Using the same idea of splitting the graph into layers, I can make the test for the 'bit more complicated graph' with
+#pagebreak()
+Using the same idea of splitting the graph into layers, I can make the test for the 'bit more complicated graph' with:
 ```js
 test("Complicated List", () => {
   let result = dfs_traverse(complicatedList, "M");
@@ -556,20 +705,140 @@ As expected, initially, when no code has been made, the bfs test fails due to no
 #figure(image("images/bfs_test_error.png"), caption: [Error: bfs_traverse not found])
 
 ===== Boundary Test
-For boundary test I decided to make some special looking graphs such as a self looped graph, graph with only one node and graph with
+Besides normal tests, I have also designed boundary tests to test special cases. \
+Boundary tests:
++ The adjacency list only contains one node with no neighbours. Therefore, when traversing the graph starting from that single node, the expected output should be an array containing only that node.
++ The adjacency list contains multiple disconnected components. When starting the traversal from a node in one component, the expected output should only include nodes from that component.
++ The adjacency list is empty. When attempting to traverse from any starting node, the expected output should be an array containing only the starting node, as there are no other nodes to visit.
++ The adjacency list contains cycles. The BFS algorithm should handle cycles correctly by ensuring that each node is visited only once, preventing infinite loops.
+
+The tests for the boundary cases are as follows:
+```js
+test("Boundary Test: Single Node Graph", () => {
+  let singleNodeList: AList = { A: [] };
+  let result = bfs_traverse(singleNodeList, "A");
+  expect(result).toEqual(["A"]);
+});
+
+
+test("Boundary Test: Disconnected Graph", () => {
+  let disconnectedList: AList = {
+    A: ["B"],
+    B: ["A"],
+    C: ["D"],
+    D: ["C"],
+  };
+  let result = bfs_traverse(disconnectedList, "A");
+  expect(result).toEqual(["A", "B"]);
+});
+
+test("Boundary Test: Empty Adjacency List", () => {
+  let emptyList: AList = {};
+  let result = bfs_traverse(emptyList, "A");
+  expect(result).toEqual(["A"]);
+});
+
+test("Boundary Test: Cyclic Graph", () => {
+  let cyclicList: AList = {
+    A: ["B"],
+    B: ["C"],
+    C: ["A"],
+  };
+  let result = bfs_traverse(cyclicList, "A");
+  expect(result).toEqual(["A", "B", "C"]);
+});
+```
 ===== Erroneous Test
-I decided to do erroneous testing with unexpected input types.
+I decided to also do erroneous testing to test how my bfs algorithm handles unexpected inputs. The erroneous tests I have designed are:
++ The starting node does not exist in the adjacency list. The expected output should be an array containing only the starting node, as there are no reachable nodes to visit.
++ The adjacency list contains nodes with invalid data types (e.g., numbers instead of strings). The BFS algorithm should handle this gracefully, either by ignoring invalid nodes or throwing an appropriate error.
+```js
+test("Erroneous Test: Non-existent Start Node", () => {
+  let result = bfs_traverse(normalList, "Z");
+  expect(result).toEqual(["Z"]);
+});
+
+test("Erroneous Test: unexpected input types", () => {
+  // @ts-ignore
+  let result = bfs_traverse(200, 400);
+  expect(result).toEqual([null]);
+});
+```
 
 ==== Development of BFS
+To implement the Breadth-First Search (BFS) algorithm, I developed a function named `bfs_traverse()` that accepts two parameters: an adjacency list (`adjacencyList`) with the `AList` interface and a starting node (`startNode`) as a string. The adjacency list provides an efficient way to represent the structure of a graph, where each key corresponds to a node and each value is a list of its directly connected neighbours. The output of the function should be the traversal order of nodes as an array of strings.\
+\
+The algorithm begins by initialising a queue with the starting node. The queue follows the First-In-First-Out (FIFO) principle, ensuring that nodes are explored in the order they are discovered. This structure allows the algorithm to process the graph in layers, visiting all nodes that are one edge away before progressing to nodes further out. A separate visited array is also initialised to keep track of nodes that have already been explored, preventing repetition and infinite loops.\
+\
+Within the main while loop, the algorithm continues executing as long as the queue is not empty. At each iteration, the first node in the queue is removed (dequeue) using the `shift()` operation. The algorithm then examines each of its neighbouring nodes, obtained from the adjacency list. If a neighbour has not yet been visited, it is appended to both the visited array and the queue, ensuring that it will be explored in subsequent iterations.\
+\
+The process continues until the queue becomes empty, meaning that all nodes reachable from the starting node have been visited. The function then returns the visited array, representing the order in which the nodes were explored.\
+\
+This implementation adopts an iterative approach rather than a recursive one, which enhances efficiency and avoids stack overflow in large graphs. The use of a queue structure naturally supports the concept of layered traversal, ensuring that all nodes at distance n from the starting node are processed before any nodes at distance n + 1. This guarantees that BFS correctly identifies the shortest path (in terms of the number of edges) in an unweighted graph while systematically exploring all reachable vertices.
 
+The final code for my BFS Proof of Concept is as follows:
+```js
+function bfs_traverse(adjacencyList: AList, startNode: string): string[] {
+  // Initialise the queue and mark the starting node as visited
+  let queue: string[] = [startNode];
+  let visited: string[] = [startNode];
+
+  // Continue exploring while there are nodes left in the queue
+  while (queue.length) {
+    // Dequeue the next node to explore
+    let node: string = queue.shift() ?? "";
+    if (!node) continue;
+
+    // Explore each unvisited neighbour of the current node
+    for (let neighbour of adjacencyList[node]) {
+      if (!visited.includes(neighbour)) {
+        visited.push(neighbour);
+        queue.push(neighbour); // Enqueue neighbour for later exploration
+      }
+    }
+  }
+
+  // Return the order in which nodes were visited
+  return visited;
+}
+```
+#pagebreak()
+==== Testing Results
+After implementing the BFS algorithm, I ran the unit tests I designed earlier. The results were successful, with the normal testing passing as expected. The BFS algorithm correctly traversed the basic tree graph and the more complicated graph, producing the expected order of node visits.\
+\
+All of the boundary tests passed, including the 'Single Node Graph' and 'Disconnected Graph' tests. The 'Empty Adjacency List' boundary test initially produced an error because the algorithm attempted to access neighbours for a node that does not exist in the adjacency list, resulting in a TypeError.\
+\
+Both erroneous tests, the 'Non-existent Start Node' and the 'unexpected input types', also initially failed for similar reasons: the code assumed that the start node would always exist in the adjacency list and that the inputs would be of valid types. When this assumption was violated, the algorithm tried to iterate over undefined, causing runtime errors.\
+
+#figure(image("images/bfs_fail_test_result.png", width: 50%), caption: [BFS Test Results - Some Boundary and Erroneous Test Failing])
+To fix these issues, I added a defensive check before iterating over neighbours. If a node does not exist in the adjacency list, the algorithm simply skips the neighbour loop, allowing it to safely return the starting node as visited. Additionally, a type check can be added at the start to handle completely invalid inputs gracefully, returning [null] if the input types are incorrect.\
+\
+To fix this, I added a defensive check at the start of the function before iterating over neighbours:
+```js
+  // Defensive type check for completely invalid inputs
+  if (typeof adjacencyList !== "object" || typeof startNode !== "string") {
+    // @ts-ignore
+    return [null];
+  }
+```
+Within the while loop, I also added a check to ensure the current node exists in the adjacency list before attempting to access its neighbours:
+```js
+    // Skip nodes not in the adjacency list
+    if (!(node in adjacencyList)) continue;
+```
+After applying these fixes, all unit tests passed successfully. The BFS algorithm now correctly handles normal, boundary, and erroneous cases without crashing, demonstrating that it is robust, reliable, and behaves as expected across a wide range of scenarios.
+#pagebreak()
 === Proof of Concept: DFS
 Depth First Serch is another algorithm to traverse an undirected graph. A DFS algorithm also starts at a selected node (the 'root' node) and explores as far as possible along each branch before backtracking. This means that DFS goes deep into the graph, visiting a node and then recursively visiting one of its unvisited neighbours until it reaches a node with no unvisited neighbours. At this point, the algorithm backtracks to the most recent node that has unvisited neighbours and continues the process until all nodes have been visited.
 
 ==== Design of algorithm: DFS
-I used a stack data structure in my DFS algorithm to keep track of nodes to be explored. The algorithm begins by pushing the starting node onto the stack and marking it as visited. It then enters a loop where it pops a node from the stack, and pushes all its unvisited neighbours onto the stack, marking them as visited. This process continues until the stack is empty, meaning all reachable nodes have been visited.
-
-I decided to make use of the call stack and implement the DFS algorithm recursively. The algorithm starts at the root node, marks it as visited, and then recursively visits each unvisited neighbour. This continues until all nodes have been visited.
-
+Depth-first search (DFS) explores a graph by moving as far as possible along each branch before backtracking. The algorithm conceptually follows a single path from the starting node, exploring one neighbour at a time until it reaches a node with no unvisited neighbours, at which point it backtracks to the previous node to explore other paths.\
+\
+I will use a stack data structure in my DFS algorithm to keep track of nodes to be explored. The algorithm begins by pushing the starting node onto the stack and marking it as visited. It then enters a loop where it pops a node from the stack, and pushes all its unvisited neighbours onto the stack, marking them as visited. This process continues until the stack is empty, meaning all reachable nodes have been visited.\
+\
+I decided to make use of the call stack and implement the DFS algorithm recursively. The algorithm starts at the root node, marks it as visited, and then recursively visits each unvisited neighbour. This continues until all nodes have been visited. Using recursion in DFS is justified because it naturally mirrors the algorithm's logic of exploring 'as deep as possible' along a branch before backtracking. The call stack inherently acts as the stack needed to keep track of nodes yet to be explored, so recursion simplifies the code and avoids manually managing a separate stack. It also makes the algorithm easier to read and understand, especially for complex graphs, since each recursive call represents the exploration of a node and its subtree. Recursion is particularly suitable for small to medium-sized graphs, like the ones in my simulator, because the depth of recursion is limited and won't cause stack overflow on a typical machine.\
+\
+I am also using the same adjacency list data structure as BFS to store the graph.
 ==== Unit Test for DFS
 ===== Normal Test
 I am using the same tree graph from BFS to test my DFS. However this time I will have to manually traverse it in a DFS algorithm.
