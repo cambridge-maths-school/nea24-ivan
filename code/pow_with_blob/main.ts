@@ -4,7 +4,7 @@ let numThreads = os.cpus().length; // logical cores
 let eighty_percent_of_threads = Math.max(1, Math.floor(numThreads * 0.8));
 console.log(`Detected ${numThreads} logical CPU cores.`);
 let startTime: number;
-let NUM_WORKERS = 20;
+let NUM_WORKERS = 200;
 let CHUNK_SIZE = 50000;
 
 let nonceOffset = 0; // Tracks the starting nonce for the next batch

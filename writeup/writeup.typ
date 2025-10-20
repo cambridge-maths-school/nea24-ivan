@@ -1443,9 +1443,9 @@ function stopMining() {
 In this approach I don't have to serve multiple files and the code remains in TypeScript. The worker code is defined as a string within `main.ts`, and a Blob is created from this string to instantiate the workers. This allows the mining simulation to run entirely within Bun without the need for an external server or multiple files. Therefore this is the preferred approach for my PoW mining simulation in Bun.#pagebreak()
 === Testing
 I am using two different computers to test the PoW mining algorithm:
-+ A high performance computer with Intel(R) Core(TM) i5-14500, 2.60 GHz, 32.0 GB RAM, which has 14 cores and 20 threads#footnote[Spec sheet: https://www.intel.com/content/www/us/en/products/sku/236784/intel-core-i5-processor-14500-24m-cache-up-to-5-00-ghz/specifications.html]. Theoretically it should be able to handle 20 web workers at the same time.
-+ A lower performance computer with // Spec TODO
-I will use the `performance.now()` method to measure the run time for 10 times in each case and take the mean average of each results to make it accurate. Both computers will be tested with the same input string "Hello World" and difficulty level of 4 leading zeros. The number of web workers will be varied from 1 to XX   for the lower performance computer, and from 1 to 20 for the high performance computer.
++ A high performance computer with Intel(R) Core(TM) i5-14500, 2.60 GHz, 32.0 GB DDR5 RAM, which has 14 cores and 20 threads#footnote[Spec sheet: https://www.intel.com/content/www/us/en/products/sku/236784/intel-core-i5-processor-14500-24m-cache-up-to-5-00-ghz/specifications.html]. Theoretically it should be able to handle 20 web workers at the same time.
++ A medium performance laptop with 13th Gen Intel(R) Core(TM) i5-1335U (1.30 GHz), DDR4 16GB RAM, which has 10 cores and 12 threads#footnote[spec sheet:https://www.intel.com/content/www/us/en/products/sku/232153/intel-core-i51335u-processor-12m-cache-up-to-4-60-ghz/specifications.html]. Therefore theoretically it should be able to handle 12 web workers at the same time.
+I will use the `performance.now()` method to measure the run time for 10 times in each case and take the mean average of each results to make it accurate. Both computers will be tested with the same input string "Hello World" and difficulty level of 4 leading zeros. The number of web workers will be varied from 1 to 12 for the medium performance aptop, and from 1 to 20 for the high performance computer.
 ```ts 
 // Add this at the start of main.ts
 let startTime: number;
@@ -1461,11 +1461,20 @@ I expect to see a decrease in run time as the number of web workers increases, i
 ==== Testing Results
 [All measurement results are in milliseconds (ms)]
 // Differentiate the curve?
+// large standard deviation = inconsistent performance
+#figure(image("images/mid_cpu_not_running.png"), caption:[Logical processors on medium performance laptop when the algorithm is not running])
+#figure(image("images/mid_cpu_running.png"), caption: [Logical processors on medium performance laptop when 12 workers is used])
+#image("images/image.png")
+
+
 Interestingly, when I set the number of Web Workers to something extreme like 200, your runtime becomes unstable because I am massively oversubscribing the CPU. Each worker runs in its own thread, so having far more workers than CPU threads forces the system to constantly switch between them (called context switching). This burns up CPU time just managing threads instead of actually mining. On top of that, memory usage spikes and the browser or Bun runtime struggles to coordinate all those workers, causing delays, crashes, or inconsistent runtimes.
+// Desmos Graph excludes the 200 workers data point
+// Explain x and y
+// Highest coefficient of determination for power regression
 
 Limitation - This test is only done on two computers, therefore the results may vary on different hardware configurations. However, the general trend of performance improvement with increased web workers should hold true across most systems. 
 Another Limitation - The result might not be accurate as there are other background processes running on the computer which might interfere with the mining process. However, by taking the average of multiple runs, I can mitigate some of this variability and get a more reliable measure of performance.
-
+// To optimise the algorithm, ...
 Using around 80% of the stakholder's CPU threads for Web Workers gives the best performance because it keeps your system stable while still using most of your cores for mining. If you max out all threads, the OS and main thread have no room to handle background tasks, causing thread contention, lag, and even slower results. Leaving a few threads free ensures smoother communication and better overall throughput.
 === Evaluating Iteration 1
 In this iteration I have done the proof of concept for multiple parts of my blockchain simulator:
@@ -1492,6 +1501,8 @@ Looking forward, the next steps involve integrating these components into the la
 In Iteration 2, I will be continuing on Proof of Concept. Howecer this time I will be focusing on creating the Block and Blockchain classes. The `Block` class will represent individual blocks in the blockchain, containing properties such as index, timestamp, transactions, previous hash, nonce, and hash. The Blockchain class will manage the chain of blocks, providing methods to add new blocks, validate the chain, and handle transactions.
 
 I will be using modular coding practices to ensure that the Block and Blockchain classes are well-encapsulated and can be easily maintained and extended in the future. This approach will also facilitate testing and debugging, as each class can be developed and tested independently before integrating them into the larger simulator. This means that it can reduce the repetition in code, improve readability, and allow future developers to pick things up straight away. It is also a perfect fit for decomposed code as it makes it easier to code and debug, reducing the risk of cascading bugs throughout the application.
+
+// WWW, EBI
 ==== Decomposing Iteration 2
 
 
