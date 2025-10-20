@@ -1466,6 +1466,7 @@ I expect to see a decrease in run time as the number of web workers increases, i
 #figure(image("images/mid_cpu_running.png"), caption: [Logical processors on medium performance laptop when 12 workers is used])
 #image("images/image.png")
 
+// Standard Deviaiton Calculation
 
 Interestingly, when I set the number of Web Workers to something extreme like 200, your runtime becomes unstable because I am massively oversubscribing the CPU. Each worker runs in its own thread, so having far more workers than CPU threads forces the system to constantly switch between them (called context switching). This burns up CPU time just managing threads instead of actually mining. On top of that, memory usage spikes and the browser or Bun runtime struggles to coordinate all those workers, causing delays, crashes, or inconsistent runtimes.
 // Desmos Graph excludes the 200 workers data point
