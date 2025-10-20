@@ -1,3 +1,4 @@
+// @ts-ignore
 import { serve } from "bun";
 
 serve({
@@ -12,6 +13,7 @@ serve({
         path = "./index.html";
       }
       // Respond with the requested file
+      // @ts-ignore
       return new Response(Bun.file(path));
     } catch {
       return new Response("Not found", { status: 404 });

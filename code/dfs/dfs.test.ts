@@ -36,26 +36,72 @@ let complicatedList: AList = {
 // Normal Test
 test("Normal List", () => {
   let result = dfs_traverse(normalList, "A");
-  expect(result[0]).toBe("A");
-  let layer1 = result.slice(1, 3).sort();
-  expect(layer1).toEqual(["B", "C"]);
-  let layer2 = result.slice(3).sort();
-  expect(layer2).toEqual(["D", "E", "F"]);
+  expect(result).toEqual(["A", "C", "D", "E", "B", "F"]);
 });
 
 test("Complicated List", () => {
   let result = dfs_traverse(complicatedList, "M");
-  expect(result[0]).toBe("M");
-  let layer1 = result.slice(1, 3).sort();
-  expect(layer1).toEqual(["D", "I"]);
-  let layer2 = result.slice(3, 8).sort();
-  expect(layer2).toEqual(["A", "B", "E", "G", "L"]);
-  let layer3 = result.slice(8, 14).sort();
-  expect(layer3).toEqual(["C", "F", "H", "J", "K", "N"]);
-  let layer4 = result.slice(14).sort();
-  expect(layer4).toEqual(["O"]);
+  expect(result).toEqual([
+    "M",
+    "D",
+    "B",
+    "H",
+    "A",
+    "C",
+    "E",
+    "G",
+    "F",
+    "J",
+    "L",
+    "I",
+    "N",
+    "O",
+    "K",
+  ]);
 });
 
 // Boundary Test
+test("Boundary Test: Single Node Graph", () => {
+  let singleNodeList: AList = { A: [] };
+  let result = dfs_traverse(singleNodeList, "A");
+  expect(result).toEqual(["A"]);
+});
+
+test("Boundary Test: Disconnected Graph", () => {
+  let disconnectedList: AList = {
+    A: ["B"],
+    B: ["A"],
+    C: ["D"],
+    D: ["C"],
+  };
+  let result = dfs_traverse(disconnectedList, "A");
+  expect(result).toEqual(["A", "B"]);
+});
+
+test("Boundary Test: Empty Adjacency List", () => {
+  let emptyList: AList = {};
+  let result = dfs_traverse(emptyList, "A");
+  expect(result).toEqual(["A"]);
+});
+
+test("Boundary Test: Cyclic Graph", () => {
+  let cyclicList: AList = {
+    A: ["B"],
+    B: ["C"],
+    C: ["A"],
+  };
+  let result = dfs_traverse(cyclicList, "A");
+  expect(result).toEqual(["A", "B", "C"]);
+});
 
 // Erroneous Test
+test("Erroneous Test: Non-existent Start Node", () => {
+  let result = dfs_traverse(normalList, "Z");
+  expect(result).toEqual(["Z"]);
+});
+
+test("Erroneous Test: unexpected input types", () => {
+  // @ts-ignore
+  let result = dfs_traverse(200, 400);
+  expect(result).toEqual([null]);
+});
