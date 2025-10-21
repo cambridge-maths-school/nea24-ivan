@@ -1,14 +1,14 @@
 // @ts-ignore
 import { serve } from "bun";
 // @ts-ignore
-import app from "./index.html";
+import app from "./code/index.html";
 // @ts-ignore
-import test from "./test.html";
+import test from "./code/test.html";
 
 let server = serve({
   routes: {
     "/": app,
-    "/test": test,
+    "/test/": test,
   },
 });
 

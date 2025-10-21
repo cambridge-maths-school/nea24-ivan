@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "cd code && bun server.ts"
+    "start": "bun server.ts"
   },
   "dependencies": {
     "os": "^0.1.2"

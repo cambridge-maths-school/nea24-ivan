@@ -1,51 +1,9 @@
 # nea24-ivan
-Hello World! 
-<!-- 
-Ideas:
-- Graph plotting application like desmos, including features that desmos doesnt have, e.g. Newton Raphson
-- Trajectory simulator
-- Block Chain: Including packet switching/circuit switching features; encryption
-- Neural Network for OCR from scratch
-- Virtual Machine
- -->
+
+Hello World!
 
 Project Proposal:
-<!-- 
-1. Graph Plotting Application (something looking like Desmos but more enhanced)
-- Allow users to input expressions like `y = sin(x)`, `y = x^2 + 3x - 4`, or implicit forms (`x^2 + y^2 = 25`).
-- Features to include:
-  - Cartesian, parametric, polar, and implicit plotting, complex numbers (e.g. arg(z), |z| that desmos doesn't have)
-  - Zoom, pan, and grid toggling
-  - Highlight intersections, turning points, asymptotes
-  - Numerical methods tools that desmos doesn't have, e.g., Newton-Raphson root finding (visual iteration)
-  - Display first/second derivatives and integrals as shaded areas
-  - Add user-defined sliders (e.g. to animate transformations)
-  - Graph inequalities (e.g. `y < x^2`)
-  - Save and load graph states
 
-2. Trajectory Physics Simulator
-- Simulate projectile motion with user-defined parameters:
-  - Initial speed, angle, height, mass
-  - Air resistance (linear or quadratic drag)
-  - Wind effects (vector inputs)
-
-- Display:
-  - 2D motion path in real time
-  - Realistic vs ideal trajectory comparisons (e.g. ignoring drag)
-  - Velocity, acceleration, and displacement graphs
-	- Showing how the equation of trajectory changes throughout the trajection
-
-- Physics models:
-  - Use numerical integration
-  - Vector decomposition of motion
-  - Optional: bouncing/collisions with surfaces
-
-- Extensions:
-  - Target hitting mini-game
-  - Multi-projectile comparisons
-  - Trajectories on different planets (Mars, Moon, Earth, etc.) -->
-
-<!-- 3.  -->
 Blockchain & Networking Simulator
 - Blockchain system
   - Blocks hold transaction details
@@ -70,15 +28,13 @@ Blockchain & Networking Simulator
   - Let the program search and verify past blocks easily
 
 - Interface:
-  - Show the blockchain as connected blocks and let users click to see details like transactions and hashes  
+  - Show the blockchain as connected blocks and let users click to see details like transactions and hashes
   - Animate how transactions are created, signed, and sent through the network
   - Show the mining process live, including trying different nonces
   - Display logs of what’s happening in the network and blockchain for better understanding
 
-
-
 Building and running code
-- run in development with `bun index.html`
+- run in development with `bun server.ts --watch`
 - build with `bun build ./index.html --outdir=dist`
 - run a build with `bunx --bun serve dist`
-- live website is at https://your-url-here.deno.dev using Deno Deploy
+- live website "https://ivan-nea.2024.compsci.me"
