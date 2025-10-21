@@ -9,5 +9,5 @@ function fakeHash(input: string): string {
 export { fakeHash };
 
 // console.log(fakeHash("cat"));
-console.log(fakeHash("hello world"));
-console.log(fakeHash("William"));
+// console.log(fakeHash("hello world"));
+// console.log(fakeHash("William"));

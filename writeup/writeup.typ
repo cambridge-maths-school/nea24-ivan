@@ -333,6 +333,8 @@ In this image, Sean's Blockchain simulator has shown the connection between diff
 Another blockchain simulator #footnote[https://andersbrownworth.com/blockchain/] I found is made by Anders Brownworth.
 
 Both of the simulators on the internet allows you to change the content in a blockchain but this is not a realistic feature as in real life, once a block is mined and added to the blockchain, it is immutable and cannot be changed. This is misleading for learners as they might think that blocks in a blockchain can be changed.
+Features like mempool also isn't implemented onto the online simulators. This makes the idea of the process of converting transactions into blocks quite hard to understand. Therefore we could try to implement that.
+#pagebreak()
 == Initial Features
 In this BlockChain Simulator project, I will build a simplified model of BlockChain and mainly focusing on visualisation of different technologies, so that learners would be able to easily understand them.
 
@@ -389,8 +391,8 @@ Each feature of the solution might be improved throughout the iterations.
 
 Abstracted plans for my iterations:
 - Iteration 1-2: Proof of Concept for the technologies that I will be using in the simulator
-- Iteration 3-4: Developing a Command Line Interface (CLI)
-- Iteration 5: Developing a Graphical User Interface (GUI) to visualise blockchain
+- Iteration 3: Developing a Command Line Interface (CLI)
+- Iteration 4-5: Developing a Graphical User Interface (GUI) to visualise blockchain
 
 === Technology
 The simulator will run purely on client side code to reduce server costs and workload, improve scalability, and create a more interactive and responsive user experience\
@@ -1466,6 +1468,8 @@ I expect to see a decrease in run time as the number of web workers increases, i
 #figure(image("images/mid_cpu_running.png"), caption: [Logical processors on medium performance laptop when 12 workers is used])
 #image("images/image.png")
 
+As you may see, there is clearly a spike in CPU usage in multiple cores throughout the test for 12 web workers. This can sufficiently proof that the workers aree
+
 // Standard Deviaiton Calculation
 
 Interestingly, when I set the number of Web Workers to something extreme like 200, your runtime becomes unstable because I am massively oversubscribing the CPU. Each worker runs in its own thread, so having far more workers than CPU threads forces the system to constantly switch between them (called context switching). This burns up CPU time just managing threads instead of actually mining. On top of that, memory usage spikes and the browser or Bun runtime struggles to coordinate all those workers, causing delays, crashes, or inconsistent runtimes.
@@ -1492,17 +1496,12 @@ I have solved the issues for many blockchain simulators online -- which was the 
 Looking forward, the next steps involve integrating these components into the larger blockchain simulator project. This includes creating the Block and Blockchain classes, developing a Command Line Interface (CLI) for user interaction, and eventually building a Graphical User Interface (GUI) for enhanced usability. The focus will be on ensuring that these components work seamlessly together to provide an educational and interactive experience for users learning about blockchain technology.
 #pagebreak()
 == Iteration 2
-// Making blocks as global objects so that it can be accessed throughout different part of the programme while keeping it modular
-// Justify modular coding
-// Not repeating code, improve readability, allowing future developers to be able pick things up straight away
-// Good for decomposed code
-// Easier to code and debug
-// Reducing risk of cascading bugs throughout the application
-// Easier to test
 In Iteration 2, I will be continuing on Proof of Concept. Howecer this time I will be focusing on creating the Block and Blockchain classes. The `Block` class will represent individual blocks in the blockchain, containing properties such as index, timestamp, transactions, previous hash, nonce, and hash. The Blockchain class will manage the chain of blocks, providing methods to add new blocks, validate the chain, and handle transactions.
 
 I will be using modular coding practices to ensure that the Block and Blockchain classes are well-encapsulated and can be easily maintained and extended in the future. This approach will also facilitate testing and debugging, as each class can be developed and tested independently before integrating them into the larger simulator. This means that it can reduce the repetition in code, improve readability, and allow future developers to pick things up straight away. It is also a perfect fit for decomposed code as it makes it easier to code and debug, reducing the risk of cascading bugs throughout the application.
+// transaction validation, block linking and immutability
 
+// pow: startMining changed from being a procedure to a function
 // WWW, EBI
 ==== Decomposing Iteration 2
 
@@ -1514,11 +1513,11 @@ In Iteration 3, I will start to code a Command Line Interface (CLI) for my simul
 === Testing
 === Evaluation
 == Iteration 4
-In Iteration 4, I will finish off my Command Line Interface (CLI) for my simulator
+In Iteration 4, I will be developing a Graphical User Interface (GUI) for my blockchain simulator.
 === Testing
 === Evaluation
 == Iteration 5
-In Iteration 5, I will be developing a Graphical User Interface (GUI)
+In Iteration 5, I will be continuing developing and enhancing the features of my blockchain simulator after getting feedback from my external stakeholders.
 === Testing
 === Evaluation
 `Section 1: Participant Background

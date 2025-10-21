@@ -1,17 +1,17 @@
 // @ts-ignore
 import os from "os";
-let numThreads = os.cpus().length; // logical cores
-let eighty_percent_of_threads = Math.max(1, Math.floor(numThreads * 0.8));
-console.log(`Detected ${numThreads} logical CPU cores.`);
+// let numThreads = os.cpus().length; // logical cores
+// let eighty_percent_of_threads = Math.max(1, Math.floor(numThreads * 0.8));
+// console.log(`Detected ${numThreads} logical CPU cores.`);
 let startTime: number;
-let NUM_WORKERS = 200;
+let NUM_WORKERS = 10;
 let CHUNK_SIZE = 50000;
 
 let nonceOffset = 0; // Tracks the starting nonce for the next batch
 let running = false; // Indicates if mining is currently active
 let workers: Worker[] = [];
 
-function startMining(baseData: string, difficulty: number) {
+export function startMining(baseData: string, difficulty: number) {
   if (running) {
     console.log("Mining already in progress.");
     return;
@@ -59,6 +59,7 @@ function startMining(baseData: string, difficulty: number) {
       console.log(`=== HIT! nonce=${e.data.nonce}, hash=${e.data.hash}`);
       console.log(`Mining took ${(endTime - startTime).toFixed(2)} ms`);
       stopMining(); // Stop all workers when one finds a valid nonce
+      return e.data.nonce, e.data.hash;
     };
 
     // Assign work to the worker in repeated chunks
@@ -79,11 +80,11 @@ function startMining(baseData: string, difficulty: number) {
 }
 
 // Terminate all workers when nonce is found or mining is stopped
-function stopMining() {
+export function stopMining() {
   running = false;
   for (let w of workers) w.terminate();
   workers.length = 0;
   console.log("Mining stopped.");
 }
 
-startMining("Hello World", 4);
+// startMining("Hello World", 4);

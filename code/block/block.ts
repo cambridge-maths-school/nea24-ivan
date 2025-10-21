@@ -1,31 +1,39 @@
-class Block {
+import { fakeHash } from "../pow/hash.ts";
+import { startMining, stopMining } from "../pow_with_blob/main.ts"
+export class Block {
   index: number;
-  previousHash: string;
   timestamp: number;
-  data: string;
-  difficulty: number;
-  nonce: number;
+  transactions: string[];
+  previousHash: string;
+  nonce: number = 0;
   hash: string;
-  miner: string;
 
   constructor(
     index: number,
-    previousHash: string,
     timestamp: number,
-    data: string,
-    difficulty: number,
-    nonce: number,
-    hash: string,
-    miner: string
+    transactions: string[],
+    previousHash: string
   ) {
     this.index = index;
-    this.previousHash = previousHash;
     this.timestamp = timestamp;
-    this.data = data;
-    this.difficulty = difficulty;
-    this.nonce = nonce;
-    this.hash = hash;
-    this.miner = miner;
+    this.transactions = transactions;
+    this.previousHash = previousHash;
+    this.hash = this.calculateHash();
+  }
+
+  calculateHash(): string {
+    return fakeHash(
+      this.index +
+        this.previousHash +
+        this.timestamp +
+        JSON.stringify(this.transactions) +
+        this.nonce
+    );
+  }
+
+  mineBlock(transactions: string[], difficulty: number) {
+    let tx =  JSON.stringify(transactions)
+    let res = [startMining(tx,difficulty)]
+    console.log(`Block mined: ${res[0]} with nonce ${res[1]}`);
   }
 }
-export default Block;
