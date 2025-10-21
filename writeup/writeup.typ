@@ -1468,7 +1468,7 @@ I expect to see a decrease in run time as the number of web workers increases, i
 #figure(image("images/mid_cpu_running.png"), caption: [Logical processors on medium performance laptop when 12 workers is used])
 #image("images/image.png")
 
-As you may see, there is clearly a spike in CPU usage in multiple cores throughout the test for 12 web workers. This can sufficiently proof that the workers aree
+As you may see, there is clearly a spike in CPU usage in multiple cores throughout the test for 12 web workers. This can sufficiently proof that the workers are in action and improving the speed for the proof of work algorithm. This algn wiith the results for the tests that I ran.
 
 // Standard Deviaiton Calculation
 
@@ -1504,12 +1504,71 @@ I will be using modular coding practices to ensure that the Block and Blockchain
 // pow: startMining changed from being a procedure to a function
 // WWW, EBI
 ==== Decomposing Iteration 2
+Goal: Represent a single block in the chain.
+
+Core attributes:
+- index: number -- block's position in the chain
+- timestamp: string -- when the block was created
+- transactions: object[] -- list of transactions included
+- previousHash: string -- hash of the previous block
+- nonce: number -- for Proof of Work mining
+- hash: string -- final hash of the block
+
+Core methods:
+- calculateHash() -- returns hash of the block using your hashing function (fakeHash or SHA256)
+- mineBlock(difficulty) -- repeatedly change nonce until hash starts with 0...0 (difficulty target)
+
+Testing: Manually create a block and log the hash before and after mining to show that PoW affects it
+
+2. Implement the Blockchain class
+Goal: Manage the entire chain of blocks.
+Core attributes:
+- chain: Block[] -- list of all blocks
+- pendingTransactions: object[] -- this will act as your mempool (unconfirmed transactions)
+- difficulty: number -- mining difficulty
+Core methods:
+- createGenesisBlock() -- creates the first block manually
+- getLatestBlock() -- returns the last block in the chain
+- minePendingTransactions() -- mines all pending transactions into a new block, clears mempool after
+- addTransaction(tx) -- pushes a new transaction into the mempool
+- isChainValid() -- verifies the chain by checking hashes and links between blocks
+
+ Test: Add a few transactions, mine them, then print out the blockchain array.
+
+3. Proof of Concept — Mempool
+My mempool will just be the list of pending transactions waiting to be mined.
+The simulation can be done like this:
+Add a few dummy transactions:
+Print the mempool to show unconfirmed transaction
+Call minePendingTransactions().
+Show that the mempool is now empty, and those transactions appear in the new block.
+
+proof of concept:
+- New transactions are stored temporarily.
+- They get written into the blockchain when mined.
+- The chain integrity stays valid.
+
+4. Mempool
+- Before mining → mempool not empty
+- After mining → new block added + mempool cleared
+
+Features:
+- Block with index, timestamp, transactions, previousHash, nonce, hash.
+- Blockchain with chain array and mempool array.
+- Simple PoW mining (mineBlock) with adjustable difficulty.
+- Ability to add transactions to mempool and mine them into a new block.
+- Chain validation (isChainValid()).
+- Modular code for testing and future expansion.
+
+hash = hash(index + timestamp + transactions + previousHash + nonce)
+
+In this simulation, the difficulty value is fixed for simplicity. In a real blockchain, it dynamically adjusts based on the total computational power in the network to maintain consistent block production times.
 
 
 === Testing
 === Evaluation
 == Iteration 3
-In Iteration 3, I will start to code a Command Line Interface (CLI) for my simulator. This will be a Minimum Viable Product (MVP) and the first version of my simulator that my external stakeholders can interact with and provide feedback on.
+In Iteration 3, I will start to code a Command Line Interface (CLI) for my simulator. This will be a Minimum Viable Product (MVP) and the first version of my simulator that my external stakeholders can interact with and provide feedback on. Essentially, in this iteration, I will be linking everything that I had in the proof of concepts into one command line interface. 
 === Testing
 === Evaluation
 == Iteration 4

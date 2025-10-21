@@ -1,5 +1,5 @@
 import { fakeHash } from "../pow/hash.ts";
-import { startMining, stopMining } from "../pow_with_blob/main.ts"
+import { startMining, stopMining } from "../pow_with_blob/main.ts";
 export class Block {
   index: number;
   timestamp: number;
@@ -32,8 +32,8 @@ export class Block {
   }
 
   mineBlock(transactions: string[], difficulty: number) {
-    let tx =  JSON.stringify(transactions)
-    let res = [startMining(tx,difficulty)]
+    let tx = JSON.stringify(transactions);
+    let res = [startMining(tx, difficulty)];
     console.log(`Block mined: ${res[0]} with nonce ${res[1]}`);
   }
 }
