@@ -1,49 +1,62 @@
 import { Block } from "./block.ts";
 
+// Represents the full blockchain
 export class Blockchain {
-  chain: Block[] = [];
-  mempool: string[] = [];
-  difficulty: number;
+  chain: Block[] = []; // Array of all blocks
+  mempool: string[] = []; // Transactions waiting to be mined
+  difficulty: number; // Mining difficulty (number of leading zeros)
 
   constructor(difficulty: number = 2) {
     this.difficulty = difficulty;
-    this.chain.push(this.createGenesisBlock());
+    this.chain.push(this.createGenesisBlock()); // Start chain with genesis block
   }
 
+  // Create the first block in the chain
   createGenesisBlock(): Block {
-    return new Block(0, Date.now(), ["Genesis Block"], "0");
+    let genesis = new Block(0, Date.now(), ["Genesis Block"], "0");
+    return genesis;
   }
 
+  // Get the latest block in the chain
   getLatestBlock(): Block {
-    return this.chain[this.chain.length - 1];
+    let latest = this.chain[this.chain.length - 1];
+    return latest;
   }
 
+  // Add a transaction to the mempool
   addTransaction(tx: string) {
     this.mempool.push(tx);
   }
 
-  minePendingTransactions() {
+  // Mine all pending transactions and add as a new block
+  async minePendingTransactions() {
     if (this.mempool.length === 0) {
       console.log("No transactions to mine.");
       return;
     }
 
-    let block = new Block(
+    console.log("Current mempool:", this.mempool);
+
+    let newBlock = new Block(
       this.chain.length,
       Date.now(),
       this.mempool,
       this.getLatestBlock().hash
     );
 
-    block.mineBlock(this.mempool, this.difficulty);
-    this.chain.push(block);
-    this.mempool = []; // clear mempool
+    await newBlock.mineBlock(this.difficulty);
+
+    this.chain.push(newBlock);
+    this.mempool = []; // Clear mempool after mining
+    console.log("Mempool cleared after mining.\n");
   }
 
+  // Check if blockchain is valid by comparing hashes
   isChainValid(): boolean {
     for (let i = 1; i < this.chain.length; i++) {
       let current = this.chain[i];
       let previous = this.chain[i - 1];
+
       if (current.hash !== current.calculateHash()) return false;
       if (current.previousHash !== previous.hash) return false;
     }
