@@ -100,11 +100,11 @@ async function reMiningTest() {
 
 // === Run all tests sequentially ===
 async function runAllTests() {
-  // await normalTest();
-  // await emptyMempoolTest();
-  // await largeBatchTest();
-  // await highDifficultyTest();
-  // await invalidTransactionTest();
+  await normalTest();
+  await emptyMempoolTest();
+  await largeBatchTest();
+  await highDifficultyTest();
+  await invalidTransactionTest();
   await tamperedChainTest();
   await reMiningTest();
 }

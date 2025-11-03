@@ -434,7 +434,7 @@ These are the initial Success Criteria (SC) which is what I am aiming for while 
     ],
   ),
   $ 1.1 $,
-  [Users can create a new block with a hash linked to the previous block within 1 second],
+  [Users can create a new block with a hash linked to the previous block within 10 second],
   [Ensures blocks are linked correctly and the blockchain structure is maintained; 1 second chosen so that block creation is fast enough for interactive testing and demonstration],
   [Click “Add Block” and verify `block.previousHash === previousBlock.hash` and block.hash calculated correctly],
 
@@ -593,7 +593,6 @@ I have selected a few A level students to represent my target users to interview
 
 Section 2: Learning Goals
 3. What would you like to learn or understand better about blockchain through a simulator?
-
 4. Are there specific concepts (e.g., network propagation, mining difficulty) that you find difficult and would like the simulator to explain visually?
 
 Section 3: Features and Usability
@@ -603,14 +602,74 @@ Section 3: Features and Usability
 
 Section 4: Performance and Limits
 8. How fast or responsive do you expect the simulator to be when adding blocks or mining blocks?
-9. Would you like the simulator to simulate multiple nodes on one computer, or is a single-node demonstration sufficient?
+9. Would you like the simulator to simulate multiple nodes on one computer, or one node on each computer over the network?
 
 Section 5: Expectations and Concerns
 10. What potential difficulties or frustrations do you anticipate when using a blockchain simulator?
 11. How important is it for the simulator to be visually engaging (e.g., showing block links, network paths)?
 12. If you could suggest one unique feature for this simulator, what would it be?`
 
-I have interviewed 4 A level students, in which 3 of them takes Computer Science as their A level subject while 1 of them doesn't. Here are some key points that I have gathered from the interview:
+I have interviewed 5 A level students, in which 4 of them takes Computer Science as their A level subject while 1 of them doesn't. Here are some key points that I have gathered from the interview:
+
+// William Stone -- A level Computer Science student:
+// 1. Not at all
+// 2. No
+// 3. Learn about mining and how the blocks are connected together
+// 4. network propagation 
+// 5. Blocks being in a chain
+// 6. Mine blocks
+// 7. Simple
+// 8. within william's attention span (5 seconds) -- Visual stuff extends his attention span
+// 9. multiple nodes on one computer
+// 10. dont know whats actually happening
+// 11. very
+// 12. graphs
+// Note:
+// - I am a visual learner
+
+// Jeremy Courten -- A level Computer Science Student
+// 1. Not at all
+// 2. no
+// 3. learn how the blocks are shared
+// 4. sharing of blocks
+// 5. Visualisation
+// 6. let you simulates a transaction
+// 7. simple 
+// 8. within 10 seconds
+// 9. multiple nodes on one computer
+// 10. lack of features
+// 11. very
+// 12. instructions
+
+// Ben Varea -- A level computer science student
+// 1. Very familiar
+// 2. yes -- EVM (proof of stake)
+// 3. Visual process -- EVM doesn't provide
+// 4. Validation -- agreement between nodes
+// 5. Mining blocks
+// 6. mine, create, add transactions into mempool
+// 7. simple
+// 8. sub 10 seconds
+// 9. multiple nodes on one computer
+// 10. not being able to find the nonce and hash (long runtimes)
+// 11. very
+// 12. visualisation for the blocks to be linked, represent links between nodes
+
+// James Charles Bouttell -- A level Computer Science student
+// 1. Not at all
+// 2. no
+// 3. how the blocks link together
+// 4. how its mined
+// 5. simple
+// 6. create a new transaction and then turn it block
+// 7. simple
+// 8. 5 seconds (note: I dont wanna wait)
+// 9. single computer (cuz no friends)
+// 10. not knowing what it is or how to use it
+// 11. very
+// 12. 
+
+
 // TODO
 
 I have also interviewed a Maths and Physics teacher at my school who is //TODO
@@ -1456,11 +1515,11 @@ I have noticed a significant decrease in run time for mining from the first few 
 \
 // Standard Deviaiton Calculation
 // large standard deviation = inconsistent performance
-I have also calculated the standard deviation (s.d., denoted by $s^2$) for samples with $ s^2 = Sigma(x_i - overline(x))^2/(n-1)) $ of both execution and found the mean for them. This tells us how far each data point is from the mean run time. Notice that the standard deviation for run time on the high performance computer is \u{223C}4.4\u{00D7} that of the medium performance. This means that the performance will be more inconsistent on lower spec computers. Hence, \
+I have also calculated the standard deviation (s.d., denoted by $s^2$) for samples with $ s^2 = Sigma(x_i - overline(x))^2/(n-1) $ of both execution and found the mean for them. This tells us how far each data point is from the mean run time. Notice that the standard deviation for run time on the high performance computer is \u{223C}4.4\u{00D7} that of the medium performance. This means that the performance will be more inconsistent on lower spec computers. Hence, \
 \
 Interestingly, when I set the number of web workers to something extreme like 200 (this result is not included in any of the calculations for mean results), the runtime becomes unstable because I am massively oversubscribing the CPU. Each worker runs in its own thread, so having far more workers than CPU threads forces the system to constantly switch between them (called context switching). This burns up CPU time just managing threads instead of actually mining. On top of that, memory usage spikes and the browser or Bun runtime struggles to coordinate all those workers, causing delays, crashes, or inconsistent runtimes. Therefore I will have to find the optimal number of threads for the user not to oversubscribe their CPU or use up all their threads, so that other software cannot be run at the same time.\
-#figure(image("image.png", width:120%),caption:[pow test results plotted on desmos])
-On this diagram, the green dots represents the performance for the high performance computer while the blue dots represents the performance for the medium performance computer. \
+#figure(image("images/desmos.png", width:120%),caption:[pow test results plotted on desmos])
+On this diagram, the x-axis represents the number of cores being used to run the simulation and the y-axis is the tested runtime. The green dots represents the performance for the high performance computer while the blue dots represents the performance for the medium performance computer. After trying every types of regression line on Desmos, I have found out that the power regression fits the best, with a coefficient of determination $r^2$ of 0.987 and 0.9837 on the high and medium performance computer respectively. This means that   \
 \
 // To optimise the algorithm, ...
 Using around 80% of the stakeholder's CPU threads for Web Workers gives the best performance because it keeps most system stable while still using most of the cores for mining. If you max out all threads, the OS and main thread have no room to handle background tasks, causing thread contention, lag, and even slower results. Leaving a few threads free ensures smoother communication and better overall throughput.
