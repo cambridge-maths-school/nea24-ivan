@@ -9,6 +9,7 @@ export class Block {
   previousHash: string; // Hash of previous block
   nonce: number = 0; // Used for proof-of-work
   hash: string; // Hash of this block
+  // mined: boolean = false;
 
   constructor(
     index: number,
@@ -37,6 +38,7 @@ export class Block {
   // Mine the block using proof of work
   async mineBlock(difficulty: number) {
     // Pass the full block data to startMining
+    // if (this.mined) throw new Error("Block has already been mined!");
     let blockData =
       this.index +
       this.previousHash +
@@ -48,6 +50,7 @@ export class Block {
 
     this.nonce = result.nonce; // store mined nonce
     this.hash = result.hash; // store mined hash
+    // this.mined = true;
     console.log(`Block mined: hash=${this.hash}, nonce=${this.nonce}`);
   }
 }

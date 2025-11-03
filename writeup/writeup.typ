@@ -4,7 +4,7 @@
 
 #set heading(numbering: "1.")
 #show heading: set text(blue)
-
+#set bibliography(style: "harvard-cite-them-right")
 // headers and footers
 #set par(spacing: 1em)
 #set page(
@@ -371,6 +371,9 @@ Controls (buttons):
 - "Mine Block" \u{27F6} mines transactions into a block
 - "Propagate Transaction" \u{27F6} spreads it across nodes
 - Network view \u{27F6} graph of nodes (circles), with edges showing connections
+
+Limitations:
+- This is a simplified model of the blockchain, which means that // TODO: Justify the limitations of the blockchain simulator
 #pagebreak()
 === Usability Features
 This is my initial rough sketch on the graphical user interface (GUI) design of my blockchain simulator. It shows shows the user interface design of different sections of the platform, including the Introduction Page, Main Page, Users Page, Chains Page, Mining Page, Transactions Page, and the Settings Page.
@@ -393,10 +396,17 @@ Abstracted plans for my iterations:
 - Iteration 2: Building the core blockchain structure (Block and Blockchain classes)
 - Iteration 3: Developing a Command Line Interface (CLI)
 - Iteration 4-5: Developing a Graphical User Interface (GUI) to visualise blockchain
-
+=== Computational methods
+// TODO: justify all of these
+In the project, all the algorithms will be developed using the following computational methods:
+- Abstraction
+- Thinking parallel
+- Thinking Ahead
+- Problem solving using
+  - Visualisation
 === Technology
 The simulator will run purely on client side code to reduce server costs and workload, improve scalability, and create a more interactive and responsive user experience\
-Frontend: HTML + CSS + JavaScript \
+Frontend: HTML + CSS + TypeScript \
 Graph visualisation: canvas
 === Device Compatibility
 The blockchain simulator is designed to run entirely in the browser. Therefore a JavaScript supporting browser is required. The simulator will be optimised for modern desktop and laptop environments using Chromium browsers (Google Chrome, Microsoft Edge, Opera). Mobile browsers may support basic interactios, but visualisation features are best experienced on computer systems. The device running to program should have at least a refresh rate of 60Hz to run the `requestAnimationFrame()` function in canvas to visualise blockchain workflow.
@@ -404,7 +414,7 @@ The blockchain simulator is designed to run entirely in the browser. Therefore a
 I will be using TypeScript to develop my blockchain simulator. TypeScript is a superset of JavaScript that adds types, interfaces, and other features to enhance code quality and maintainability. Here are some reasons why TypeScript is a good choice for this project:
 + Type Safety: TypeScript's static typing helps catch errors at compile time, reducing bugs in runtime. This is  important in a complex project like a blockchain simulator where data structures and algorithms need to be precise. It also helps me to think about the input and output of the functions while doing modular coding
 + Sustainability: TypeScript's type makes it easier to understand and maintain code over time. This is important because it allows other developers to look at the code and understand it to develop new features and improvements
-However, when the website gets online, the TypeScript code will be transpiled (convert between two high-level languages) into JavaScript, so that it can be run on all Chromium browsers. Therefore, users do not have to install TypeScript on their devices to run the Blockchain Simulator. Their browsers only have to support JavaScript
+However, when the website gets online, the TypeScript code will be transpiled (convert between two high-level languages) into JavaScript, so that it can be run on all Chromium browsers. Therefore, users do not have to install TypeScript on their devices to run the Blockchain Simulator. Their browsers only have to support JavaScript. Since I will be developing in Bun, the TypeScript will be automatically transpiled into JavaScript and I could just plug the file into the html file.
 
 #pagebreak()
 == Intital Sucess Criteria
@@ -1420,11 +1430,11 @@ function stopMining() {
 }
 ```
 In this approach I don't have to serve multiple files and the code remains in TypeScript. The worker code is defined as a string within `main.ts`, and a Blob is created from this string to instantiate the workers. This allows the mining simulation to run entirely within Bun without the need for an external server or multiple files. Therefore this is the preferred approach for my PoW mining simulation in Bun.#pagebreak()
-=== Testing
+==== PoW Testing
 I am using two different computers to test the PoW mining algorithm:
 + A high performance computer with Intel(R) Core(TM) i5-14500, 2.60 GHz, 32.0 GB DDR5 RAM, which has 14 cores and 20 threads#footnote[Spec sheet: https://www.intel.com/content/www/us/en/products/sku/236784/intel-core-i5-processor-14500-24m-cache-up-to-5-00-ghz/specifications.html]. Theoretically it should be able to handle 20 web workers at the same time.
 + A medium performance laptop with 13th Gen Intel(R) Core(TM) i5-1335U (1.30 GHz), DDR4 16GB RAM, which has 10 cores and 12 threads#footnote[spec sheet:https://www.intel.com/content/www/us/en/products/sku/232153/intel-core-i51335u-processor-12m-cache-up-to-4-60-ghz/specifications.html]. Therefore theoretically it should be able to handle 12 web workers at the same time.
-I will use the `performance.now()` method to measure the run time for 10 times in each case and take the mean average of each results to make it accurate. Both computers will be tested with the same input string "Hello World" and difficulty level of 4 leading zeros. The number of web workers will be varied from 1 to 12 for the medium performance aptop, and from 1 to 20 for the high performance computer.
+I will use the `performance.now()` method to measure the run time for 10 times in each case and take the mean average of each results to make it accurate. Both computers will be tested with the same input string "Hello World" and difficulty level of 4 leading zeros. The number of web workers will be varied from 1 to 12 for the medium performance laptop, and from 1 to 20 for the high performance computer.
 ```ts 
 // Add this at the start of main.ts
 let startTime: number;
@@ -1437,28 +1447,49 @@ let endTime = performance.now();
 console.log(`Mining took ${(endTime - startTime).toFixed(2)} ms`);
 ```
 I expect to see a decrease in run time as the number of web workers increases, indicating that the web workers are effectively utilising multiple threads for parallel processing.
+#pagebreak()
 ==== Testing Results
-[All measurement results are in milliseconds (ms)]
-// Differentiate the curve?
-// large standard deviation = inconsistent performance
-#figure(image("images/mid_cpu_not_running.png"), caption:[Logical processors on medium performance laptop when the algorithm is not running])
-#figure(image("images/mid_cpu_running.png"), caption: [Logical processors on medium performance laptop when 12 workers is used])
-#image("images/image.png")
+After running the tests on both computers with the blockchain network (control variable) difficulty of 4. I have collected the results and recorded it in the following spreadsheet:
+#figure(image("images/pow_test_result.png",width:90%),caption:[proof of work test result -- [Note: All measurement results are in milliseconds (ms)]])
 
-As you may see, there is clearly a spike in CPU usage in multiple cores throughout the test for 12 web workers. This can sufficiently proof that the workers are in action and improving the speed for the proof of work algorithm. This algn wiith the results for the tests that I ran.
-
+I have noticed a significant decrease in run time for mining from the first few core, however this decrease becomes less significant as the number of cores continue to increase. This means that there will be an optimal number of threads to be used to get a decent performance, and after that, the performance will still increase, but the performance gain will be trivial. \
+\
 // Standard Deviaiton Calculation
+// large standard deviation = inconsistent performance
+I have also calculated the standard deviation (s.d., denoted by $s^2$) for samples with $ s^2 = Sigma(x_i - overline(x))^2/(n-1)) $ of both execution and found the mean for them. This tells us how far each data point is from the mean run time. Notice that the standard deviation for run time on the high performance computer is \u{223C}4.4\u{00D7} that of the medium performance. This means that the performance will be more inconsistent on lower spec computers. Hence, \
+\
+Interestingly, when I set the number of web workers to something extreme like 200 (this result is not included in any of the calculations for mean results), the runtime becomes unstable because I am massively oversubscribing the CPU. Each worker runs in its own thread, so having far more workers than CPU threads forces the system to constantly switch between them (called context switching). This burns up CPU time just managing threads instead of actually mining. On top of that, memory usage spikes and the browser or Bun runtime struggles to coordinate all those workers, causing delays, crashes, or inconsistent runtimes. Therefore I will have to find the optimal number of threads for the user not to oversubscribe their CPU or use up all their threads, so that other software cannot be run at the same time.\
+#figure(image("image.png", width:120%),caption:[pow test results plotted on desmos])
+On this diagram, the green dots represents the performance for the high performance computer while the blue dots represents the performance for the medium performance computer. \
+\
+// To optimise the algorithm, ...
+Using around 80% of the stakeholder's CPU threads for Web Workers gives the best performance because it keeps most system stable while still using most of the cores for mining. If you max out all threads, the OS and main thread have no room to handle background tasks, causing thread contention, lag, and even slower results. Leaving a few threads free ensures smoother communication and better overall throughput.
 
-Interestingly, when I set the number of Web Workers to something extreme like 200, the runtime becomes unstable because I am massively oversubscribing the CPU. Each worker runs in its own thread, so having far more workers than CPU threads forces the system to constantly switch between them (called context switching). This burns up CPU time just managing threads instead of actually mining. On top of that, memory usage spikes and the browser or Bun runtime struggles to coordinate all those workers, causing delays, crashes, or inconsistent runtimes.
 // Desmos Graph excludes the 200 workers data point
 // Explain x and y
 // Highest coefficient of determination for power regression
+\
+// TODO: pmcc
+// epsilon = 0.2
+Epsilon $epsilon$ quantifies how much performance you're willing to sacrifice to gain efficiency — it defines the “sweet spot” rather than chasing pure speed.
+Mathematically, $epsilon$ is the acceptable deviation from the minimum runtime, expressed as a percentage:
+$ y(x) <= (1+epsilon)y_min $
+where $y(x)$ = runtime at $x$ threads, $y_min$ = theoretical minimum runtime (at max threads) and $epsilon$ = tolerance level.
 
+#pagebreak()
+#subpar.grid(
+  figure(image("images/mid_cpu_not_running.png", width: 100%), caption:[Logical processors (threads) on medium performance laptop when the algorithm is not running]), <a>,
+  figure(image("images/mid_cpu_running.png", width: 103%), caption: [Logical processors (threads) on medium performance laptop when 12 workers is used]), <b>,
+  columns: (1fr, 1fr),
+  label: <full>,
+)
+#figure(image("images/image.png",width:50%),caption:[Logical processors (threads) on medium performance laptop when running with max (12) threads multiple times])
+
+As you may see, there is clearly a spike in CPU usage in multiple cores throughout the test for 12 web workers. This can sufficiently proof that the workers are in action and improving the speed for the proof of work algorithm. This aligns with the results for the tests that I ran.\
+\
 Limitation - This test is only done on two computers, therefore the results may vary on different hardware configurations. However, the general trend of performance improvement with increased web workers should hold true across most systems. 
 Another Limitation - The result might not be accurate as there are other background processes running on the computer which might interfere with the mining process. However, by taking the average of multiple runs, I can mitigate some of this variability and get a more reliable measure of performance.
-// To optimise the algorithm, ...
-Using around 80% of the stakholder's CPU threads for Web Workers gives the best performance because it keeps most system stable while still using most of the cores for mining. If you max out all threads, the OS and main thread have no room to handle background tasks, causing thread contention, lag, and even slower results. Leaving a few threads free ensures smoother communication and better overall throughput.
-=== Evaluating Iteration 1
+=== Iteration 1 Evaluation
 In this iteration I have done the proof of concept for multiple parts of my blockchain simulator:
 + Breadth-First Search (BFS) algorithm for graph traversal to show the broadcast of new blocks and transactions across the network
 + Depth-First Search (DFS) algorithm for graph traversal also to show the broadcast of new blocks and transactions across the network
@@ -1468,10 +1499,16 @@ In this iteration I have done the proof of concept for multiple parts of my bloc
 In this iteration the stakeholder would be me - the developer of the simulator, as there isn't a Minimal Viable Product (MVP) yet for the external stakeholders to review.
 
 Review:\
-The proof of concept implementations for BFS, DFS, hashing, and PoW mining were successful. Each component functioned as intended, passing all unit tests and demonstrating the core concepts effectively. The BFS and DFS algorithms correctly traversed graphs, the hashing function produced consistent and unique hashes, and the PoW mining algorithm successfully simulated the mining process using web workers.
-I have solved the issues for many blockchain simulators online -- which was the lack of realistic mining simulation -- by implementing a PoW mining algorithm that uses web workers for parallel processing. This approach effectively simulates the distributed nature of mining in real blockchain networks, allowing multiple threads to work concurrently to find a valid nonce. By leveraging web workers, the mining process can be significantly sped up, providing a more accurate representation of how mining operates in practice. I have also solved the issue for the lack of graph traversal algorithms in existing blockchain simulators by implementing both BFS and DFS algorithms. These algorithms allow for realistic simulation of how blocks and transactions propagate through a blockchain network, enhancing the educational value of the simulator. 
-Looking forward, the next steps involve integrating these components into the larger blockchain simulator project. This includes creating the Block and Blockchain classes, developing a Command Line Interface (CLI) for user interaction, and eventually building a Graphical User Interface (GUI) for enhanced usability. The focus will be on ensuring that these components work seamlessly together to provide an educational and interactive experience for users learning about blockchain technology.
-// WWW, EBI
+The proof of concept implementations for BFS, DFS, hashing, and PoW mining were successful. Each component functioned as intended, passing all unit tests and demonstrating the core concepts effectively. The BFS and DFS algorithms correctly traversed graphs, the hashing function produced consistent and unique hashes, confirming its suitability for block validation later, and the PoW mining algorithm successfully simulated the mining process using web workers.\
+\
+I have solved the issues for many blockchain simulators online -- which was the lack of realistic mining simulation -- by implementing a PoW mining algorithm that uses web workers for parallel processing. This approach effectively simulates the distributed nature of mining in real blockchain networks, allowing multiple threads to work in parallel to find a valid nonce. By leveraging web workers, the mining process can be significantly sped up, providing a more accurate representation of how mining operates in practice. I have also solved the issue for the lack of graph traversal algorithms in existing blockchain simulators by implementing both BFS and DFS algorithms. These algorithms allow for realistic simulation of how blocks and transactions propagate through a blockchain network, enhancing the educational value of the simulator. \
+\
+Despite the success of this iteration, there are a few problems. Firstly, there are not a lot of input validation. For example, unexpected results such as an empty string (doesn't mean anything as there are no transactions to be mined) could be input into the `startMining` or other types of data could be input. Luckily, since I am developing in TypeScript, the wrong type of output will be automatically rejected by the function if I have stated the expected type of input, which I have. Another problem is that I didn't set limit to the input of the functions. For example, you could add millions of nodes in the dfs algorithm, and since my dfs algorithm is recursive, the execution time would be really long. This is the same with the `startMining` function. If the difficulty of the network level is being set too high, the mining would take a really long run time and likely not to load.\
+\
+Looking forward, the next steps involve integrating these components into the larger blockchain simulator project. This includes creating the Block and Blockchain classes, developing a Command Line Interface (CLI) for user interaction, and eventually building a Graphical User Interface (GUI) for enhanced usability. The focus will be on ensuring that these components work seamlessly together to provide an educational and interactive experience for users learning about blockchain technology. One thing that I could do in the next iteration is to improve the readability of the output, showing at each stage what the code is doing.\
+\
+In Iteration 1, I have developed the different functions for proof of concept. These will be reused in further iterations. However, to adapt to the use of further use, the functions are highly likely to be altered before use.
+
 #pagebreak()
 == Iteration 2
 In Iteration 2, I will be building the core blockchain structure. I will be focusing on creating the Block and Blockchain classes. The `Block` class will represent individual blocks in the blockchain, containing properties such as index, timestamp, transactions, previous hash, nonce, and hash. The `Blockchain` class will manage the chain of blocks, providing methods to add new blocks, validate the chain, and handle transactions.\
@@ -1755,7 +1792,8 @@ export class Block {
     - This sets the block's nonce and hash
  5. Push the mined block into the blockchain's chain array
  6. Clear the mempool to indicate transactions are now confirmed
- 7. Print mempool cleared message`
+ 7. Print mempool cleared message`\
+ \
  Since we will have to await the block for mining, the `minPendingTransactions()` will also have to be an asynchronous function.\
 \
 5. `isChainValid()`
@@ -1842,12 +1880,13 @@ The testing for Iteration 2 will be manual and observational. The best tests for
 - Validate the chain using isChainValid() and print the result
 As the process of mining involves asynchronous functions I will wrap all my tests in an asynchronous function.\
 I will be doing three types of tests:
-1. Normal Tests to test the basic functionality of the simulator:
+1. *Normal Tests* to test the basic functionality of the simulator:
 ```ts
 import { Blockchain } from "./blockchain.ts";
 
 // Run blockchain demo
-async function run() {
+async function normalTest() {
+  console.log("=== NORMAL TEST ===");
   let myChain = new Blockchain(3);
 
   // Add first batch of transactions
@@ -1875,27 +1914,115 @@ async function run() {
   // Validate chain
   console.log("Is blockchain valid?", myChain.isChainValid());
 }
-
-run();
 ```
-2. Boundary Tests: 
-- Empty mempool -- Expected Result: 'No transactions to mine'
-- Large number of transactions -- Expected Result: handles it fine since hash will turn it into a fixed length hexamdecimal
-- Setting a high difficulty for the blockchain network -- Expected: Might take a long time but will eventually mine
+2. *Boundary Tests*: 
+- Empty mempool to test what would happen when no transaction has to be mined into blocks but user tries to mine a block -- Expected Result: 'No transactions to mine':
+```ts
+async function emptyMempoolTest() {
+  console.log("\n=== BOUNDARY TEST: Empty mempool ===");
+  let myChain = new Blockchain(3);
+  await myChain.minePendingTransactions();
+}
+```
+- Large number of transactions to simulate a busy network with a lot of transactions happening -- Expected Result: handles it fine since hash will turn it into a fixed length hexamdecimal
+```ts
+async function largeBatchTest() {
+  console.log("\n=== BOUNDARY TEST: Large batch of transactions ===");
+  let myChain = new Blockchain(2);
+  for (let i = 0; i < 100; i++) {
+    myChain.addTransaction(`User${i} sends ${i} coins`);
+  }
+  console.log("Mining large batch...");
+  await myChain.minePendingTransactions();
+  console.log(
+    "Transactions in last block:",
+    myChain.getLatestBlock().transactions.length
+  );
+}
+```
+- Setting a high difficulty for the blockchain network to simulate a more complex blockchain network, just like in real life -- Expected: Might take a long time but will eventually mine
+```ts
+async function highDifficultyTest() {
+  console.log("\n=== BOUNDARY TEST: High difficulty ===");
+  let myChain = new Blockchain(5); // very hard to mine
+  myChain.addTransaction("High difficulty test transaction");
+  console.log("Mining with difficulty 5 (might take a while)...");
+  await myChain.minePendingTransactions();
+  console.log("Blockchain valid after mining?", myChain.isChainValid());
+}
+```
 
-3. Erroneous Tests
+3. *Erroneous Tests*
 - Invalid transaction type
-- Tampering with the chain
-- Re-mining an already mined block
+```ts
+async function invalidTransactionTest() {
+  console.log("\n=== ERRONEOUS TEST: Invalid transaction type ===");
+  let myChain = new Blockchain(2);
+  try {
+    // @ts-ignore
+    myChain.addTransaction(12345); // Invalid, should be string
+  } catch (err: any) {
+    console.error("Caught error:", err.message);
+  }
+}
+
+```
+- Tampering with the chain: a blockchain network should not allow user to tamper with the chain
+```ts
+async function tamperedChainTest() {
+  console.log("\n=== ERRONEOUS TEST: Tampered block ===");
+  let myChain = new Blockchain(2);
+  myChain.addTransaction("Alice pays Bob 1 coin");
+  await myChain.minePendingTransactions();
+  myChain.addTransaction("Charlie pays Dave 2 coins");
+  await myChain.minePendingTransactions();
+
+  // Tamper with first mined block
+  myChain.chain[1].transactions.push("Hacked Transaction!");
+  console.log("Blockchain valid after tampering?", myChain.isChainValid());
+}
+```
+- Re-mining an already mined block. Expected: chain not valid
+```ts
+async function reMiningTest() {
+  console.log("\n=== ERRONEOUS TEST: Re-mining block ===");
+  let myChain = new Blockchain(2);
+  myChain.addTransaction("Test transaction");
+  await myChain.minePendingTransactions();
+
+  console.log("Re-mining latest block...");
+  let latestBlock = myChain.getLatestBlock();
+  await latestBlock.mineBlock(myChain.difficulty);
+  console.log("Blockchain valid after re-mining?", myChain.isChainValid());
+}
+```
 
 ==== Testing Results
+The test is observational. This means that we will have to analyse the output to know if the code that we made actually function as it should. As expected, while the code isn't there, none of the tests passed. However once the code has been developed, this is the result of the tests:
 
+Everything runs except from the 
+// TODO: `InvalidStateError`
 
-=== Evaluation
-I have invited some of my stakeholders, ..., to review my command line interface code. 
+The `InvalidStateError` sometimes appear and sometimes not.
+This is beacuse each worker runs `assignWork()` repeatedly with `setTimeout(assignwork, 0)` -- meaning it's in an infinite async loop, posting new work until mining stops. But when `stopMining()` is called (after one worker finds a valid hash), it terminates all workers. The problem though is that some workers still have a pending `setTimeout(assignWork, 0)` callback queued. So they wake up, try to call `worker.postMessage()` again but the worker has already been terminated, causing the `InvalidStateError`. This only happens in the 'Re-mining Test' because the test that triggers this (reMiningTest) calls `mineBlock()` directly again after mining once. This means that the global worker pool and `running` flag from the previous mining session are still in use. The new workers are starting while the old ones are mid-termination. Therfore they're racing.  
+Therefore, to fix this, // TODO: workers = []
+// However the programs sometimes get killed when it does the re-mining block test
+// This is beacuse of variable scoping and worker lifecycle timing. The old workers from the previous mining round are still alive for a few milliseconds
+// 
+// however the chain shouldnt be valid when remined
+// the `Block` class doesn't track whether it’s already mined, so calling `mineBlock()` again just overwrites nonce and hash. That’s why the reMiningTest passes, even though in a real blockchain it shouldn’t.
+// TODO: see block.ts
+// 
+// Blockchain shouldnt still be valid after remining. Therefore adding a mined flag
+
+=== Iteration 2 Evaluation
+I have invited some of my stakeholders, ..., to review my blockchain core structure.  
 #pagebreak()
 == Iteration 3
-In Iteration 3, I will start to code a Command Line Interface (CLI) for my simulator. This will be a Minimum Viable Product (MVP). In this iteration, I will be linking everything that I had in the proof of concepts into one command line interface. This includes the 
+In Iteration 3, I will start to code a Command Line Interface (CLI) for my simulator. This will be a Minimum Viable Product (MVP). In this iteration, I will be linking everything that I had in the proof of concepts into one command line interface. This includes the demomstration of adding users to the blockchain network, showing how the blocks are propagating through the network after being added to the network,
+
+=== Design for CLI
+I quite like the Sean CLI from the Analysis section. When I start his simulator, there is a menu page which allows you to navigate to different sections such as the `blockchain` section and the `p2p` section. Therefore I am going to use this idea to create the menu page for my simulator.
 === Testing
 === Evaluation
 == Iteration 4
@@ -1906,88 +2033,90 @@ In Iteration 4, I will be developing a Graphical User Interface (GUI) for my blo
 In Iteration 5, I will be continuing developing and enhancing the features of my blockchain simulator after getting feedback from my external stakeholders.
 === Testing
 === Evaluation
-`Section 1: Participant Background
-What is your familiarity with blockchain concepts?
-☐ None
-☐ Basic (heard of blockchain/Bitcoin)
-☐ Intermediate (know about mining, blocks, transactions)
-☐ Advanced (have coded or studied blockchain before)
+// `Section 1: Participant Background
+// What is your familiarity with blockchain concepts?
+// ☐ None
+// ☐ Basic (heard of blockchain/Bitcoin)
+// ☐ Intermediate (know about mining, blocks, transactions)
+// ☐ Advanced (have coded or studied blockchain before)
 
-How comfortable are you with using web-based or desktop software simulations?
-☐ Not comfortable
-☐ Somewhat comfortable
-☐ Comfortable
-☐ Very comfortable
+// How comfortable are you with using web-based or desktop software simulations?
+// ☐ Not comfortable
+// ☐ Somewhat comfortable
+// ☐ Comfortable
+// ☐ Very comfortable
 
-Section 2: Usability
-3. How easy is it to navigate the simulator interface?
-☐ Very difficult
-☐ Difficult
-☐ Neutral
-☐ Easy
-☐ Very easy
+// Section 2: Usability
+// 3. How easy is it to navigate the simulator interface?
+// ☐ Very difficult
+// ☐ Difficult
+// ☐ Neutral
+// ☐ Easy
+// ☐ Very easy
 
-Section 3: Functionality and Features
-6. Which features do you find most useful? (Select all that apply)
-☐ Adding transactions
-☐ Mining blocks
-☐ Viewing block details
-☐ Visualising blockchain structure
-☐ Simulating network propagation (BFS/DFS)
-☐ Checking chain validity
+// Section 3: Functionality and Features
+// 6. Which features do you find most useful? (Select all that apply)
+// ☐ Adding transactions
+// ☐ Mining blocks
+// ☐ Viewing block details
+// ☐ Visualising blockchain structure
+// ☐ Simulating network propagation (BFS/DFS)
+// ☐ Checking chain validity
 
-Are there any features that are confusing or need improvement?
-Open ans
+// Are there any features that are confusing or need improvement?
+// Open ans
 
-How responsive is the simulator to your actions (e.g., adding blocks, expanding transactions)?
-☐ Very slow
-☐ Slow
-☐ Neutral
-☐ Fast
-☐ Very fast
+// How responsive is the simulator to your actions (e.g., adding blocks, expanding transactions)?
+// ☐ Very slow
+// ☐ Slow
+// ☐ Neutral
+// ☐ Fast
+// ☐ Very fast
 
-Section 4: Educational Value
-9. How much did you learn about blockchain by using the simulator?
-☐ Nothing
-☐ A little
-☐ Some
-☐ A lot
-☐ A great deal
+// Section 4: Educational Value
+// 9. How much did you learn about blockchain by using the simulator?
+// ☐ Nothing
+// ☐ A little
+// ☐ Some
+// ☐ A lot
+// ☐ A great deal
 
-Would you recommend this simulator to other students to learn blockchain concepts?
-☐ Definitely not
-☐ Probably not
-☐ Neutral
-☐ Probably yes
-☐ Definitely yes
+// Would you recommend this simulator to other students to learn blockchain concepts?
+// ☐ Definitely not
+// ☐ Probably not
+// ☐ Neutral
+// ☐ Probably yes
+// ☐ Definitely yes
 
-Section 5: Additional Feedback
-11. What improvements would make the simulator more useful or enjoyable?
-Open ans
+// Section 5: Additional Feedback
+// 11. What improvements would make the simulator more useful or enjoyable?
+// Open ans
 
-Any other comments or suggestions?
-Open ans
+// Any other comments or suggestions?
+// Open ans
 
-How clear are the visual representations of:
-Blocks and transactions
-☐ Very unclear ☐ Unclear ☐ Neutral ☐ Clear ☐ Very clear
-Blockchain structure (links between blocks)
-☐ Very unclear ☐ Unclear ☐ Neutral ☐ Clear ☐ Very clear
-Network propagation
-☐ Very unclear ☐ Unclear ☐ Neutral ☐ Clear ☐ Very clear
-Is the tutorial/help documentation clear enough to understand how to use the simulator?
-☐ Not at all
-☐ Slightly
-☐ Moderately
-☐ Mostly
-☐ Completely`
+// How clear are the visual representations of:
+// Blocks and transactions
+// ☐ Very unclear ☐ Unclear ☐ Neutral ☐ Clear ☐ Very clear
+// Blockchain structure (links between blocks)
+// ☐ Very unclear ☐ Unclear ☐ Neutral ☐ Clear ☐ Very clear
+// Network propagation
+// ☐ Very unclear ☐ Unclear ☐ Neutral ☐ Clear ☐ Very clear
+// Is the tutorial/help documentation clear enough to understand how to use the simulator?
+// ☐ Not at all
+// ☐ Slightly
+// ☐ Moderately
+// ☐ Mostly
+// ☐ Completely`
 == Test Data <test-data>
 == Data Validation
 = Evaluation <evaluation>
 // Data Validation
 
 == Decomposition <decomposition>
-TODO:Justify for decomposition
+// TODO:Justify for decomposition
 
-== Appendix
+= Bibliography  
+
+= Appendix
 Here I will attach all the code files that I have written for my blockchain simulator project. They are sorted in alphabetical order for easy navigation.

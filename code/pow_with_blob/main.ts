@@ -12,6 +12,7 @@ let running = false; // Indicates if mining is currently active
 let workers: Worker[] = [];
 
 export async function startMining(baseData: string, difficulty: number) {
+  workers = [];
   if (running) {
     console.log("Mining already in progress.");
     return Promise.resolve({ nonce: 0, hash: "" });
@@ -52,7 +53,6 @@ export async function startMining(baseData: string, difficulty: number) {
       let worker = new Worker(URL.createObjectURL(blob));
 
       workers.push(worker);
-
       // Handle message from worker when a valid nonce is found
       worker.onmessage = (e) => {
         let endTime = performance.now();
@@ -74,7 +74,6 @@ export async function startMining(baseData: string, difficulty: number) {
         nonceOffset += CHUNK_SIZE; // Increment nonce start for next batch
         setTimeout(assignWork, 0); // Schedule next batch asynchronously
       };
-
       assignWork(); // Start first batch
     }
   });

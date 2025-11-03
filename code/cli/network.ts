@@ -1,0 +1,228 @@
+import { Blockchain } from "../block/blockchain.ts";
+
+// Represents a network node (user)
+export class Node {
+  username: string;
+  blockchain: Blockchain;
+  neighbours: Node[] = [];
+
+  constructor(username: string, difficulty = 2) {
+    this.username = username;
+    this.blockchain = new Blockchain(difficulty);
+  }
+
+  addneighbour(node: Node) {
+    if (!this.neighbours.includes(node)) this.neighbours.push(node);
+  }
+}
+
+// Represents the full network
+export class Network {
+  nodes: Map<string, Node> = new Map();
+  mempool: string[] = []; // global mempool
+
+  // Add a new user/node
+  addUser(username: string) {
+    if (this.nodes.has(username)) {
+      console.log(`User ${username} already exists.`);
+      return;
+    }
+    let node = new Node(username);
+    this.nodes.set(username, node);
+    console.log(`User ${username} added.`);
+  }
+
+  getNode(username: string): Node | undefined {
+    return this.nodes.get(username);
+  }
+
+  // Add transaction to global mempool
+  addTransaction(from: string, to: string, amount: number) {
+    let sender = this.getNode(from);
+    if (!sender) {
+      console.log(`Sender ${from} not found.`);
+      return;
+    }
+    let tx = `${from} pays ${to} ${amount} coins`;
+    this.mempool.push(tx);
+    console.log(`Transaction added to global mempool: ${tx}`);
+  }
+
+  // Mine transactions for a given node
+  async mine(username: string) {
+    let node = this.getNode(username);
+    if (!node) {
+      console.log(`User ${username} not found.`);
+      return;
+    }
+
+    if (this.mempool.length === 0) {
+      console.log("No transactions to mine.");
+      return;
+    }
+
+    // Copy global mempool for mining
+    let transactionsToMine = [...this.mempool];
+
+    // Mine using node's blockchain
+    await node.blockchain.minePendingTransactions(transactionsToMine);
+
+    // Remove mined transactions from global mempool
+    this.mempool = this.mempool.filter(
+      (tx) => !transactionsToMine.includes(tx)
+    );
+
+    let latestBlock = node.blockchain.getLatestBlock();
+    console.log(
+      `Block mined by ${username}: Index=${latestBlock.index}, Hash=${latestBlock.hash}, Nonce=${latestBlock.nonce}`
+    );
+  }
+
+  // BFS/DFS propagation of latest block
+  propagate(startUsername: string, method: "bfs" | "dfs") {
+    let startNode = this.getNode(startUsername);
+    if (!startNode) {
+      console.log(`Start user ${startUsername} not found.`);
+      return;
+    }
+
+    let latestBlock = startNode.blockchain.getLatestBlock();
+
+    // Check if the block is mined (hash satisfies difficulty)
+    let targetPrefix = "0".repeat(startNode.blockchain.difficulty);
+    if (!latestBlock.hash.startsWith(targetPrefix)) {
+      console.log(
+        `Cannot propagate: latest block by ${startUsername} is not mined yet.`
+      );
+      return;
+    }
+
+    let visited = new Set<string>();
+    let order: string[] = [];
+
+    let visitNode = (node: Node) => {
+      visited.add(node.username);
+      order.push(node.username);
+      for (let neighbour of node.neighbours) {
+        if (!visited.has(neighbour.username)) visitNode(neighbour);
+      }
+    };
+
+    if (method === "dfs") {
+      visitNode(startNode);
+    } else {
+      // BFS
+      let queue: Node[] = [startNode];
+      while (queue.length > 0) {
+        let node = queue.shift()!;
+        if (!visited.has(node.username)) {
+          visited.add(node.username);
+          order.push(node.username);
+          for (let neighbour of node.neighbours) queue.push(neighbour);
+        }
+      }
+    }
+
+    // Propagate the block to all nodes
+    for (let username of order) {
+      let node = this.getNode(username)!;
+      // Only add block if chain is shorter
+      if (node.blockchain.chain.length <= latestBlock.index) {
+        node.blockchain.chain.push(latestBlock);
+      }
+    }
+
+    console.log(`${method.toUpperCase()} propagation: ${order.join(" -> ")}`);
+  }
+
+  // Display a user's blockchain
+  showChain(username: string) {
+    let node = this.getNode(username);
+    if (!node) {
+      console.log(`User ${username} not found.`);
+      return;
+    }
+    node.blockchain.chain.forEach((block) => {
+      console.log(`Index: ${block.index}, Hash: ${block.hash}`);
+      console.log(`Transactions: ${block.transactions.join(", ")}`);
+    });
+  }
+
+  // Validate a user's blockchain
+  validate(username: string) {
+    let node = this.getNode(username);
+    if (!node) {
+      console.log(`User ${username} not found.`);
+      return;
+    }
+    console.log(
+      `Blockchain valid for ${username}? ${node.blockchain.isChainValid()}`
+    );
+  }
+
+  // Show all users
+  showUsers() {
+    if (this.nodes.size === 0) {
+      console.log("No users in the network.");
+      return;
+    }
+    console.log("Users in network:");
+    for (let username of this.nodes.keys()) {
+      console.log("- " + username);
+    }
+  }
+
+  // Show a user's neighbours
+  showneighbours(username: string) {
+    let node = this.getNode(username);
+    if (!node) {
+      console.log(`User ${username} not found.`);
+      return;
+    }
+    if (node.neighbours.length === 0) {
+      console.log(`${username} has no neighbours.`);
+      return;
+    }
+    console.log(
+      `neighbours of ${username}: ${node.neighbours
+        .map((n) => n.username)
+        .join(", ")}`
+    );
+  }
+
+  // Show global mempool or per-user mempool
+  showMempool(username?: string) {
+    if (!username) {
+      if (this.mempool.length === 0) {
+        console.log("Global mempool is empty.");
+        return;
+      }
+      console.log("Global mempool:");
+      this.mempool.forEach((tx) => console.log("- " + tx));
+      return;
+    }
+
+    let node = this.getNode(username);
+    if (!node) {
+      console.log(`User ${username} not found.`);
+      return;
+    }
+
+    if (node.blockchain.mempool.length === 0) {
+      console.log(`${username}'s mempool is empty.`);
+      return;
+    }
+    console.log(`${username}'s mempool:`);
+    node.blockchain.mempool.forEach((tx) => console.log("- " + tx));
+  }
+
+  // Connect two users as neighbours
+  connectUsers(user1: string, user2: string) {
+    let n1 = this.getNode(user1);
+    let n2 = this.getNode(user2);
+    if (!n1 || !n2) return;
+    n1.addneighbour(n2);
+    n2.addneighbour(n1);
+    console.log(`${user1} and ${user2} are now neighbours.`);
+  }
+}
