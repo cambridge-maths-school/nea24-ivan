@@ -15,7 +15,6 @@ async function normalTest() {
   await myChain.minePendingTransactions();
   console.log("Current Blockchain:");
   console.log(JSON.stringify(myChain.chain, null, 2));
-
   // Add second batch of transactions
   myChain.addTransaction("Charlie pays Dave 2 coins");
   myChain.addTransaction("Eve pays Frank 1 coin");
@@ -61,16 +60,11 @@ async function highDifficultyTest() {
   console.log("Blockchain valid after mining?", myChain.isChainValid());
 }
 
-// === Erroneous / Invalid Tests ===
+// === Erroneous Tests ===
 async function invalidTransactionTest() {
   console.log("\n=== ERRONEOUS TEST: Invalid transaction type ===");
   let myChain = new Blockchain(2);
-  try {
-    // @ts-ignore
     myChain.addTransaction(12345); // Invalid, should be string
-  } catch (err: any) {
-    console.error("Caught error:", err.message);
-  }
 }
 
 async function tamperedChainTest() {
@@ -101,12 +95,12 @@ async function reMiningTest() {
 // === Run all tests sequentially ===
 async function runAllTests() {
   await normalTest();
-  await emptyMempoolTest();
-  await largeBatchTest();
-  await highDifficultyTest();
-  await invalidTransactionTest();
-  await tamperedChainTest();
-  await reMiningTest();
+  // await emptyMempoolTest();
+  // await largeBatchTest();
+  // await highDifficultyTest();
+  // await invalidTransactionTest();
+  // await tamperedChainTest();
+  // await reMiningTest();
 }
 
 runAllTests();

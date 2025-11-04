@@ -29,55 +29,28 @@ export class Blockchain {
   }
 
   // Mine all pending transactions and add as a new block
-  // async minePendingTransactions() {
-  //   if (this.mempool.length === 0) {
-  //     console.log("No transactions to mine.");
-  //     return;
-  //   }
-
-  //   console.log("Current mempool:", this.mempool);
-
-  //   let newBlock = new Block(
-  //     this.chain.length,
-  //     Date.now(),
-  //     this.mempool,
-  //     this.getLatestBlock().hash
-  //   );
-
-  //   await newBlock.mineBlock(this.difficulty);
-
-  //   this.chain.push(newBlock);
-  //   this.mempool = []; // Clear mempool after mining
-  //   console.log("Mempool cleared after mining.\n");
-  // }
-
-  async minePendingTransactions(transactions?: string[]) {
-    // Use passed transactions if given, otherwise use the blockchain's own mempool
-    const txs = transactions ?? this.mempool;
-
-    if (txs.length === 0) {
+  // async minePendingTransactions(transactions?: string[]) {
+  async minePendingTransactions() {
+    if (this.mempool.length === 0) {
       console.log("No transactions to mine.");
       return;
     }
 
-    console.log("Current transactions being mined:", txs);
+    console.log("Current mempool:", this.mempool);
 
     let newBlock = new Block(
       this.chain.length,
       Date.now(),
-      txs,
+      this.mempool,
       this.getLatestBlock().hash
     );
 
     await newBlock.mineBlock(this.difficulty);
-
+    // if (!transactions) {
     this.chain.push(newBlock);
-
-    // Clear mempool if mining the blockchain's own mempool
-    if (!transactions) {
-      this.mempool = [];
-      console.log("Mempool cleared after mining.\n");
-    }
+    this.mempool = []; // Clear mempool after mining
+    console.log("Mempool cleared after mining.\n");
+    // }
   }
 
   // Check if blockchain is valid by comparing hashes

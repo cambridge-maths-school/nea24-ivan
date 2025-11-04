@@ -140,92 +140,92 @@ Here are my summary to some main concepts in Blockchain technology:
 Algorithm flowchart - see next page
 #figure(
   move(dx: 5em, dy: 0em)[
-      #diagram(
-        node-stroke: 1pt,
-        node((0, 0), [Start], corner-radius: 2pt, extrude: (0, 3)),
-        edge("-|>"),
-        node(
-          (0, 1),
-          align(center)[
-            Verify \ T.signature using sender's \ public key
-          ],
-          shape: diamond,
-        ),
-        edge("d,d", "-|>", [Valid], label-pos: 0.5),
-        edge("r,r", "-|>", [Invalid], label-pos: 0.7),
-        node(
-          (2, 1),
-          align(center)[
-            Reject the \ transaction
-          ],
-          shape: rect,
-        ),
-        node(
-          (0, 3),
-          align(center)[
-            Check sender's \ balance
-          ],
-          shape: diamond,
-        ),
-        edge("r,r", "-|>", [If L\u{2264}T.amount], label-pos: 0.4),
-        edge("d,d", "-|>", [If L\u{2265}T.amount], label-pos: 0.4),
-        node(
-          (2, 3),
-          align(center)[
-            Reject the \ transaction
-          ],
-          shape: rect,
-        ),
-        node(
-          (0, 5),
-          align(center)[
-            Ensure T \ does not double-spend \ coins already spent \ in L
-          ],
-          shape: diamond,
-        ),
-        edge("d,d", "-|>", [No Double spending isues], label-pos: 0.5),
-        edge("r,r", "-|>", [Double\ spending\ detected], label-pos: 0.6),
-        node(
-          (2, 5),
-          align(center)[
-            Reject the \ transaction
-          ],
-          shape: rect,
-        ),
-        node(
-          (0, 7),
-          align(center)[
-            \ Check transaction \ structure (fields, \ format, protocol rules) \ ‎
-          ],
-          shape: diamond,
-        ),
-        edge("d,d", "-|>", [Valid], label-pos: 0.6),
-        edge("r,r", "-|>", [Invalid], label-pos: 0.7),
-        node(
-          (2, 7),
-          align(center)[
-            Reject the \ transaction
-          ],
-          shape: rect,
-        ),
-        node(
-          (0, 9),
-          align(center)[
-            All check pass
-          ],
-          shape: rect,
-        ),
-        edge("d", "-|>", label-pos: 0.7),
-        node(
-          (0, 10),
-          align(center)[
-            Add to mempool
-          ],
-          shape: rect,
-        ),
-        edge("d", "-|>", label-pos: 0.7),
-        node((0, 11), [End], corner-radius: 2pt, extrude: (0, 3)),
-      )],
+    #diagram(
+      node-stroke: 1pt,
+      node((0, 0), [Start], corner-radius: 2pt, extrude: (0, 3)),
+      edge("-|>"),
+      node(
+        (0, 1),
+        align(center)[
+          Verify \ T.signature using sender's \ public key
+        ],
+        shape: diamond,
+      ),
+      edge("d,d", "-|>", [Valid], label-pos: 0.5),
+      edge("r,r", "-|>", [Invalid], label-pos: 0.7),
+      node(
+        (2, 1),
+        align(center)[
+          Reject the \ transaction
+        ],
+        shape: rect,
+      ),
+      node(
+        (0, 3),
+        align(center)[
+          Check sender's \ balance
+        ],
+        shape: diamond,
+      ),
+      edge("r,r", "-|>", [If L\u{2264}T.amount], label-pos: 0.4),
+      edge("d,d", "-|>", [If L\u{2265}T.amount], label-pos: 0.4),
+      node(
+        (2, 3),
+        align(center)[
+          Reject the \ transaction
+        ],
+        shape: rect,
+      ),
+      node(
+        (0, 5),
+        align(center)[
+          Ensure T \ does not double-spend \ coins already spent \ in L
+        ],
+        shape: diamond,
+      ),
+      edge("d,d", "-|>", [No Double spending isues], label-pos: 0.5),
+      edge("r,r", "-|>", [Double\ spending\ detected], label-pos: 0.6),
+      node(
+        (2, 5),
+        align(center)[
+          Reject the \ transaction
+        ],
+        shape: rect,
+      ),
+      node(
+        (0, 7),
+        align(center)[
+          \ Check transaction \ structure (fields, \ format, protocol rules) \ ‎
+        ],
+        shape: diamond,
+      ),
+      edge("d,d", "-|>", [Valid], label-pos: 0.6),
+      edge("r,r", "-|>", [Invalid], label-pos: 0.7),
+      node(
+        (2, 7),
+        align(center)[
+          Reject the \ transaction
+        ],
+        shape: rect,
+      ),
+      node(
+        (0, 9),
+        align(center)[
+          All check pass
+        ],
+        shape: rect,
+      ),
+      edge("d", "-|>", label-pos: 0.7),
+      node(
+        (0, 10),
+        align(center)[
+          Add to mempool
+        ],
+        shape: rect,
+      ),
+      edge("d", "-|>", label-pos: 0.7),
+      node((0, 11), [End], corner-radius: 2pt, extrude: (0, 3)),
+    )],
   caption: [Algorithm flowchart to validate a transaction],
 )
 \
@@ -238,7 +238,7 @@ A block is a container for transactions and metadata. Each block contains:
 - Previous block hash -- linking the block to its predecessor
 - Timestamp -- recording creation time
 - Nonce (Number used Once) --  adjusted during mining to solve the proof of work puzzle
-- Block hash -- a cryptographic hash of all block contents -- including 
+- Block hash -- a cryptographic hash of all block contents -- including
 \
 4. Hashing
 Blocks are uniquely identified by a cryptographic hash function (e.g. SHA-256).\
@@ -615,7 +615,7 @@ I have interviewed 5 A level students, in which 4 of them takes Computer Science
 // 1. Not at all
 // 2. No
 // 3. Learn about mining and how the blocks are connected together
-// 4. network propagation 
+// 4. network propagation
 // 5. Blocks being in a chain
 // 6. Mine blocks
 // 7. Simple
@@ -634,7 +634,7 @@ I have interviewed 5 A level students, in which 4 of them takes Computer Science
 // 4. sharing of blocks
 // 5. Visualisation
 // 6. let you simulates a transaction
-// 7. simple 
+// 7. simple
 // 8. within 10 seconds
 // 9. multiple nodes on one computer
 // 10. lack of features
@@ -667,7 +667,7 @@ I have interviewed 5 A level students, in which 4 of them takes Computer Science
 // 9. single computer (cuz no friends)
 // 10. not knowing what it is or how to use it
 // 11. very
-// 12. 
+// 12.
 
 
 // TODO
@@ -931,7 +931,10 @@ All of the boundary tests passed, including the 'Single Node Graph' and 'Disconn
 \
 Both erroneous tests, the 'Non-existent Start Node' and the 'unexpected input types', also failed for similar reasons: the code assumed that the start node would always exist in the adjacency list and that the inputs would be of valid types. When this assumption was violated, the algorithm tried to iterate over undefined, causing runtime errors.\
 
-#figure(image("images/bfs_fail_test_result.png", width: 42%), caption: [BFS Test Results - Some Boundary and Erroneous Test Failing])
+#figure(
+  image("images/bfs_fail_test_result.png", width: 42%),
+  caption: [BFS Test Results - Some Boundary and Erroneous Test Failing],
+)
 
 To fix these issues, I added a defensive check before iterating over neighbours. If a node does not exist in the adjacency list, the algorithm simply skips the neighbour loop, allowing it to safely return the starting node as visited. Additionally, a type check can be added at the start to handle completely invalid inputs gracefully, returning [null] if the input types are incorrect.\
 \
@@ -1074,7 +1077,10 @@ Crossing fingers, all of the boundary tests passed, including the 'Single Node G
 \
 Both erroneous tests, the 'Non-existent Start Node' and the 'unexpected input types', also passed this time because of the defensive checks I added at the start of the function to check for invalid input types and the existence of the start node in the adjacency list.\
 \
-#figure(image("/writeup/images/dfs_pass_test.png", width:100%), caption: [DFS Test Results - All Tests Passed Successfully])
+#figure(
+  image("/writeup/images/dfs_pass_test.png", width: 100%),
+  caption: [DFS Test Results - All Tests Passed Successfully],
+)
 #pagebreak()
 === Proof of Concept: Hashing
 Hashing is a fundamental concept in blockchain technology, used to ensure data integrity and security. A hash function takes an input (or 'message') and returns a fixed-size string of bytes. The output appears random and is unique to the specific input. Even a small change in the input will produce a significantly different hash, a property known as the avalanche effect. In blockchain, hashing is used to link blocks together, verify transactions, and secure data against tampering.
@@ -1185,14 +1191,17 @@ The updated part of the code is as follows:
 Now the hashed value for 'hello world' is `e923ee44`, which is a valid positive hexadecimal string.
 ==== Testing Results
 After implementing the simplified hashing algorithm, I ran the unit tests I designed earlier. The results were successful, with all tests passing as expected. The hashing function demonstrated determinism by consistently producing the same hash for identical inputs. Additionally, the avalanche effect was confirmed, as even minor changes in the input string resulted in significantly different hash outputs. The edge case test for an empty string also passed, confirming that the function can handle such inputs gracefully and produce a valid hash. Overall, the hashing function performed reliably across all test scenarios, validating its correctness and robustness.
-#figure(image("images/hash_test_result.png", width: 49%), caption: [Hashing Test Results - All Tests Passed Successfully])
+#figure(
+  image("images/hash_test_result.png", width: 49%),
+  caption: [Hashing Test Results - All Tests Passed Successfully],
+)
 #pagebreak()
 === Proof of Concept: Proof of Work Mining
 I have decided to implement a simplified version of the Proof of Work (PoW) mining algorithm to demonstrate the concept of mining in blockchain technology. The goal of PoW is to find a nonce (a number used once) such that when it is combined with the block's data and hashed, the resulting hash meets a specific difficulty target, typically defined by a certain number of leading zeros in its binary representation. This is probably the most computationally intensive part of blockchain technology, as it requires significant processing power to find a valid nonce through trial and error.
 ==== Research on Proof of Work Mining
 After researching on Proof of Work (PoW) mining from Investopedia #footnote[https://www.investopedia.com/terms/p/proof-work.asp], Wikipedia #footnote[https://en.wikipedia.org/wiki/Proof_of_work], Medium #footnote[https://scryptplatform.medium.com/proof-of-work-in-bitcoin-043ff9fa0d2d] and Bitcoin StackExchange #footnote[https://bitcoin.stackexchange.com/questions/57684/proof-of-work-how-are-target-difficultly-and-number-of-leading-zeros-related-t], I have summarised the following key points about PoW mining:
-- Proof of Work (PoW) is a consensus mechanism in blockchain technology where participants (miners) solve complex mathematical puzzles to validate transactions and secure the network. 
-- Leading Zeros in PoW: A key aspect of PoW is the requirement for a hash to meet a specific difficulty target, often expressed as a number of leading zeros in the hash output. This condition ensures that miners expend a significant amount of computational effort to find a valid hash. 
+- Proof of Work (PoW) is a consensus mechanism in blockchain technology where participants (miners) solve complex mathematical puzzles to validate transactions and secure the network.
+- Leading Zeros in PoW: A key aspect of PoW is the requirement for a hash to meet a specific difficulty target, often expressed as a number of leading zeros in the hash output. This condition ensures that miners expend a significant amount of computational effort to find a valid hash.
 - The exact hash value doesn't matter: The focus on leading zeros rather than the exact hash value allows for flexibility in the mining process. Miners adjust a nonce value and rehash the block's data repeatedly until they find a hash that meets the difficulty target. This approach makes the process probabilistic, ensuring that finding a valid hash requires substantial computational work, but the exact hash value is not predetermined.
 ==== Design of algorithm: Proof of Work Mining
 To ensure the speed of mining and simulate the reality of mining rigs which uses multicore CPU/GPU to mine, I have decided to use *web workers* to implement the PoW mining algorithm. Web workers allow for running scripts in background threads, enabling parallel execution without blocking the main thread. This is particularly useful for computationally intensive tasks like mining, as it allows the user interface to remain responsive while the mining process is ongoing.
@@ -1241,8 +1250,8 @@ Key Variables:
 
 Functions:
 - `startMining()` - initialises mining, creates workers, assigns work in chunks, and handles results.
- - Uses worker.postMessage() to send work chunks to workers.
- - Uses setTimeout(assignWork, 0) to schedule subsequent chunks asynchronously, allowing non-blocking operation.
+  - Uses worker.postMessage() to send work chunks to workers.
+  - Uses setTimeout(assignWork, 0) to schedule subsequent chunks asynchronously, allowing non-blocking operation.
 - `stopMining()` - terminates all active workers and clears state.
 
 The code for `main.ts` is as follows:
@@ -1316,7 +1325,7 @@ Outputs:
 - Posts a message back to the main thread when a valid nonce is found: { nonce, hash }.
 
 Key Variables & Functions:
-- `fakeHash()` function from the hashing PoC 
+- `fakeHash()` function from the hashing PoC
 - prefix - a string of zeros equal to the difficulty, used to check if a hash satisfies the proof-of-work requirement.
 - The main work loop iterates over the nonce batch, applies `fakeHash()` to each baseData + nonce string, and checks if the hash starts with the required number of zeros (`hash.startsWith(prefix)`).
 
@@ -1363,7 +1372,7 @@ self.onmessage = (e: MessageEvent<WorkerMessage>) => {
 };
 ```
 ==== Issues with Bun
-While developing the PoW mining algorithm using web workers, I encountered an issue with Bun. As Bun only serves one file at a time, I was able to serve `main.ts` but not `worker.ts`. This limitation meant that when the main thread attempted to create a new worker with `new Worker("worker.ts", { type: "module" });`, it could not find the `worker.ts` file, leading to errors and preventing the workers from being created successfully. 
+While developing the PoW mining algorithm using web workers, I encountered an issue with Bun. As Bun only serves one file at a time, I was able to serve `main.ts` but not `worker.ts`. This limitation meant that when the main thread attempted to create a new worker with `new Worker("worker.ts", { type: "module" });`, it could not find the `worker.ts` file, leading to errors and preventing the workers from being created successfully.
 
 ==== Approach 1
 This can be resolved by using a different environment that supports multiple file serving, such as a traditional web server or vite -- development server and build tool for web projects. However, with this approach, we will have to transpile the code into JavaScript and run it in a browser console. An html file will also be needed to load the `main.js` file. The functions `startMining` and `stopMining` has to be exposed to the global environment to be able to call them from the browser console. Therefore these two lines have to be added to `main.ts`:
@@ -1373,7 +1382,7 @@ This can be resolved by using a different environment that supports multiple fil
 (self as any).stopMining = stopMining;
 ```
 This works but it is not ideal for my use case as I want to keep the code in TypeScript for better type safety and developer experience.
-#figure( image("images/vite.png"), caption: [Vite Development Server Serving Multiple Files])
+#figure(image("images/vite.png"), caption: [Vite Development Server Serving Multiple Files])
 This is not the best approach since I want to keep the code in TypeScript for better type safety and developer experience.
 ==== Approach 2
 Another approach to resolve this issue in Bun is to create a simple HTTP server that serves both `main.ts` and `worker.ts`. This way, when the main thread creates a new worker, it can successfully fetch the `worker.ts` file from the server. Here is how I implemented it:
@@ -1494,7 +1503,7 @@ I am using two different computers to test the PoW mining algorithm:
 + A high performance computer with Intel(R) Core(TM) i5-14500, 2.60 GHz, 32.0 GB DDR5 RAM, which has 14 cores and 20 threads#footnote[Spec sheet: https://www.intel.com/content/www/us/en/products/sku/236784/intel-core-i5-processor-14500-24m-cache-up-to-5-00-ghz/specifications.html]. Theoretically it should be able to handle 20 web workers at the same time.
 + A medium performance laptop with 13th Gen Intel(R) Core(TM) i5-1335U (1.30 GHz), DDR4 16GB RAM, which has 10 cores and 12 threads#footnote[spec sheet:https://www.intel.com/content/www/us/en/products/sku/232153/intel-core-i51335u-processor-12m-cache-up-to-4-60-ghz/specifications.html]. Therefore theoretically it should be able to handle 12 web workers at the same time.
 I will use the `performance.now()` method to measure the run time for 10 times in each case and take the mean average of each results to make it accurate. Both computers will be tested with the same input string "Hello World" and difficulty level of 4 leading zeros. The number of web workers will be varied from 1 to 12 for the medium performance laptop, and from 1 to 20 for the high performance computer.
-```ts 
+```ts
 // Add this at the start of main.ts
 let startTime: number;
 
@@ -1502,14 +1511,17 @@ let startTime: number;
 startTime = performance.now();
 
 // Adding these two lines at the end of the startMining function
-let endTime = performance.now(); 
+let endTime = performance.now();
 console.log(`Mining took ${(endTime - startTime).toFixed(2)} ms`);
 ```
 I expect to see a decrease in run time as the number of web workers increases, indicating that the web workers are effectively utilising multiple threads for parallel processing.
 #pagebreak()
 ==== Testing Results
 After running the tests on both computers with the blockchain network (control variable) difficulty of 4. I have collected the results and recorded it in the following spreadsheet:
-#figure(image("images/pow_test_result.png",width:90%),caption:[proof of work test result -- [Note: All measurement results are in milliseconds (ms)]])
+#figure(
+  image("images/pow_test_result.png", width: 90%),
+  caption: [proof of work test result -- [Note: All measurement results are in milliseconds (ms)]],
+)
 
 I have noticed a significant decrease in run time for mining from the first few core, however this decrease becomes less significant as the number of cores continue to increase. This means that there will be an optimal number of threads to be used to get a decent performance, and after that, the performance will still increase, but the performance gain will be trivial. \
 \
@@ -1518,8 +1530,8 @@ I have noticed a significant decrease in run time for mining from the first few 
 I have also calculated the standard deviation (s.d., denoted by $s^2$) for samples with $ s^2 = Sigma(x_i - overline(x))^2/(n-1) $ of both execution and found the mean for them. This tells us how far each data point is from the mean run time. Notice that the standard deviation for run time on the high performance computer is \u{223C}4.4\u{00D7} that of the medium performance. This means that the performance will be more inconsistent on lower spec computers. Hence, \
 \
 Interestingly, when I set the number of web workers to something extreme like 200 (this result is not included in any of the calculations for mean results), the runtime becomes unstable because I am massively oversubscribing the CPU. Each worker runs in its own thread, so having far more workers than CPU threads forces the system to constantly switch between them (called context switching). This burns up CPU time just managing threads instead of actually mining. On top of that, memory usage spikes and the browser or Bun runtime struggles to coordinate all those workers, causing delays, crashes, or inconsistent runtimes. Therefore I will have to find the optimal number of threads for the user not to oversubscribe their CPU or use up all their threads, so that other software cannot be run at the same time.\
-#figure(image("images/desmos.png", width:120%),caption:[pow test results plotted on desmos])
-On this diagram, the x-axis represents the number of cores being used to run the simulation and the y-axis is the tested runtime. The green dots represents the performance for the high performance computer while the blue dots represents the performance for the medium performance computer. After trying every types of regression line on Desmos, I have found out that the power regression fits the best, with a coefficient of determination $r^2$ of 0.987 and 0.9837 on the high and medium performance computer respectively. This means that   \
+#figure(image("images/desmos.png", width: 120%), caption: [pow test results plotted on desmos])
+On this diagram, the x-axis represents the number of cores being used to run the simulation and the y-axis is the tested runtime. The green dots represents the performance for the high performance computer while the blue dots represents the performance for the medium performance computer. After trying every types of regression line on Desmos, I have found out that the power regression fits the best, with a coefficient of determination $r^2$ of 0.987 and 0.9837 on the high and medium performance computer respectively. This means that the result for runtime can be explained by the number of cores 98.7% and 98.37% of the time. This shows a really high association  \
 \
 // To optimise the algorithm, ...
 Using around 80% of the stakeholder's CPU threads for Web Workers gives the best performance because it keeps most system stable while still using most of the cores for mining. If you max out all threads, the OS and main thread have no room to handle background tasks, causing thread contention, lag, and even slower results. Leaving a few threads free ensures smoother communication and better overall throughput.
@@ -1537,16 +1549,29 @@ where $y(x)$ = runtime at $x$ threads, $y_min$ = theoretical minimum runtime (at
 
 #pagebreak()
 #subpar.grid(
-  figure(image("images/mid_cpu_not_running.png", width: 100%), caption:[Logical processors (threads) on medium performance laptop when the algorithm is not running]), <a>,
-  figure(image("images/mid_cpu_running.png", width: 103%), caption: [Logical processors (threads) on medium performance laptop when 12 workers is used]), <b>,
+  figure(
+    image("images/mid_cpu_not_running.png", width: 100%),
+    caption: [Logical processors (threads) on medium performance laptop when the algorithm is not running],
+  ),
+  <a>,
+
+  figure(
+    image("images/mid_cpu_running.png", width: 103%),
+    caption: [Logical processors (threads) on medium performance laptop when 12 workers is used],
+  ),
+  <b>,
+
   columns: (1fr, 1fr),
   label: <full>,
 )
-#figure(image("images/image.png",width:50%),caption:[Logical processors (threads) on medium performance laptop when running with max (12) threads multiple times])
+#figure(
+  image("images/image.png", width: 50%),
+  caption: [Logical processors (threads) on medium performance laptop when running with max (12) threads multiple times],
+)
 
 As you may see, there is clearly a spike in CPU usage in multiple cores throughout the test for 12 web workers. This can sufficiently proof that the workers are in action and improving the speed for the proof of work algorithm. This aligns with the results for the tests that I ran.\
 \
-Limitation - This test is only done on two computers, therefore the results may vary on different hardware configurations. However, the general trend of performance improvement with increased web workers should hold true across most systems. 
+Limitation - This test is only done on two computers, therefore the results may vary on different hardware configurations. However, the general trend of performance improvement with increased web workers should hold true across most systems.
 Another Limitation - The result might not be accurate as there are other background processes running on the computer which might interfere with the mining process. However, by taking the average of multiple runs, I can mitigate some of this variability and get a more reliable measure of performance.
 === Iteration 1 Evaluation
 In this iteration I have done the proof of concept for multiple parts of my blockchain simulator:
@@ -1578,7 +1603,10 @@ I will be using modular coding practices to ensure that the `Block` and `Blockch
 // pow: startMining changed from being a procedure to a function
 ==== Decomposing Iteration 2
 Iteration 2 will mainly be focusing on Object Oriented Programming (OOP) concepts to build the core blockchain structure. Therefore I can decompose the iteration with a class diagram which includes the `Block` and `Blockchain` classes along with their core attributes and methods.
-#figure(image("images/class_diagram_for_block_and_blockchain.png"),caption: [Class Diagram for Block and Blockchain Classes, made with draw.io]) <class_diagram>
+#figure(
+  image("images/class_diagram_for_block_and_blockchain.png"),
+  caption: [Class Diagram for Block and Blockchain Classes, made with draw.io],
+) <class_diagram>
 #pagebreak()
 === Iteration 2 Tasks
 1. Implement the `Block` class
@@ -1653,97 +1681,100 @@ Despite their might be no links between the two classes in terms of inheritance 
 - The Blockchain uses each block's `calculateHash()` method to verify that the chain hasn't been tampered with.
 - Blocks themselves are passive; they provide their hash and allow mining, but do not manage the chain.
 Here is a flowchart to show how `Block` and `Blockchain` classes work together to form the blockchain structure:
-#figure(image("images/block_and_blockchain.jpg", width:47%),caption: [Interaction between Block and Blockchain Classes])
+#figure(
+  image("images/block_and_blockchain.jpg", width: 47%),
+  caption: [Interaction between Block and Blockchain Classes],
+)
 
 The whole Iteration 2 blockchain core structure will look like this:
 #figure(
   move(dx: 5em, dy: 0em)[
-      #diagram(
-        node-stroke: 1pt,
-        node((0, 0), [Start], corner-radius: 2pt, extrude: (0, 3)),
-        edge("-|>"),
-        node(
-          (0, 1),
-          align(left)[
-            Initialse Blockchain \
-            - chain = [Genisis Block] \
-            - mempool = [] \
-            - difficulty = 2 by default \
-          ],
-          shape: rect,
-        ),
-        edge("d", "-|>"),
-        node(
-          (0, 2),
-          align(left)[
-            Add Transactions to Mempool
-            - Blockchain.addTransaction(tx)
-            - mempool stores tx
-          ],
-          shape: rect,
-        ),
-        edge("d", "-|>"),
-        node(
-          (0, 3),
-          align(left)[
-            Print mempool
-            - show unconfirmed tx
-          ],
-          shape: rect,
-        ),
-        edge("d", "-|>"),
-        node(
-          (0, 4),
-          align(left)[
-            Mine Pending Transactions
-            - Blockchain creates a new \ Block with mempool tx
-            - Set previousHash = latest
-            - Call Block.mineBlock()
-              - PoW updates nonce \ and hash
-          ],
-          shape: rect,
-        ),
-        edge("d", "-|>"),
-        node(
-          (0, 5),
-          align(left)[
-            Add Mined Block to Chain 
-            - Blockchain.chain.push()
-            - Clear mempool
-          ],
-          shape: rect,
-        ),
-        edge("d", "-|>"),
-        node(
-          (0, 6),
-          align(left)[
-            Print BlockChain
-            - Shows all blocks in chain
-          ],
-          shape: rect,
-        ),
-        edge("d", "-|>"),
-        node(
-          (0, 7),
-          align(left)[
-            Print BlockChain
-            - Shows all blocks in chain
-          ],
-          shape: rect,
-        ),
-        edge("d", "-|>"),
-        node(
-          (0, 7.979),
-          align(left)[
-            Validate Chain
-            - Blockchain.isChainValid()
-            - Uses Block.calculateHash()
-            - Checks previousHash links
-          ],
-          shape: rect,
-        ),
-        edge("r,u,u,u,u,u,u,l","-|>"),
-      )],
+    #diagram(
+      node-stroke: 1pt,
+      node((0, 0), [Start], corner-radius: 2pt, extrude: (0, 3)),
+      edge("-|>"),
+      node(
+        (0, 1),
+        align(left)[
+          Initialse Blockchain \
+          - chain = [Genisis Block] \
+          - mempool = [] \
+          - difficulty = 2 by default \
+        ],
+        shape: rect,
+      ),
+      edge("d", "-|>"),
+      node(
+        (0, 2),
+        align(left)[
+          Add Transactions to Mempool
+          - Blockchain.addTransaction(tx)
+          - mempool stores tx
+        ],
+        shape: rect,
+      ),
+      edge("d", "-|>"),
+      node(
+        (0, 3),
+        align(left)[
+          Print mempool
+          - show unconfirmed tx
+        ],
+        shape: rect,
+      ),
+      edge("d", "-|>"),
+      node(
+        (0, 4),
+        align(left)[
+          Mine Pending Transactions
+          - Blockchain creates a new \ Block with mempool tx
+          - Set previousHash = latest
+          - Call Block.mineBlock()
+            - PoW updates nonce \ and hash
+        ],
+        shape: rect,
+      ),
+      edge("d", "-|>"),
+      node(
+        (0, 5),
+        align(left)[
+          Add Mined Block to Chain
+          - Blockchain.chain.push()
+          - Clear mempool
+        ],
+        shape: rect,
+      ),
+      edge("d", "-|>"),
+      node(
+        (0, 6),
+        align(left)[
+          Print BlockChain
+          - Shows all blocks in chain
+        ],
+        shape: rect,
+      ),
+      edge("d", "-|>"),
+      node(
+        (0, 7),
+        align(left)[
+          Print BlockChain
+          - Shows all blocks in chain
+        ],
+        shape: rect,
+      ),
+      edge("d", "-|>"),
+      node(
+        (0, 7.979),
+        align(left)[
+          Validate Chain
+          - Blockchain.isChainValid()
+          - Uses Block.calculateHash()
+          - Checks previousHash links
+        ],
+        shape: rect,
+      ),
+      edge("r,u,u,u,u,u,u,l", "-|>"),
+    )],
   caption: [Algorithm Flowchart for Iteration 2 Blockchain Core Structure],
 )
 === Block Design
@@ -1751,7 +1782,7 @@ The whole Iteration 2 blockchain core structure will look like this:
 + `calculateHash()`\
   The `calculateHash()` procedure will compute the hash of the block by concatenating its index, timestamp, transactions, previousHash, and nonce into a single string. This string will then be passed into the simplified hashing function (`fakeHash`) to generate the block's hash. This ensures that any change to the block's data will result in a completely different hash, maintaining the integrity of the blockchain. This can be done by simply applying the formula: `hash = fakeHash(index + previousHash + timestamp + transactions + nonce)`. Since the transactions are in the form of array, they will also have to be converted into a string first before concatenating using the `JSON.stringify` method. Other attributes do not have to be converted as TypeScript will automatically convert them into strings when concatenating.\
 \
-2.  `mineBlock(difficulty)`\
+2. `mineBlock(difficulty)`\
   The `mineBlock(difficulty)` function will use the proof of work algorithm that I made in Iteration 1. It will pass in the transactions which is an array of strings, and difficulty of the blockchain network as a number. then output the nonce and the updated hash of the block. As we are using the PoW mining `startMining` function from Iteration 1, however the `startMining` is a procedure and does not return any value. Therefore I will have to modify the `startMining` function to return a *Promise* and make it an `async` function. A Promise is a TypeScript construct that represents a value that will become available in the future. In this case, the value is the mined nonce and hash. Wrapping the mining logic in a Promise allows the program to continue running other tasks while the mining is happening asynchronously. The structure of the wrapping looks like this:
 ```ts
 return new Promise<{ nonce: number; hash: string }>((resolve) => {
@@ -1837,7 +1868,7 @@ export class Block {
 \
 4. `minePendingTransactions()`
   The `minePendingTransactions()` function is used to mine all pending transactions and add them as a new block to the blockchain. It ensures that pending transactions are confirmed and stored in the chain securely.\
-  Algorithm:\ 
+  Algorithm:\
   ` 1. Check if mempool is empty
     - If yes, print "No transactions to mine" and exit
  2. Print current mempool (pending transactions)
@@ -1852,8 +1883,8 @@ export class Block {
  5. Push the mined block into the blockchain's chain array
  6. Clear the mempool to indicate transactions are now confirmed
  7. Print mempool cleared message`\
- \
- Since we will have to await the block for mining, the `minPendingTransactions()` will also have to be an asynchronous function.\
+  \
+  Since we will have to await the block for mining, the `minPendingTransactions()` will also have to be an asynchronous function.\
 \
 5. `isChainValid()`
   The `isChainValid()` function is used to validate the chain and make sure nothing is wrong in the blockchain. This can be done by verifying if the `previousHash` on each block actually matches the previous block. Therefore we can make a loop through the blocks checking the hashes. There will be no input for this function because the chain is already an attribute of the blockchain, therefore it can be accessed in the local class scope. The output of the function will be a true/false therefore it's a `boolean`.
@@ -1974,7 +2005,12 @@ async function normalTest() {
   console.log("Is blockchain valid?", myChain.isChainValid());
 }
 ```
-2. *Boundary Tests*: 
+On this line:
+```ts
+console.log(JSON.stringify(myChain.chain, null, 2))
+```
+The ouptut has to be 'JSONified' since the attribute `myChain.chain` is an array consists of blocks, which contains the methods of `calculateHash()` and `mineBlock()`
+2. *Boundary Tests*:
 - Empty mempool to test what would happen when no transaction has to be mined into blocks but user tries to mine a block -- Expected Result: 'No transactions to mine':
 ```ts
 async function emptyMempoolTest() {
@@ -2058,24 +2094,31 @@ async function reMiningTest() {
 
 ==== Testing Results
 The test is observational. This means that we will have to analyse the output to know if the code that we made actually function as it should. As expected, while the code isn't there, none of the tests passed. However once the code has been developed, this is the result of the tests:
+#subpar.grid(
+  figure(move(dx:-3em,dy:0em,(image("IMG_1657.jpeg", width: 130%)))), <a>,
+  figure(move(dx:2em,dy:0em,(image("IMG_1658.jpeg", width: 127%)))), <b>,
+  columns: (1fr, 1fr),
+  label: <full>,
+)
 
-Everything runs except from the 
+
+#image("image.png")
 // TODO: `InvalidStateError`
 
 The `InvalidStateError` sometimes appear and sometimes not.
-This is beacuse each worker runs `assignWork()` repeatedly with `setTimeout(assignwork, 0)` -- meaning it's in an infinite async loop, posting new work until mining stops. But when `stopMining()` is called (after one worker finds a valid hash), it terminates all workers. The problem though is that some workers still have a pending `setTimeout(assignWork, 0)` callback queued. So they wake up, try to call `worker.postMessage()` again but the worker has already been terminated, causing the `InvalidStateError`. This only happens in the 'Re-mining Test' because the test that triggers this (reMiningTest) calls `mineBlock()` directly again after mining once. This means that the global worker pool and `running` flag from the previous mining session are still in use. The new workers are starting while the old ones are mid-termination. Therfore they're racing.  
+This is beacuse each worker runs `assignWork()` repeatedly with `setTimeout(assignwork, 0)` -- meaning it's in an infinite async loop, posting new work until mining stops. But when `stopMining()` is called (after one worker finds a valid hash), it terminates all workers. The problem though is that some workers still have a pending `setTimeout(assignWork, 0)` callback queued. So they wake up, try to call `worker.postMessage()` again but the worker has already been terminated, causing the `InvalidStateError`. This only happens in the 'Re-mining Test' because the test that triggers this (reMiningTest) calls `mineBlock()` directly again after mining once. This means that the global worker pool and `running` flag from the previous mining session are still in use. The new workers are starting while the old ones are mid-termination. Therfore they're racing.
 Therefore, to fix this, // TODO: workers = []
 // However the programs sometimes get killed when it does the re-mining block test
 // This is beacuse of variable scoping and worker lifecycle timing. The old workers from the previous mining round are still alive for a few milliseconds
-// 
+//
 // however the chain shouldnt be valid when remined
 // the `Block` class doesn't track whether it’s already mined, so calling `mineBlock()` again just overwrites nonce and hash. That’s why the reMiningTest passes, even though in a real blockchain it shouldn’t.
 // TODO: see block.ts
-// 
+//
 // Blockchain shouldnt still be valid after remining. Therefore adding a mined flag
 
 === Iteration 2 Evaluation
-I have invited some of my stakeholders, ..., to review my blockchain core structure.  
+I have invited some of my stakeholders, ..., to review my blockchain core structure.
 #pagebreak()
 == Iteration 3
 In Iteration 3, I will start to code a Command Line Interface (CLI) for my simulator. This will be a Minimum Viable Product (MVP). In this iteration, I will be linking everything that I had in the proof of concepts into one command line interface. This includes the demomstration of adding users to the blockchain network, showing how the blocks are propagating through the network after being added to the network,
@@ -2175,7 +2218,7 @@ In Iteration 5, I will be continuing developing and enhancing the features of my
 == Decomposition <decomposition>
 // TODO:Justify for decomposition
 
-= Bibliography  
+= Bibliography
 
 = Appendix
 Here I will attach all the code files that I have written for my blockchain simulator project. They are sorted in alphabetical order for easy navigation.
