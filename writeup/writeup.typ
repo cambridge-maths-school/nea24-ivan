@@ -1078,7 +1078,7 @@ Crossing fingers, all of the boundary tests passed, including the 'Single Node G
 Both erroneous tests, the 'Non-existent Start Node' and the 'unexpected input types', also passed this time because of the defensive checks I added at the start of the function to check for invalid input types and the existence of the start node in the adjacency list.\
 \
 #figure(
-  image("/writeup/images/dfs_pass_test.png", width: 100%),
+  image("images/dfs_pass_test.png", width: 100%),
   caption: [DFS Test Results - All Tests Passed Successfully],
 )
 #pagebreak()
