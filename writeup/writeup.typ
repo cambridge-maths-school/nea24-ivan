@@ -1784,6 +1784,7 @@ The whole Iteration 2 blockchain core structure will look like this:
 \
 2. `mineBlock(difficulty)`\
   The `mineBlock(difficulty)` function will use the proof of work algorithm that I made in Iteration 1. It will pass in the transactions which is an array of strings, and difficulty of the blockchain network as a number. then output the nonce and the updated hash of the block. As we are using the PoW mining `startMining` function from Iteration 1, however the `startMining` is a procedure and does not return any value. Therefore I will have to modify the `startMining` function to return a *Promise* and make it an `async` function. A Promise is a TypeScript construct that represents a value that will become available in the future. In this case, the value is the mined nonce and hash. Wrapping the mining logic in a Promise allows the program to continue running other tasks while the mining is happening asynchronously. The structure of the wrapping looks like this:
+  // TODO: Tell that this is an error encounted
 ```ts
 return new Promise<{ nonce: number; hash: string }>((resolve) => {
   // start mining with web workers
@@ -2010,6 +2011,7 @@ On this line:
 console.log(JSON.stringify(myChain.chain, null, 2))
 ```
 The ouptut has to be 'JSONified' since the attribute `myChain.chain` is an array consists of blocks, which contains the methods of `calculateHash()` and `mineBlock()`
+// TODO: Justify JSON
 2. *Boundary Tests*:
 - Empty mempool to test what would happen when no transaction has to be mined into blocks but user tries to mine a block -- Expected Result: 'No transactions to mine':
 ```ts
@@ -2054,7 +2056,6 @@ async function invalidTransactionTest() {
   console.log("\n=== ERRONEOUS TEST: Invalid transaction type ===");
   let myChain = new Blockchain(2);
   try {
-    // @ts-ignore
     myChain.addTransaction(12345); // Invalid, should be string
   } catch (err: any) {
     console.error("Caught error:", err.message);
@@ -2091,16 +2092,18 @@ async function reMiningTest() {
   console.log("Blockchain valid after re-mining?", myChain.isChainValid());
 }
 ```
-
+#pagebreak()
 ==== Testing Results
 The test is observational. This means that we will have to analyse the output to know if the code that we made actually function as it should. As expected, while the code isn't there, none of the tests passed. However once the code has been developed, this is the result of the tests:
 #subpar.grid(
-  figure(move(dx:-3em,dy:0em,(image("IMG_1657.jpeg", width: 130%)))), <a>,
-  figure(move(dx:2em,dy:0em,(image("IMG_1658.jpeg", width: 127%)))), <b>,
+  figure(move(dx:-1em,dy:0em,(image("images/I2_normal_test.png", width: 135.5%)))), <a>,
+  figure(move(dx:3em,dy:0em,(image("images/I2_normal_test_cont.png", width: 115%)))), <b>,
   columns: (1fr, 1fr),
   label: <full>,
 )
+Looking at the test result, I have shown that different functions working in action, and how they are successfully connected to each other. For example, with the block mining in `minePendingTransaction()`, there is some log from the console which tells how long the mining took, this is from the 
 
+#image("image-1.png")
 
 #image("image.png")
 // TODO: `InvalidStateError`
@@ -2129,12 +2132,15 @@ I quite like the Sean CLI from the Analysis section. When I start his simulator,
 === Evaluation
 == Iteration 4
 In Iteration 4, I will be developing a Graphical User Interface (GUI) for my blockchain simulator.
+
+=== GUI Design
+Over the 3 iterations that I have been through, I have gained more understanding on blockchain technologies and I realised that the 
 === Testing
 === Evaluation
 == Iteration 5
-In Iteration 5, I will be continuing developing and enhancing the features of my blockchain simulator after getting feedback from my external stakeholders.
+In Iteration 5, I will be focusing on the data validation of each input of my simulator.
 === Testing
-=== Evaluation
+=== End Product Evaluation
 // `Section 1: Participant Background
 // What is your familiarity with blockchain concepts?
 // ☐ None
