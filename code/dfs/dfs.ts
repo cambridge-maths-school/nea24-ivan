@@ -62,6 +62,6 @@ function dfs_traverse(
   return visited;
 }
 
-console.log(dfs_traverse(adjacencyList, "A"));
-console.log(dfs_traverse(complicatedList, "M"));
+// console.log(dfs_traverse(adjacencyList, "A"));
+// console.log(dfs_traverse(complicatedList, "M"));
 export { dfs_traverse };

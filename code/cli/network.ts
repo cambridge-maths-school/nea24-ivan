@@ -26,12 +26,11 @@ export class Network {
   // Add a new node
   addUser(username: string) {
     if (this.nodes.has(username)) {
-      console.log(`User ${username} already exists.`);
-      return;
+      return `User ${username} already exists.`;
     }
     let node = new Node(username);
     this.nodes.set(username, node);
-    console.log(`User ${username} added.`);
+    return `User ${username} added.`;
   }
 
   getNode(username: string): Node | undefined {
@@ -150,10 +149,8 @@ export class Network {
       console.log("No users in the network.");
       return;
     }
-    console.log("Users in network:");
-    for (let username of this.nodes.keys()) {
-      console.log("- " + username);
-    }
+    console.log(this.nodes.keys());
+    return this.nodes.keys();
   }
 
   // Show a user's neighbours

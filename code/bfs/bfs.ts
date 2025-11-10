@@ -63,6 +63,6 @@ function bfs_traverse(adjacencyList: AList, startNode: string): string[] {
   return visited;
 }
 
-console.log(bfs_traverse(adjacencyList, "C"));
-console.log(bfs_traverse(complicatedList, "M"));
+// console.log(bfs_traverse(adjacencyList, "C"));
+// console.log(bfs_traverse(complicatedList, "M"));
 export { bfs_traverse };

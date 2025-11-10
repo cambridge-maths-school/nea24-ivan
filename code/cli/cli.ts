@@ -24,7 +24,7 @@ async function main() {
 
     switch (cmd) {
       case "add_user":
-        network.addUser(args[0]);
+        console.log(network.addUser(args[0]));
         break;
       case "add_tx":
         network.addTransaction(args[0], args[1], parseInt(args[2]));
@@ -48,7 +48,13 @@ async function main() {
         rl.close();
         return;
       case "show_users":
-        network.showUsers();
+        console.log("Users in network:");
+        let user_num = 0
+        for (let username of network.nodes.keys()) {
+          user_num += 1
+          console.log("- " + username);
+          console.log(`There are ${user_num} users in the network.`)
+        }
         break;
       case "show_neighbours":
         network.showneighbours(args[0]);

@@ -1540,7 +1540,7 @@ I have also calculated the standard deviation (s.d., denoted by $s^2$) for sampl
 \
 Interestingly, when I set the number of web workers to something extreme like 200 (this result is not included in any of the calculations for mean results), the runtime becomes unstable because I am massively oversubscribing the CPU. Each worker runs in its own thread, so having far more workers than CPU threads forces the system to constantly switch between them (called context switching). This burns up CPU time just managing threads instead of actually mining. On top of that, memory usage spikes and the browser or Bun runtime struggles to coordinate all those workers, causing delays, crashes, or inconsistent runtimes. Therefore I will have to find the optimal number of threads for the user not to oversubscribe their CPU or use up all their threads, so that other software cannot be run at the same time.\
 #figure(image("images/desmos.png", width: 120%), caption: [pow test results plotted on desmos])
-On this diagram, the x-axis represents the number of threads being used to run the simulation and the y-axis is the tested runtime. The green dots represents the performance for the high performance computer while the blue dots represents the performance for the medium performance computer. After trying every types of regression line on Desmos, I have found out that the power regression fits the best, with a coefficient of determination $r^2$ of 0.987 and 0.9837 on the high and medium performance computer respectively. This means that the result for runtime can be explained by the number of cores 98.7% and 98.37% of the time. This shows a really high association between x (no. of threads) and y (runtime).  \
+On this diagram, the x-axis represents the number of threads being used to run the simulation and the y-axis is the tested runtime. The green dots represents the performance for the high performance computer while the blue dots represents the performance for the medium performance computer. After trying every types of regression line on Desmos, I have found out that the power regression fits the best, with a *coefficient of determination* $r^2$ of 0.987 and 0.9837 on the high and medium performance computer respectively. This means that the result for runtime can be explained by the number of cores 98.7% and 98.37% of the time. This shows a really high association between x (no. of threads) and y (runtime).  \
 \
 To optimise the mining algorithm, I decide to do a mathematical analysis on the performance. I want the algorithm to use a number of threads that allows a very promising runtime, while not taking all the threads so that the user can run other programs at the same time. I decide to find a point on the graph where increasing the number of thread by 1 reduces the runtime by less than 7% as this is unlikely to affect the performance after that point (if you continue to increase the no. of threads). This can be represented mathematically by:
 $ y(x+1) > 0.93 y(x) $
@@ -2143,10 +2143,9 @@ I have truncated some of the transactions output and them after being turned int
 ===== Errorneous Tests Result
 #figure(image("images/I2-error.png",width:50%),caption:[Iteration 2 Errorneous Tests Result])
 There are a few things going on here. Firstly, for my "Invalid Transaction type" test, there was no error being raised, which was what is expected. However, the error actually did raise, but not in runtime. TypeScript automatically highlights the invalid type in the IDE, which is shown like this: 
-#figure(image("image.png"), caption:[TypeScript raising type error])
+#figure(image("images/I2-erroneous.png"), caption:[TypeScript raising type error])
 This is good as I can spot the wrong input during development. However, at the end product, the code will not be shown to the users, therefore data has to be validated. This will be done in Iteration 5 where I improve the user experience.\
 \ 
-// TODO: `InvalidStateError`
 Another problem in this test is the `InvalidStateError` in the reMining tests. This error is sometimes raised and sometimes not. This is beacuse each worker runs `assignWork()` repeatedly with `setTimeout(assignwork, 0)` -- meaning it's in an infinite async loop, posting new work until mining stops. When `stopMining()` is called (after one worker finds a valid hash), it terminates all workers. The problem though is that some workers still have pending `setTimeout(assignWork,0)` callbacks queued. So they wake up, try to call `worker.postMessage()` again but the worker has already been terminated, causing the `InvalidStateError`. \
 #pagebreak()
 This only happens in the 'Re-mining Test' because the test that triggers this (reMiningTest) calls `mineBlock()` directly again after mining once. This means that the global worker pool and `running` flag from the previous mining session are still in use. The new workers are starting while the old ones are mid-termination. Therfore they're racing.\
@@ -2178,10 +2177,14 @@ I have invited some of my stakeholders, ..., to review my blockchain core struct
 
 #pagebreak()
 == Iteration 3
-In Iteration 3, I will start to code a Command Line Interface (CLI) for my simulator. This will be a Minimum Viable Product (MVP). In this iteration, I will be linking everything that I had in the proof of concepts into one command line interface. This includes the demomstration of adding users to the blockchain network, showing how the blocks are propagating through the network after being added to the network,
+In Iteration 3, I will start to code a Command Line Interface (CLI) for my simulator. This will be a Minimum Viable Product (MVP). In this iteration, I will be linking everything that I had in the proof of concepts in Iteration 1 and the core block structure in Iteration 2 into one command line interface. This includes the demomstration of adding users to the blockchain network, connecting the users to each other, showing how the blocks are propagating through the network after being added to the network, and the basic core structure which has been developed in Iteration 2.
 
 === Design for CLI
-I quite like the menu from Sean CLI from @sean-cli due to the readability of the menu and easy to understand interface. When I start his simulator, there is a menu page which allows you to navigate to different sections such as the `blockchain` section and the `p2p` section. Therefore I am going to use this idea to create the menu page for my simulator. After research into different command line libraries, I have decided to choose `readline` API library. This is because the `readline` API provides a simple and built-in way to handle user input directly from the terminal, without needing to install any extra packages. It also works seamlessly with Bun, since Bun implements Node's core `readline` module by default. On top of that, it makes the cli look cleaner and more organised -- similar to Sean CLI -- allowing me to create a visually clear and intuitive menu system for navigating between different components of my blockchain simulator. 
+I quite like the menu from Sean CLI from @sean-cli due to the readability of the menu and easy to understand interface. When I start his simulator, there is a menu page which allows you to navigate to different sections such as the `blockchain` section and the `p2p` section. Therefore I am going to use this idea to create the menu page for my simulator. After research into different command line libraries, I have decided to choose `readline` API library. This is because the `readline` API provides a simple and built-in way to handle user input directly from the terminal, without needing to install any extra packages. It also works seamlessly with Bun, since Bun implements Node's core `readline` module by default. On top of that, it makes the cli look cleaner and more organised -- similar to Sean CLI -- allowing me to create a visually clear and intuitive menu system for navigating between different components of my blockchain simulator.\
+\
+=== Designing tests for CLI
+
+
 // TODO: adding `if (!transactions)` into the Blockchain.mineBlock() function
 === Testing
 === Evaluation
@@ -2194,8 +2197,9 @@ Over the 3 iterations that I have been through, I have gained more understanding
 === Testing
 === Evaluation
 == Iteration 5
+// TODO: before unload
 In Iteration 5, I will be focusing on the data validation of each input of my simulator.
-=== Testing
+=== Testing to inform evaluation
 === End Product Evaluation
 // `Section 1: Participant Background
 // What is your familiarity with blockchain concepts?
