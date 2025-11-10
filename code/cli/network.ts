@@ -1,4 +1,6 @@
 import { Blockchain } from "../block/blockchain.ts";
+import { bfs_traverse } from "../bfs/bfs.ts";
+import { dfs_traverse } from "../dfs/dfs.ts";
 
 // Represents a network node (user)
 export class Node {
@@ -21,7 +23,7 @@ export class Network {
   nodes: Map<string, Node> = new Map();
   mempool: string[] = []; // global mempool
 
-  // Add a new user/node
+  // Add a new node
   addUser(username: string) {
     if (this.nodes.has(username)) {
       console.log(`User ${username} already exists.`);
@@ -61,10 +63,8 @@ export class Network {
       return;
     }
 
-    // Copy global mempool for mining
     let transactionsToMine = [...this.mempool];
 
-    // Mine using node's blockchain
     await node.blockchain.minePendingTransactions(transactionsToMine);
 
     // Remove mined transactions from global mempool
@@ -78,7 +78,7 @@ export class Network {
     );
   }
 
-  // BFS/DFS propagation of latest block
+  // BFS/DFS propagation of latest block using imported traversals
   propagate(startUsername: string, method: "bfs" | "dfs") {
     let startNode = this.getNode(startUsername);
     if (!startNode) {
@@ -87,9 +87,8 @@ export class Network {
     }
 
     let latestBlock = startNode.blockchain.getLatestBlock();
-
-    // Check if the block is mined (hash satisfies difficulty)
     let targetPrefix = "0".repeat(startNode.blockchain.difficulty);
+
     if (!latestBlock.hash.startsWith(targetPrefix)) {
       console.log(
         `Cannot propagate: latest block by ${startUsername} is not mined yet.`
@@ -97,36 +96,21 @@ export class Network {
       return;
     }
 
-    let visited = new Set<string>();
-    let order: string[] = [];
-
-    let visitNode = (node: Node) => {
-      visited.add(node.username);
-      order.push(node.username);
-      for (let neighbour of node.neighbours) {
-        if (!visited.has(neighbour.username)) visitNode(neighbour);
-      }
-    };
-
-    if (method === "dfs") {
-      visitNode(startNode);
-    } else {
-      // BFS
-      let queue: Node[] = [startNode];
-      while (queue.length > 0) {
-        let node = queue.shift()!;
-        if (!visited.has(node.username)) {
-          visited.add(node.username);
-          order.push(node.username);
-          for (let neighbour of node.neighbours) queue.push(neighbour);
-        }
-      }
+    // Build adjacency list for traversal
+    let adjacencyList: Record<string, string[]> = {};
+    for (let [username, node] of this.nodes.entries()) {
+      adjacencyList[username] = node.neighbours.map((n) => n.username);
     }
 
-    // Propagate the block to all nodes
+    // Get traversal order
+    let order =
+      method === "dfs"
+        ? dfs_traverse(adjacencyList, startUsername)
+        : bfs_traverse(adjacencyList, startUsername);
+
+    // Propagate block along traversal order
     for (let username of order) {
       let node = this.getNode(username)!;
-      // Only add block if chain is shorter
       if (node.blockchain.chain.length <= latestBlock.index) {
         node.blockchain.chain.push(latestBlock);
       }

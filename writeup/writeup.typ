@@ -318,7 +318,7 @@ I created the flowchart below to visualise the workflow of a blockchain:
   caption: [Conceptual flowchart of blockchain workflow.],
 )
 #pagebreak()
-== Existing models
+== Existing models <sean-cli>
 I found this blockchain simulator Command Line Interface (CLI) #footnote[https://github.com/0xs34n/blockchain] on GitHub by Sean. I have forked the repository and ran it on my local machine using `node.js`. The simulator offers a basic understanding of blockchain technologies with features like possessing blockchains and connecting to peers in different networks. However, it doesn't contain features such as transactions of blockchains or the process of mining blockchains.
 #subpar.grid(
   figure(image("images/SeanCLI.png", width: 140%, height: 60%)), <a>,
@@ -396,11 +396,16 @@ Abstracted plans for my iterations:
 - Iteration 2: Building the core blockchain structure (Block and Blockchain classes)
 - Iteration 3: Developing a Command Line Interface (CLI)
 - Iteration 4-5: Developing a Graphical User Interface (GUI) to visualise blockchain
+#pagebreak()
 === Computational methods
 // TODO: justify all of these
 In the project, all the algorithms will be developed using the following computational methods:
+- Decomposition
+  - At the start of each iteration, I will decompose the iteration, analyse what has to be done in that iteration and setting goals. This allows a more efficient development as I only have to think about each small goal while developing, including the targets and requirements. This also means that the code overall will be more modular, making it easier for future development and increasing maintainability.
 - Abstraction
+  - I will focus on essential features rather than unnecessary details before developing. This can help me to achieve the overall goal quicker in each development stage. I will be using different methods such as writing psuedocode or drawing flowchart diagrams before development.
 - Thinking parallel
+  - I will think about what is happening at the same time. For example, in my proof of work algorithm, I will require multiple 
 - Thinking Ahead
 - Problem solving using
   - Visualisation
@@ -609,8 +614,9 @@ Section 5: Expectations and Concerns
 11. How important is it for the simulator to be visually engaging (e.g., showing block links, network paths)?
 12. If you could suggest one unique feature for this simulator, what would it be?`
 
-I have interviewed 5 A level students, in which 4 of them takes Computer Science as their A level subject while 1 of them doesn't. Here are some key points that I have gathered from the interview:
+I have interviewed 4 A level students, in which all of them takes Computer Science as their A level subject. Here are some key points that I have gathered from the interview:
 
+Most of them are very unfamiliar with the blockchain technology. However, one of them did some research in the blockchain in his free time. 
 // William Stone -- A level Computer Science student:
 // 1. Not at all
 // 2. No
@@ -1204,7 +1210,10 @@ After researching on Proof of Work (PoW) mining from Investopedia #footnote[http
 - Leading Zeros in PoW: A key aspect of PoW is the requirement for a hash to meet a specific difficulty target, often expressed as a number of leading zeros in the hash output. This condition ensures that miners expend a significant amount of computational effort to find a valid hash.
 - The exact hash value doesn't matter: The focus on leading zeros rather than the exact hash value allows for flexibility in the mining process. Miners adjust a nonce value and rehash the block's data repeatedly until they find a hash that meets the difficulty target. This approach makes the process probabilistic, ensuring that finding a valid hash requires substantial computational work, but the exact hash value is not predetermined.
 ==== Design of algorithm: Proof of Work Mining
-To ensure the speed of mining and simulate the reality of mining rigs which uses multicore CPU/GPU to mine, I have decided to use *web workers* to implement the PoW mining algorithm. Web workers allow for running scripts in background threads, enabling parallel execution without blocking the main thread. This is particularly useful for computationally intensive tasks like mining, as it allows the user interface to remain responsive while the mining process is ongoing.
+To ensure the speed of mining and simulate the reality of mining rigs which uses multicore CPU/GPU to mine, I have decided to use *web workers* to implement the PoW mining algorithm. Web workers allow for running scripts in background threads, enabling parallel execution without blocking the main thread. This is particularly useful for computationally intensive tasks like mining, as it allows the user interface to remain responsive while the mining process is ongoing.\
+\
+Initially, I planned to use *WebGPU* for the parallel mining. This means that I will be able to use the GPU in the user's computer to mine the blocks. However, I decided that this wouldn't fit the blockchain simulator because the ultimate goal of the project is to demonstrate how blockchains work, not to max out hardware performance. WebGPU adds a ton of unnecessary complexity -- it's built for graphics and parallel vector math, not for small, iterative CPU tasks like Proof of Work. It is also not consistently supported across browsers and could easily cause crashes or overheating on student's devices, limiting the program's accessibility for the students (considering the students would have an average computer). Since my target audience is general A level students. This means that I need something that runs smoothly and safely in any browsers without setup issues. Web workers are a better fit as they allow the user to see realistic mining by simulating parallel computation across CPU threads, keeping the focus on the blockchain logic rather than GPU technicalities.
+#pagebreak()
 ==== Algorithm Plan
 The PoW mining algorithm works as follows:
 + The main thread initiates multiple web workers, each assigned a unique range of nonce values to test.
@@ -1531,33 +1540,47 @@ I have also calculated the standard deviation (s.d., denoted by $s^2$) for sampl
 \
 Interestingly, when I set the number of web workers to something extreme like 200 (this result is not included in any of the calculations for mean results), the runtime becomes unstable because I am massively oversubscribing the CPU. Each worker runs in its own thread, so having far more workers than CPU threads forces the system to constantly switch between them (called context switching). This burns up CPU time just managing threads instead of actually mining. On top of that, memory usage spikes and the browser or Bun runtime struggles to coordinate all those workers, causing delays, crashes, or inconsistent runtimes. Therefore I will have to find the optimal number of threads for the user not to oversubscribe their CPU or use up all their threads, so that other software cannot be run at the same time.\
 #figure(image("images/desmos.png", width: 120%), caption: [pow test results plotted on desmos])
-On this diagram, the x-axis represents the number of cores being used to run the simulation and the y-axis is the tested runtime. The green dots represents the performance for the high performance computer while the blue dots represents the performance for the medium performance computer. After trying every types of regression line on Desmos, I have found out that the power regression fits the best, with a coefficient of determination $r^2$ of 0.987 and 0.9837 on the high and medium performance computer respectively. This means that the result for runtime can be explained by the number of cores 98.7% and 98.37% of the time. This shows a really high association  \
+On this diagram, the x-axis represents the number of threads being used to run the simulation and the y-axis is the tested runtime. The green dots represents the performance for the high performance computer while the blue dots represents the performance for the medium performance computer. After trying every types of regression line on Desmos, I have found out that the power regression fits the best, with a coefficient of determination $r^2$ of 0.987 and 0.9837 on the high and medium performance computer respectively. This means that the result for runtime can be explained by the number of cores 98.7% and 98.37% of the time. This shows a really high association between x (no. of threads) and y (runtime).  \
 \
-// To optimise the algorithm, ...
-Using around 80% of the stakeholder's CPU threads for Web Workers gives the best performance because it keeps most system stable while still using most of the cores for mining. If you max out all threads, the OS and main thread have no room to handle background tasks, causing thread contention, lag, and even slower results. Leaving a few threads free ensures smoother communication and better overall throughput.
+To optimise the mining algorithm, I decide to do a mathematical analysis on the performance. I want the algorithm to use a number of threads that allows a very promising runtime, while not taking all the threads so that the user can run other programs at the same time. I decide to find a point on the graph where increasing the number of thread by 1 reduces the runtime by less than 7% as this is unlikely to affect the performance after that point (if you continue to increase the no. of threads). This can be represented mathematically by:
+$ y(x+1) > 0.93 y(x) $
+As the general formula for the runtime-threads graph takes in the form $y = A x^(-b) $, we can get that 
+$ y(x+1) / y(x) = ((x)/(x+1))^b > 0.93 $
+If we take the natural log of both sides, we get:
+$ b ln(x/(x+1)) > ln(0.93) $
+$ ln( x/ (x+1)) = ln(0.93)/b $
+And raising both sides by $e$:
+$ x/(x+1) > e^ln(0.93^(1/b)) = 0.93^(1/b) $
+And slightly rearrange the formula, we get:
+$ x > 0.93^(1/b) (x+1) $
+$ x - 0.93^(1/b)x > 0.93^(1/b) $
+$ x > 0.93^(1/b)/(1-0.93^(1/b)) $
 
-// Desmos Graph excludes the 200 workers data point
-// Explain x and y
-// Highest coefficient of determination for power regression
+Plugging in the b value for our both functions $y = 6229.31698x^(-0.877645)$ where ($b = -0.877645$) and $y=12992.6705x^(-0.790351)$ where ($b = -0.790351$) from the high performance and the medium performance computer respectively, we get $x > 0.93^(1/(0.877645))/(1-0.93^(1/(0.877645)))$ and $x > 0.93^(1/(0.790351))/(1-0.93^(1/(0.790351)))$, which gives $x > 11.60 $ (to 4 s.f.) and $x > 10.40 $ (to 4 s.f.), which rounds to $x>12$ and $x>10$ as x can only take in positive integers.\
 \
-// TODO: pmcc
-// epsilon = 0.2
-Epsilon $epsilon$ quantifies how much performance you're willing to sacrifice to gain efficiency — it defines the “sweet spot” rather than chasing pure speed.
-Mathematically, $epsilon$ is the acceptable deviation from the minimum runtime, expressed as a percentage:
-$ y(x) <= (1+epsilon)y_min $
-where $y(x)$ = runtime at $x$ threads, $y_min$ = theoretical minimum runtime (at max threads) and $epsilon$ = tolerance level.
+Assuming there are more students with the medium performance computer, I introduce a weighting factor to account for the distribution of users. Let $w_1$ be the fraction of high-performance users and $w_2$ the fraction of medium-performance users with $ w_1 + w_2 = 1$. The weighted number of threads can then be calculated as $ x_("weight") = w_1 * x_1 + w_2 * x_2 $ where $x_1$ and $x_2$ are the optimal threads percentage calculated for the high-performance and medium-performance machines, respectively. For example, if 20% of students have high-performance computers ($w_1 = 0.2$) and 80% have medium-performance machines ($w_2 = 0.8)$, we get: $ x_("weight") = 0.2 * 12/20 + 0.8 * 10/12 = 0.7867 "(to 4 s.f.)" approx 0.8 $
 
+Therefore, I can conclude that using around 80% of the stakeholder's CPU threads for web workers gives the best performance because it keeps most system stable while still using most of the cores for mining. If you max out all threads, the OS and main thread have no room to handle background tasks, causing thread contention, lag, and even slower results. Leaving a few threads free ensures smoother communication and better overall throughput.
 #pagebreak()
+I will use this value (80%) to decide the value of `NUM_WORKERS` in the algorithm. Therefore, I will have to use the `os` library to find the number of threads that the user has, and then use the 80% of that for the mining algorithm:
+```ts
+import os from "os";
+let numThreads = os.cpus().length; // no. of threads
+let eighty_percent_of_threads = Math.max(1, Math.floor(numThreads * 0.8));
+let NUM_WORKERS = eighty_percent_of_threads;
+```
+\
+
 #subpar.grid(
-  figure(
+  move(figure(
     image("images/mid_cpu_not_running.png", width: 100%),
-    caption: [Logical processors (threads) on medium performance laptop when the algorithm is not running],
-  ),
+    caption: [Threads on medium performance laptop when the algorithm is not running],
+  ),dx:0em),
   <a>,
 
   figure(
     image("images/mid_cpu_running.png", width: 103%),
-    caption: [Logical processors (threads) on medium performance laptop when 12 workers is used],
+    caption: [Threads on medium performance laptop when 12 workers are being used],
   ),
   <b>,
 
@@ -1566,13 +1589,14 @@ where $y(x)$ = runtime at $x$ threads, $y_min$ = theoretical minimum runtime (at
 )
 #figure(
   image("images/image.png", width: 50%),
-  caption: [Logical processors (threads) on medium performance laptop when running with max (12) threads multiple times],
+  caption: [Threads on medium performance laptop when running with max (12) threads multiple times],
 )
 
 As you may see, there is clearly a spike in CPU usage in multiple cores throughout the test for 12 web workers. This can sufficiently proof that the workers are in action and improving the speed for the proof of work algorithm. This aligns with the results for the tests that I ran.\
 \
 Limitation - This test is only done on two computers, therefore the results may vary on different hardware configurations. However, the general trend of performance improvement with increased web workers should hold true across most systems.
 Another Limitation - The result might not be accurate as there are other background processes running on the computer which might interfere with the mining process. However, by taking the average of multiple runs, I can mitigate some of this variability and get a more reliable measure of performance.
+#pagebreak()
 === Iteration 1 Evaluation
 In this iteration I have done the proof of concept for multiple parts of my blockchain simulator:
 + Breadth-First Search (BFS) algorithm for graph traversal to show the broadcast of new blocks and transactions across the network
@@ -2010,8 +2034,12 @@ On this line:
 ```ts
 console.log(JSON.stringify(myChain.chain, null, 2))
 ```
-The ouptut has to be 'JSONified' since the attribute `myChain.chain` is an array consists of blocks, which contains the methods of `calculateHash()` and `mineBlock()`
-// TODO: Justify JSON
+The ouptut has to be 'JSONified' since the attribute `myChain.chain` is an array consists of blocks, which contains the methods of `calculateHash()` and `mineBlock()`. Using a `JSONify` doesn't print the functions of the block, increasing the readability of the output. When printed directly, TypeScript doesn't automatically display the full object structure — it just shows `[object Object]`. \
+\
+Using JSON.stringify() converts the object data (its properties and values) into a readable JSON string format that can be shown neatly in the console, making it easier to inspect the entire blockchain state. In `JSON.stringify(myChain.chain, null, 2)`: 
+  - The first parameter (myChain.chain) is the object or array you want to convert into JSON
+  - The second parameter (null) is the replacer, which lets you filter or transform values before converting — null means “include everything as-is.”
+  - The third parameter (2) sets the indentation level, telling the output to use 2 spaces per level for readability.
 2. *Boundary Tests*:
 - Empty mempool to test what would happen when no transaction has to be mined into blocks but user tries to mine a block -- Expected Result: 'No transactions to mine':
 ```ts
@@ -2037,6 +2065,7 @@ async function largeBatchTest() {
   );
 }
 ```
+#pagebreak()
 - Setting a high difficulty for the blockchain network to simulate a more complex blockchain network, just like in real life -- Expected: Might take a long time but will eventually mine
 ```ts
 async function highDifficultyTest() {
@@ -2095,41 +2124,68 @@ async function reMiningTest() {
 #pagebreak()
 ==== Testing Results
 The test is observational. This means that we will have to analyse the output to know if the code that we made actually function as it should. As expected, while the code isn't there, none of the tests passed. However once the code has been developed, this is the result of the tests:
-#subpar.grid(
+===== Normal Tests Result
+#figure(
+subpar.grid(
   figure(move(dx:-1em,dy:0em,(image("images/I2_normal_test.png", width: 135.5%)))), <a>,
   figure(move(dx:3em,dy:0em,(image("images/I2_normal_test_cont.png", width: 115%)))), <b>,
   columns: (1fr, 1fr),
   label: <full>,
-)
-Looking at the test result, I have shown that different functions working in action, and how they are successfully connected to each other. For example, with the block mining in `minePendingTransaction()`, there is some log from the console which tells how long the mining took, this is from the 
+),caption:[Iteration 2 Normal Test Results])
+Looking at the test result, I have shown that different functions working in action, and how they are successfully connected to each other. For example, with the block mining in `myChain.minePendingTransaction()`, there is some log from the console which tells how long the mining took, this is from the `startMining()` function from Iteration 2. The log showing also implies that when the `myChain.minePendingTransaction()` is called, it is sucessfully connected to `Block.getLatestBlock()` and `Block.mineBlock()` which calls the `startMining` function. The annotations show that how each functions are involved in the algorithm.
 
-#image("image-1.png")
-
-#image("image.png")
+===== Boundary Tests Result
+#figure(align(image("images/I2-boundary.png", width: 44%), center), caption:[Iteration 2 Boundary Tests Result])
+I have truncated some of the transactions output and them after being turned into a string due to the space it's taking (this will not be showned in the GUI), denoted by my `...` in my annotations. The boundary tests have successfully shown that:
+- The validation for empty mempool is correct
+- The `fakeHash()` function working as the transaction length doesn't matter
+- The more time taken by higher difficulty blockchain network level
+===== Errorneous Tests Result
+#figure(image("images/I2-error.png",width:50%),caption:[Iteration 2 Errorneous Tests Result])
+There are a few things going on here. Firstly, for my "Invalid Transaction type" test, there was no error being raised, which was what is expected. However, the error actually did raise, but not in runtime. TypeScript automatically highlights the invalid type in the IDE, which is shown like this: 
+#figure(image("image.png"), caption:[TypeScript raising type error])
+This is good as I can spot the wrong input during development. However, at the end product, the code will not be shown to the users, therefore data has to be validated. This will be done in Iteration 5 where I improve the user experience.\
+\ 
 // TODO: `InvalidStateError`
-
-The `InvalidStateError` sometimes appear and sometimes not.
-This is beacuse each worker runs `assignWork()` repeatedly with `setTimeout(assignwork, 0)` -- meaning it's in an infinite async loop, posting new work until mining stops. But when `stopMining()` is called (after one worker finds a valid hash), it terminates all workers. The problem though is that some workers still have a pending `setTimeout(assignWork, 0)` callback queued. So they wake up, try to call `worker.postMessage()` again but the worker has already been terminated, causing the `InvalidStateError`. This only happens in the 'Re-mining Test' because the test that triggers this (reMiningTest) calls `mineBlock()` directly again after mining once. This means that the global worker pool and `running` flag from the previous mining session are still in use. The new workers are starting while the old ones are mid-termination. Therfore they're racing.
-Therefore, to fix this, // TODO: workers = []
-// However the programs sometimes get killed when it does the re-mining block test
-// This is beacuse of variable scoping and worker lifecycle timing. The old workers from the previous mining round are still alive for a few milliseconds
-//
-// however the chain shouldnt be valid when remined
-// the `Block` class doesn't track whether it’s already mined, so calling `mineBlock()` again just overwrites nonce and hash. That’s why the reMiningTest passes, even though in a real blockchain it shouldn’t.
-// TODO: see block.ts
-//
-// Blockchain shouldnt still be valid after remining. Therefore adding a mined flag
-
+Another problem in this test is the `InvalidStateError` in the reMining tests. This error is sometimes raised and sometimes not. This is beacuse each worker runs `assignWork()` repeatedly with `setTimeout(assignwork, 0)` -- meaning it's in an infinite async loop, posting new work until mining stops. When `stopMining()` is called (after one worker finds a valid hash), it terminates all workers. The problem though is that some workers still have pending `setTimeout(assignWork,0)` callbacks queued. So they wake up, try to call `worker.postMessage()` again but the worker has already been terminated, causing the `InvalidStateError`. \
+#pagebreak()
+This only happens in the 'Re-mining Test' because the test that triggers this (reMiningTest) calls `mineBlock()` directly again after mining once. This means that the global worker pool and `running` flag from the previous mining session are still in use. The new workers are starting while the old ones are mid-termination. Therfore they're racing.\
+\
+To fix this, I will have to clear all the workers before the program being called again. This is easy to fix, I will just have to add one line to the start of the `startMining()` function:
+```ts
+workers = []
+```
+This fixes the issue of workers being terminated but still tries to do `postMessage`. However as the code is fixed, another problem is arised: The blockchain is valid after being remined. This shouldn't be the case as the blockchain shouldn't allow tampering, as this will invalidate the chain. This is because the `Block` class doesn't track whether it's already mined, so calling `mineBlock()` again just overwrites nonce and hash. Therefore I will have to add a `mined` flag (variable) to track if a block has been mined before. 
+```ts
+mined: boolean = false;
+```
+This line is added to the start of the `Block` class and
+```ts
+this.mined = true;
+```
+this line is added to the end of `mineBlock()` function within the `Block` class. This flag allows the algorithm to know whether the block has been mined. If the block is mined, it shouldn't be able to be remined. Therefore this line is added before the mining action in the `mineBlock()` function:
+```ts
+if (this.mined) throw new Error("Block has already been mined!");
+```
+After these are added, the test successfully threw an error which states that the Block has already been mined. \
+\
+Therefore, the blockchain simulator can now:
+- prevent tampering of blocks
+- prevent remining of blocks
+#pagebreak()
 === Iteration 2 Evaluation
-I have invited some of my stakeholders, ..., to review my blockchain core structure.
+I have invited some of my stakeholders, ..., to review my blockchain core structure. However the A level teacher is quite busy, therefore, I will let him review the product at Iteration 3 where I have a more structured command line interface.
+
 #pagebreak()
 == Iteration 3
 In Iteration 3, I will start to code a Command Line Interface (CLI) for my simulator. This will be a Minimum Viable Product (MVP). In this iteration, I will be linking everything that I had in the proof of concepts into one command line interface. This includes the demomstration of adding users to the blockchain network, showing how the blocks are propagating through the network after being added to the network,
 
 === Design for CLI
-I quite like the Sean CLI from the Analysis section. When I start his simulator, there is a menu page which allows you to navigate to different sections such as the `blockchain` section and the `p2p` section. Therefore I am going to use this idea to create the menu page for my simulator.
+I quite like the menu from Sean CLI from @sean-cli due to the readability of the menu and easy to understand interface. When I start his simulator, there is a menu page which allows you to navigate to different sections such as the `blockchain` section and the `p2p` section. Therefore I am going to use this idea to create the menu page for my simulator. After research into different command line libraries, I have decided to choose `readline` API library. This is because the `readline` API provides a simple and built-in way to handle user input directly from the terminal, without needing to install any extra packages. It also works seamlessly with Bun, since Bun implements Node's core `readline` module by default. On top of that, it makes the cli look cleaner and more organised -- similar to Sean CLI -- allowing me to create a visually clear and intuitive menu system for navigating between different components of my blockchain simulator. 
+// TODO: adding `if (!transactions)` into the Blockchain.mineBlock() function
 === Testing
 === Evaluation
+// TODO: data validation in the future
 == Iteration 4
 In Iteration 4, I will be developing a Graphical User Interface (GUI) for my blockchain simulator.
 
