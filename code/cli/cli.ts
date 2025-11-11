@@ -21,7 +21,6 @@ async function main() {
   while (true) {
     let input = (await prompt()).trim();
     let [cmd, ...args] = input.split(" ");
-
     switch (cmd) {
       case "add_user":
         console.log(network.addUser(args[0]));
@@ -49,12 +48,12 @@ async function main() {
         return;
       case "show_users":
         console.log("Users in network:");
-        let user_num = 0
+        let user_num = 0;
         for (let username of network.nodes.keys()) {
-          user_num += 1
+          user_num += 1;
           console.log("- " + username);
-          console.log(`There are ${user_num} users in the network.`)
         }
+        console.log(`There are ${user_num} users in the network.`);
         break;
       case "show_neighbours":
         network.showneighbours(args[0]);

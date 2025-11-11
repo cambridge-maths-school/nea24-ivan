@@ -31,7 +31,7 @@ export class Block {
         this.previousHash +
         this.timestamp +
         JSON.stringify(this.transactions) +
-        this.nonce // make sure nonce is included
+        this.nonce
     );
   }
 

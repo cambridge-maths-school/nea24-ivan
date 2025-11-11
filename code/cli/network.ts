@@ -61,15 +61,12 @@ export class Network {
       console.log("No transactions to mine.");
       return;
     }
-
     let transactionsToMine = [...this.mempool];
-
+    console.log(node.blockchain.minePendingTransactions(transactionsToMine));
     await node.blockchain.minePendingTransactions(transactionsToMine);
-
+    // node.blockchain.chain.push[]
     // Remove mined transactions from global mempool
-    this.mempool = this.mempool.filter(
-      (tx) => !transactionsToMine.includes(tx)
-    );
+    this.mempool = [];
 
     let latestBlock = node.blockchain.getLatestBlock();
     console.log(
@@ -172,7 +169,7 @@ export class Network {
   }
 
   // Show global mempool or per-user mempool
-  showMempool(username?: string) {
+  showMempool(username: string) {
     if (!username) {
       if (this.mempool.length === 0) {
         console.log("Global mempool is empty.");

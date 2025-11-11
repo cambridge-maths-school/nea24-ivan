@@ -29,28 +29,29 @@ export class Blockchain {
   }
 
   // Mine all pending transactions and add as a new block
-  // async minePendingTransactions(transactions?: string[]) {
-  async minePendingTransactions() {
-    if (this.mempool.length === 0) {
-      console.log("No transactions to mine.");
-      return;
-    }
+  async minePendingTransactions(transactions: string[]): Promise<Block> {
+    // async minePendingTransactions() {
+    // if (this.mempool.length === 0) {
+    //   console.log("No transactions to mine.");
+    //   return;
+    // }
 
-    console.log("Current mempool:", this.mempool);
+    console.log("Current mempool:", transactions);
 
     let newBlock = new Block(
       this.chain.length,
       Date.now(),
-      this.mempool,
+      transactions,
       this.getLatestBlock().hash
     );
 
     await newBlock.mineBlock(this.difficulty);
-    // if (!transactions) {
-    this.chain.push(newBlock);
-    this.mempool = []; // Clear mempool after mining
-    console.log("Mempool cleared after mining.\n");
-    // }
+    return newBlock;
+    if (!transactions) {
+      this.chain.push(newBlock);
+      this.mempool = []; // Clear mempool after mining
+      console.log("Mempool cleared after mining.\n");
+    }
   }
 
   // Check if blockchain is valid by comparing hashes

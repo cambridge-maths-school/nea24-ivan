@@ -380,7 +380,7 @@ This is my initial rough sketch on the graphical user interface (GUI) design of 
 
 #figure(image("images/ui.jpeg", width: 110%), caption: [
   Intial Design for User interface of the blockchain simulator.
-])
+]) <Initial-GUI-Design>
 
 === Project Management Methodology
 The solution will be developed in an agile way. This means that it will be developed in different iterations. The analysis of requirements has been done in this section (Section 1).
@@ -1857,7 +1857,7 @@ export class Block {
         this.previousHash +
         this.timestamp +
         JSON.stringify(this.transactions) +
-        this.nonce // make sure nonce is included
+        this.nonce
     );
   }
 
@@ -2193,7 +2193,7 @@ I quite like the menu from Sean CLI from @sean-cli due to the readability of the
 In Iteration 4, I will be developing a Graphical User Interface (GUI) for my blockchain simulator.
 
 === GUI Design
-Over the 3 iterations that I have been through, I have gained more understanding on blockchain technologies and I realised that the 
+Over the 3 iterations that I have been through, I have gained more understanding on blockchain technologies and I realised that the @Initial-GUI-Design might not be a very accurate representation of the blockchain simulator that I expected. Therefore I will develop the GUI orienting the design for my CLI.
 === Testing
 === Evaluation
 == Iteration 5
