@@ -24,9 +24,5 @@ test("Adding Users already exist", () => {
   expect(network.addUser("Ada")).toBe(`User Ada already exists.`);
 });
 
-test("Adding Invalid User Types", () => {
-});
-// Control + C not to exit code 
-// SIGINT and SIGTERM
-
+test("Adding Invalid User Types", () => {});
 // =====

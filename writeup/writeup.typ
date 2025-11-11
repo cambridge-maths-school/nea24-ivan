@@ -289,7 +289,8 @@ Algorithm - see next page
    - If valid, add to local mempool
    - If invalid, discard
 3. Node forwards T to all connected peers
-4. Iterate steps 2-3 for each peer`
+4. Iterate steps 2-3 for each peer
+`
 \
 \
 
@@ -2184,6 +2185,8 @@ I quite like the menu from Sean CLI from @sean-cli due to the readability of the
 \
 === Designing tests for CLI
 
+
+// TODO: making the functions more pure
 
 // TODO: adding `if (!transactions)` into the Blockchain.mineBlock() function
 === Testing

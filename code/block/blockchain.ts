@@ -47,11 +47,6 @@ export class Blockchain {
 
     await newBlock.mineBlock(this.difficulty);
     return newBlock;
-    if (!transactions) {
-      this.chain.push(newBlock);
-      this.mempool = []; // Clear mempool after mining
-      console.log("Mempool cleared after mining.\n");
-    }
   }
 
   // Check if blockchain is valid by comparing hashes

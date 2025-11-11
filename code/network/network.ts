@@ -1,8 +1,8 @@
 import { Blockchain } from "../block/blockchain.ts";
 import { bfs_traverse } from "../bfs/bfs.ts";
 import { dfs_traverse } from "../dfs/dfs.ts";
+import { Balances } from "./balances.ts";
 
-// Represents a network node (user)
 export class Node {
   username: string;
   blockchain: Blockchain;
@@ -22,6 +22,7 @@ export class Node {
 export class Network {
   nodes: Map<string, Node> = new Map();
   mempool: string[] = []; // global mempool
+  balances: Balances = new Balances(100);
 
   // Add a new node
   addUser(username: string) {
@@ -30,6 +31,7 @@ export class Network {
     }
     let node = new Node(username);
     this.nodes.set(username, node);
+    this.balances.addUser(username);
     return `User ${username} added.`;
   }
 
@@ -40,8 +42,13 @@ export class Network {
   // Add transaction to global mempool
   addTransaction(from: string, to: string, amount: number) {
     let sender = this.getNode(from);
-    if (!sender) {
-      console.log(`Sender ${from} not found.`);
+    let receiver = this.getNode(to);
+    if (!sender || !receiver) {
+      console.log("Sender or receiver not found.");
+      return;
+    }
+    if (!this.balances.hasFunds(from, amount)) {
+      console.log(`${from} does not have enough coins.`);
       return;
     }
     let tx = `${from} pays ${to} ${amount} coins`;
@@ -62,10 +69,23 @@ export class Network {
       return;
     }
     let transactionsToMine = [...this.mempool];
-    console.log(node.blockchain.minePendingTransactions(transactionsToMine));
-    await node.blockchain.minePendingTransactions(transactionsToMine);
-    // node.blockchain.chain.push[]
-    // Remove mined transactions from global mempool
+    let newBlock = await node.blockchain.minePendingTransactions(
+      transactionsToMine
+    );
+    node.blockchain.chain.push(newBlock);
+
+    for (let tx of transactionsToMine) {
+      let parts = tx.split(" ");
+      let from = parts[0];
+      let to = parts[2];
+      let amount = parseInt(parts[3]);
+      this.balances.applyTransaction(from, to, amount);
+    }
+
+    // Give miner a reward
+    this.balances.applyTransaction("system", username, 10);
+
+    // Clear mempool after mining
     this.mempool = [];
 
     let latestBlock = node.blockchain.getLatestBlock();
@@ -149,6 +169,10 @@ export class Network {
     console.log(this.nodes.keys());
     return this.nodes.keys();
   }
+  // Show user balances
+  showBalances(username?: string) {
+    this.balances.printBalances(username);
+  }
 
   // Show a user's neighbours
   showneighbours(username: string) {
@@ -169,29 +193,8 @@ export class Network {
   }
 
   // Show global mempool or per-user mempool
-  showMempool(username: string) {
-    if (!username) {
-      if (this.mempool.length === 0) {
-        console.log("Global mempool is empty.");
-        return;
-      }
-      console.log("Global mempool:");
-      this.mempool.forEach((tx) => console.log("- " + tx));
-      return;
-    }
-
-    let node = this.getNode(username);
-    if (!node) {
-      console.log(`User ${username} not found.`);
-      return;
-    }
-
-    if (node.blockchain.mempool.length === 0) {
-      console.log(`${username}'s mempool is empty.`);
-      return;
-    }
-    console.log(`${username}'s mempool:`);
-    node.blockchain.mempool.forEach((tx) => console.log("- " + tx));
+  showMempool() {
+    return this.mempool;
   }
 
   // Connect two users as neighbours

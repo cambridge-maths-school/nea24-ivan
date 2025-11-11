@@ -1,4 +1,4 @@
-import { Network } from "./network.ts";
+import { Network } from "../network/network.ts";
 // @ts-ignore
 import readline from "readline";
 
@@ -9,6 +9,20 @@ let rl = readline.createInterface({
   output: process.stdout,
 });
 
+let MENU: string = `Menu:
+    - add_user <username>
+    - connect <user1> <user2>
+    - add_tx <from> <to> <amount>
+    - show_users
+    - show_mempool
+    - show_neighbours <username>
+    - show_chain <username>
+    - validate <username>
+    - propagate <username> <bfs|dfs>
+    - mine <username>
+    - help
+    - exit")
+    `;
 let network = new Network();
 
 function prompt(): Promise<string> {
@@ -17,11 +31,13 @@ function prompt(): Promise<string> {
 
 async function main() {
   console.log("=== Blockchain Network Simulator ===");
-
+  console.log(MENU);
   while (true) {
     let input = (await prompt()).trim();
     let [cmd, ...args] = input.split(" ");
     switch (cmd) {
+      case "help":
+        console.log(MENU);
       case "add_user":
         console.log(network.addUser(args[0]));
         break;
@@ -32,6 +48,10 @@ async function main() {
         await network.mine(args[0]);
         break;
       case "propagate":
+        if (args.length != 2) {
+          console.log("Usage: propagate <username> <bfs|dfs>");
+          break;
+        }
         network.propagate(args[0], args[1] as "bfs" | "dfs");
         break;
       case "show_chain":
@@ -51,7 +71,7 @@ async function main() {
         let user_num = 0;
         for (let username of network.nodes.keys()) {
           user_num += 1;
-          console.log("- " + username);
+          console.log(`${user_num}. ${username}`);
         }
         console.log(`There are ${user_num} users in the network.`);
         break;
@@ -59,11 +79,15 @@ async function main() {
         network.showneighbours(args[0]);
         break;
       case "show_mempool":
-        network.showMempool(args[0]);
+        for (let tx of network.showMempool()) console.log(`- ${tx}`);
+        break;
+      case "show_balances":
+        console.log(args, args.length);
+        args[0] ? network.showBalances(args[0]) : network.showBalances();
         break;
 
       default:
-        console.log("Unknown command");
+        console.log("Unknown command. Type 'help' for menu.");
     }
   }
 }
