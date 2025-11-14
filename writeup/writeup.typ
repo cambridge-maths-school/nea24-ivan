@@ -318,7 +318,18 @@ I created the flowchart below to visualise the workflow of a blockchain:
   image("images/blockchain_conceptual_flowchart.png", width: 100%),
   caption: [Conceptual flowchart of blockchain workflow.],
 )
-#pagebreak()
+
+A very broad summary of the blockchain network workflow is as follows:
+- Users create transactions (note: the transactions will get checked for validity first; Invalid transactions include double spending the same coin/token, insuffiecient balance, invalid digital signature, etc.)
+- Valid transactions are then added to the mempool (mempool is global and every node has the same mempool)
+- Miners select transactions from the mempool to include in a new block
+- Miners perform proof of work to find a valid nonce (a number that is added to the block data to be hashed that results in a hash that meets the network difficulty target, which means it should have a certain number of leading zeros in binary) and hash of the new block
+- Once a valid nonce is found, the new block is added to the blockchain and broadcasts to all nodes in the peer to peer network. 
+- Each node verifies the new block and appends it to their local copy of the blockchain if valid therefore everyone keeps a synchronised copy of the blockchain
+- This process repeats for each new block being mined
+Note:
+- The difficulty of mining is set by the network and cannot be changed by miners.
+
 == Existing models <sean-cli>
 I found this blockchain simulator Command Line Interface (CLI) #footnote[https://github.com/0xs34n/blockchain] on GitHub by Sean. I have forked the repository and ran it on my local machine using `node.js`. The simulator offers a basic understanding of blockchain technologies with features like possessing blockchains and connecting to peers in different networks. However, it doesn't contain features such as transactions of blockchains or the process of mining blockchains.
 #subpar.grid(
@@ -592,10 +603,10 @@ Secondary Stakeholders
 // ☐ How to validate a blockchain
 // ☐ Other: (Open text box)
 === Interview
-I have selected a few A level students to represent my target users to interview them about their expectations of blockchain simulator. Here are the questions that I have prepared for the interview:
+I have selected a few A level students to represent my target users to interview them about their expectations of blockchain simulator. These are the questions that I have asked during the interview:
 `Section 1: Background and Experience
 1. How familiar are you with blockchain concepts such as blocks, mining, and transactions?
-2. Have you ever used any blockchain simulator or visualization tool before? If yes, which ones and what did you like/dislike about them?
+2. Have you ever used any blockchain simulator or visualisation tool before? If yes, which ones and what did you like/dislike about them?
 
 Section 2: Learning Goals
 3. What would you like to learn or understand better about blockchain through a simulator?
@@ -615,9 +626,11 @@ Section 5: Expectations and Concerns
 11. How important is it for the simulator to be visually engaging (e.g., showing block links, network paths)?
 12. If you could suggest one unique feature for this simulator, what would it be?`
 
-I have interviewed 4 A level students, in which all of them takes Computer Science as their A level subject. Here are some key points that I have gathered from the interview:
+I have interviewed 4 A level students (Ben, James, Jeremy, and William), in which all of them takes Computer Science as their A level subject. Here are some key points that I have gathered from the interview:
 
-Most of them are very unfamiliar with the blockchain technology. However, one of them did some research in the blockchain in his free time. 
+Most of them are very unfamiliar with the blockchain technology. However, one of them -- Ben, did some research in the blockchain in his free time. The majority of my stakeholders have never used a blockchain simulator or any visualisation tools before, except from Ben who has used the Ethereum Virtual Machine (EVM) to learn about proof of stake algorithm (one of the algorithm to mine blocks in the blockchain). However, the EVM doesn't provide any graphical visualisation of any blockchain concepts. 
+
+Therefore, I aim to create a blockchain simulator that simplifies the blockchain concepts so that the majority of A level students will be able to understand them. I will also include visualisation of different blockchain concepts such as network propagation, mining, and block linking to help students to understand them. 
 // William Stone -- A level Computer Science student:
 // 1. Not at all
 // 2. No
@@ -2174,11 +2187,28 @@ Therefore, the blockchain simulator can now:
 - prevent remining of blocks
 #pagebreak()
 === Iteration 2 Evaluation
-I have invited some of my stakeholders, ..., to review my blockchain core structure. However the A level teacher is quite busy, therefore, I will let him review the product at Iteration 3 where I have a more structured command line interface.
+I have invited one of my stakeholders, Ben, to review my blockchain core structure. This is because Ben has some prior knowledge about blockchain technologies and he has also used some blockchain simulators and developed some proof of stake algorithm before. Therefore he would be able to understand what I have been doing and give me some feedback on my work, since there isn't a CLI for this iteration yet.
+
+// WWW
+
+// EBI
+In Iteration 2, most of the functions have been developed very specifically for one case. For example, the `minePendingTransactions()` function is way too tied with the blockchain's internal state -- it hard-coded `this.mempool` as the only source of transactions. In Iteration this can work because we are only doing everything in one user (node), which means that the only transactions are the ones in the local mempool. However, in Iteration 3 when I start to develop the CLI, I will have multiple users (nodes) in the network, each with their own mempool. Therefore I will have to modify the `minePendingTransactions()` functions to take in the transactions as a parameter, instead of directly accessing from `this.mempool`. This will make the function more reusable for different users (nodes) in the network. Although the functions in this Iteration were modular, they should be more pure to make it more reusable.\
+\
+In Iteration 3, I will fix the functions that have to be reused to be more pure functions. This means that the functions can be reused, especially between different users (nodes) in the network. This will make the code more maintainable and easier to test in the future.
 
 #pagebreak()
 == Iteration 3
-In Iteration 3, I will start to code a Command Line Interface (CLI) for my simulator. This will be a Minimum Viable Product (MVP). In this iteration, I will be linking everything that I had in the proof of concepts in Iteration 1 and the core block structure in Iteration 2 into one command line interface. This includes the demomstration of adding users to the blockchain network, connecting the users to each other, showing how the blocks are propagating through the network after being added to the network, and the basic core structure which has been developed in Iteration 2.
+In Iteration 3, I will start to code a Command Line Interface (CLI) for my simulator. This will be a Minimum Viable Product (MVP). In this iteration, I will be linking everything that I had in the proof of concepts in Iteration 1 and the core block structure in Iteration 2 into one command line interface. This includes the demomstration of adding users to the blockchain network, connecting the users to each other, algorithm to prevent double spending and tracking users' balances, showing how the blocks are propagating through the network after being added to the network, and the basic core structure which has been developed in Iteration 2.
+
+=== Decomposition for Iteration 3
+
+=== Goals
+- Create class `Balances` which tracks user balances and prevents double spending
+- Create class `Node` which represents a user in the blockchain network
+- Create class `Network` which manages multiple nodes and their connections
+- Create functions for adding nodes, connecting nodes, broadcasting blocks
+- Create a Command Line Interface (CLI) for the blockchain Simulator
+
 
 === Design for CLI
 I quite like the menu from Sean CLI from @sean-cli due to the readability of the menu and easy to understand interface. When I start his simulator, there is a menu page which allows you to navigate to different sections such as the `blockchain` section and the `p2p` section. Therefore I am going to use this idea to create the menu page for my simulator. After research into different command line libraries, I have decided to choose `readline` API library. This is because the `readline` API provides a simple and built-in way to handle user input directly from the terminal, without needing to install any extra packages. It also works seamlessly with Bun, since Bun implements Node's core `readline` module by default. On top of that, it makes the cli look cleaner and more organised -- similar to Sean CLI -- allowing me to create a visually clear and intuitive menu system for navigating between different components of my blockchain simulator.\
@@ -2187,7 +2217,7 @@ I quite like the menu from Sean CLI from @sean-cli due to the readability of the
 
 
 // TODO: making the functions more pure
-
+As mention in the Analysis of Iteration 2, I will be modifying some functions to make them more pure and do not alter the global variables or state. 
 // TODO: adding `if (!transactions)` into the Blockchain.mineBlock() function
 === Testing
 === Evaluation
