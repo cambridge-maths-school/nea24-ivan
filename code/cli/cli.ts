@@ -82,7 +82,6 @@ async function main() {
         for (let tx of network.showMempool()) console.log(`- ${tx}`);
         break;
       case "show_balances":
-        console.log(args, args.length);
         args[0] ? network.showBalances(args[0]) : network.showBalances();
         break;
 

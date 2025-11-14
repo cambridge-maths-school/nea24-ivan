@@ -110,7 +110,7 @@
 Blockchain is a rapidly growing technology that powers cryptocurrencies, NFTs, and secure digital record-keeping. Blockchain and Cryptography area mong the most in-demand STEM skills in the post-web economy. According to a new report from the UK Parliament, nearly half of engineering and tech businesses are struggling to recruit skilled talent. The shortage for STEM skills are costing the UK economy £1.5 billion per year [#footnote[source: medium (https://britblockchain.medium.com/uk-faces-stem-talent-shortage-as-demand-for-blockchain-skills-surges-says-parliamentary-report-ca626c0f5928)]]. Despite its increasing importance in finance, computing, and data security, not a lot of students in the UK are learning it. In addition, understanding how blockchain works is conceptually challenging for most students, especially with the lack of the resources online. Key concepts such as blockchain being decentralised distributed ledgers, mining, proof of work, hashing, and peer to peer (p2p) networks are often abstract and difficult to visualise. This creates a barrier to learn, especially when students encounter blockchain only through media or cryptocurrency hype, without practical experience. Consequently, there is a need for an educational tool which allows students to interact with. This can help them to visualise blockchain mechanics in a safe, simplified, and engaging way.
 #pagebreak()
 
-== Research
+== Research <research>
 Blockchain is a distributed ledger technology that keeps record of the transactions across a network of nodes. Each block is a container for multiple transactions, linked to the previous block using a cryptographic hash. New blocks are added to the BlockChain through mining -- a process where participants (miners) solve complex computational puzzles (proof of work). Once successfully adding a valid block to the chain, miners will be given rewards, such as cryptocurrency and transaction fees.
 
 
@@ -118,25 +118,23 @@ Research in Blockchain Technology: \
 I gained knowledge on the blockchain technologies after watching this #link("https://youtu.be/bBC-nXj3Ng4?si=7UgRxuPQdJOzkzG4")[YouTube video] [#footnote[https://youtu.be/bBC-nXj3Ng4?si=7UgRxuPQdJOzkzG4]] by #link("https://www.youtube.com/@3blue1brown")[3Blue1Brown] which explains how blockchain technologies work behind the scene and different algorithms to power it. I also confirmed my knowledge with the winner of award of distinction in the Hong Kong BlockChain Olympiad - Lester Chong by asking him questions to clearly understand the concepts behind blockchain technologies.
 
 Here are my summary to some main concepts in Blockchain technology:
-#[
-  #set par(spacing: 1em)
-  1. Transactions
-  A transaction represents a transfer of value or information between users. Each transaction typically includes:
-  - Sender and receiver addresses
-  - Amount or data being transferred
-  - Digital signature to verify authenticity
-  Transactions are first broadcast to the network and stored in the mempool -- a collection of unconfirmed transactions awaiting inclusion in a block.
-]
-\
-#[
-  #set par(spacing: 1em)
-  2. Transaction Validity
-  Transactions must satisfy several criteria before being considered valid. Miners only include valid transactions in blocks.
 
-  Algorithm: Validate Transaction \
-  Input: Transaction T, Blockchain ledger L \
-  Output: Valid or Invalid
-]
+1. Transactions
+A transaction represents a transfer of value or information between users. Each transaction typically includes:
+- Sender and receiver addresses
+- Amount or data being transferred
+- Digital signature to verify authenticity
+Transactions are first broadcast to the network and stored in the mempool -- a collection of unconfirmed transactions awaiting inclusion in a block.
+
+\
+
+2. Transaction Validity 
+Transactions must satisfy several criteria before being considered valid. Miners only include valid transactions in blocks.
+
+Algorithm: Validate Transaction \
+Input: Transaction T, Blockchain ledger L \
+Output: Valid or Invalid
+
 Algorithm flowchart - see next page
 #figure(
   move(dx: 5em, dy: 0em)[
@@ -324,7 +322,7 @@ A very broad summary of the blockchain network workflow is as follows:
 - Valid transactions are then added to the mempool (mempool is global and every node has the same mempool)
 - Miners select transactions from the mempool to include in a new block
 - Miners perform proof of work to find a valid nonce (a number that is added to the block data to be hashed that results in a hash that meets the network difficulty target, which means it should have a certain number of leading zeros in binary) and hash of the new block
-- Once a valid nonce is found, the new block is added to the blockchain and broadcasts to all nodes in the peer to peer network. 
+- Once a valid nonce is found, the new block is added to the blockchain and broadcasts to all nodes in the peer to peer network.
 - Each node verifies the new block and appends it to their local copy of the blockchain if valid therefore everyone keeps a synchronised copy of the blockchain
 - This process repeats for each new block being mined
 Note:
@@ -417,7 +415,7 @@ In the project, all the algorithms will be developed using the following computa
 - Abstraction
   - I will focus on essential features rather than unnecessary details before developing. This can help me to achieve the overall goal quicker in each development stage. I will be using different methods such as writing psuedocode or drawing flowchart diagrams before development.
 - Thinking parallel
-  - I will think about what is happening at the same time. For example, in my proof of work algorithm, I will require multiple 
+  - I will think about what is happening at the same time. For example, in my proof of work algorithm, I will require multiple
 - Thinking Ahead
 - Problem solving using
   - Visualisation
@@ -628,9 +626,9 @@ Section 5: Expectations and Concerns
 
 I have interviewed 4 A level students (Ben, James, Jeremy, and William), in which all of them takes Computer Science as their A level subject. Here are some key points that I have gathered from the interview:
 
-Most of them are very unfamiliar with the blockchain technology. However, one of them -- Ben, did some research in the blockchain in his free time. The majority of my stakeholders have never used a blockchain simulator or any visualisation tools before, except from Ben who has used the Ethereum Virtual Machine (EVM) to learn about proof of stake algorithm (one of the algorithm to mine blocks in the blockchain). However, the EVM doesn't provide any graphical visualisation of any blockchain concepts. 
+Most of them are very unfamiliar with the blockchain technology. However, one of them -- Ben, did some research in the blockchain in his free time. The majority of my stakeholders have never used a blockchain simulator or any visualisation tools before, except from Ben who has used the Ethereum Virtual Machine (EVM) to learn about proof of stake algorithm (one of the algorithm to mine blocks in the blockchain). However, the EVM doesn't provide any graphical visualisation of any blockchain concepts.
 
-Therefore, I aim to create a blockchain simulator that simplifies the blockchain concepts so that the majority of A level students will be able to understand them. I will also include visualisation of different blockchain concepts such as network propagation, mining, and block linking to help students to understand them. 
+Therefore, I aim to create a blockchain simulator that simplifies the blockchain concepts so that the majority of A level students will be able to understand them. I will also include visualisation of different blockchain concepts such as network propagation, mining, and block linking to help students to understand them.
 // William Stone -- A level Computer Science student:
 // 1. Not at all
 // 2. No
@@ -1558,11 +1556,11 @@ On this diagram, the x-axis represents the number of threads being used to run t
 \
 To optimise the mining algorithm, I decide to do a mathematical analysis on the performance. I want the algorithm to use a number of threads that allows a very promising runtime, while not taking all the threads so that the user can run other programs at the same time. I decide to find a point on the graph where increasing the number of thread by 1 reduces the runtime by less than 7% as this is unlikely to affect the performance after that point (if you continue to increase the no. of threads). This can be represented mathematically by:
 $ y(x+1) > 0.93 y(x) $
-As the general formula for the runtime-threads graph takes in the form $y = A x^(-b) $, we can get that 
+As the general formula for the runtime-threads graph takes in the form $y = A x^(-b)$, we can get that
 $ y(x+1) / y(x) = ((x)/(x+1))^b > 0.93 $
 If we take the natural log of both sides, we get:
 $ b ln(x/(x+1)) > ln(0.93) $
-$ ln( x/ (x+1)) = ln(0.93)/b $
+$ ln(x/ (x+1)) = ln(0.93)/b $
 And raising both sides by $e$:
 $ x/(x+1) > e^ln(0.93^(1/b)) = 0.93^(1/b) $
 And slightly rearrange the formula, we get:
@@ -1570,9 +1568,9 @@ $ x > 0.93^(1/b) (x+1) $
 $ x - 0.93^(1/b)x > 0.93^(1/b) $
 $ x > 0.93^(1/b)/(1-0.93^(1/b)) $
 
-Plugging in the b value for our both functions $y = 6229.31698x^(-0.877645)$ where ($b = -0.877645$) and $y=12992.6705x^(-0.790351)$ where ($b = -0.790351$) from the high performance and the medium performance computer respectively, we get $x > 0.93^(1/(0.877645))/(1-0.93^(1/(0.877645)))$ and $x > 0.93^(1/(0.790351))/(1-0.93^(1/(0.790351)))$, which gives $x > 11.60 $ (to 4 s.f.) and $x > 10.40 $ (to 4 s.f.), which rounds to $x>12$ and $x>10$ as x can only take in positive integers.\
+Plugging in the b value for our both functions $y = 6229.31698x^(-0.877645)$ where ($b = -0.877645$) and $y=12992.6705x^(-0.790351)$ where ($b = -0.790351$) from the high performance and the medium performance computer respectively, we get $x > 0.93^(1/(0.877645))/(1-0.93^(1/(0.877645)))$ and $x > 0.93^(1/(0.790351))/(1-0.93^(1/(0.790351)))$, which gives $x > 11.60$ (to 4 s.f.) and $x > 10.40$ (to 4 s.f.), which rounds to $x>12$ and $x>10$ as x can only take in positive integers.\
 \
-Assuming there are more students with the medium performance computer, I introduce a weighting factor to account for the distribution of users. Let $w_1$ be the fraction of high-performance users and $w_2$ the fraction of medium-performance users with $ w_1 + w_2 = 1$. The weighted number of threads can then be calculated as $ x_("weight") = w_1 * x_1 + w_2 * x_2 $ where $x_1$ and $x_2$ are the optimal threads percentage calculated for the high-performance and medium-performance machines, respectively. For example, if 20% of students have high-performance computers ($w_1 = 0.2$) and 80% have medium-performance machines ($w_2 = 0.8)$, we get: $ x_("weight") = 0.2 * 12/20 + 0.8 * 10/12 = 0.7867 "(to 4 s.f.)" approx 0.8 $
+Assuming there are more students with the medium performance computer, I introduce a weighting factor to account for the distribution of users. Let $w_1$ be the fraction of high-performance users and $w_2$ the fraction of medium-performance users with $w_1 + w_2 = 1$. The weighted number of threads can then be calculated as $ x_("weight") = w_1 * x_1 + w_2 * x_2 $ where $x_1$ and $x_2$ are the optimal threads percentage calculated for the high-performance and medium-performance machines, respectively. For example, if 20% of students have high-performance computers ($w_1 = 0.2$) and 80% have medium-performance machines ($w_2 = 0.8)$, we get: $ x_("weight") = 0.2 * 12/20 + 0.8 * 10/12 = 0.7867 "(to 4 s.f.)" approx 0.8 $
 
 Therefore, I can conclude that using around 80% of the stakeholder's CPU threads for web workers gives the best performance because it keeps most system stable while still using most of the cores for mining. If you max out all threads, the OS and main thread have no room to handle background tasks, causing thread contention, lag, and even slower results. Leaving a few threads free ensures smoother communication and better overall throughput.
 #pagebreak()
@@ -1586,10 +1584,13 @@ let NUM_WORKERS = eighty_percent_of_threads;
 \
 
 #subpar.grid(
-  move(figure(
-    image("images/mid_cpu_not_running.png", width: 100%),
-    caption: [Threads on medium performance laptop when the algorithm is not running],
-  ),dx:0em),
+  move(
+    figure(
+      image("images/mid_cpu_not_running.png", width: 100%),
+      caption: [Threads on medium performance laptop when the algorithm is not running],
+    ),
+    dx: 0em,
+  ),
   <a>,
 
   figure(
@@ -1822,7 +1823,7 @@ The whole Iteration 2 blockchain core structure will look like this:
 \
 2. `mineBlock(difficulty)`\
   The `mineBlock(difficulty)` function will use the proof of work algorithm that I made in Iteration 1. It will pass in the transactions which is an array of strings, and difficulty of the blockchain network as a number. then output the nonce and the updated hash of the block. As we are using the PoW mining `startMining` function from Iteration 1, however the `startMining` is a procedure and does not return any value. Therefore I will have to modify the `startMining` function to return a *Promise* and make it an `async` function. A Promise is a TypeScript construct that represents a value that will become available in the future. In this case, the value is the mined nonce and hash. Wrapping the mining logic in a Promise allows the program to continue running other tasks while the mining is happening asynchronously. The structure of the wrapping looks like this:
-  // TODO: Tell that this is an error encounted
+// TODO: Tell that this is an error encounted
 ```ts
 return new Promise<{ nonce: number; hash: string }>((resolve) => {
   // start mining with web workers
@@ -2050,10 +2051,10 @@ console.log(JSON.stringify(myChain.chain, null, 2))
 ```
 The ouptut has to be 'JSONified' since the attribute `myChain.chain` is an array consists of blocks, which contains the methods of `calculateHash()` and `mineBlock()`. Using a `JSONify` doesn't print the functions of the block, increasing the readability of the output. When printed directly, TypeScript doesn't automatically display the full object structure — it just shows `[object Object]`. \
 \
-Using JSON.stringify() converts the object data (its properties and values) into a readable JSON string format that can be shown neatly in the console, making it easier to inspect the entire blockchain state. In `JSON.stringify(myChain.chain, null, 2)`: 
-  - The first parameter (myChain.chain) is the object or array you want to convert into JSON
-  - The second parameter (null) is the replacer, which lets you filter or transform values before converting — null means “include everything as-is.”
-  - The third parameter (2) sets the indentation level, telling the output to use 2 spaces per level for readability.
+Using JSON.stringify() converts the object data (its properties and values) into a readable JSON string format that can be shown neatly in the console, making it easier to inspect the entire blockchain state. In `JSON.stringify(myChain.chain, null, 2)`:
+- The first parameter (myChain.chain) is the object or array you want to convert into JSON
+- The second parameter (null) is the replacer, which lets you filter or transform values before converting — null means “include everything as-is.”
+- The third parameter (2) sets the indentation level, telling the output to use 2 spaces per level for readability.
 2. *Boundary Tests*:
 - Empty mempool to test what would happen when no transaction has to be mined into blocks but user tries to mine a block -- Expected Result: 'No transactions to mine':
 ```ts
@@ -2140,26 +2141,28 @@ async function reMiningTest() {
 The test is observational. This means that we will have to analyse the output to know if the code that we made actually function as it should. As expected, while the code isn't there, none of the tests passed. However once the code has been developed, this is the result of the tests:
 ===== Normal Tests Result
 #figure(
-subpar.grid(
-  figure(move(dx:-1em,dy:0em,(image("images/I2_normal_test.png", width: 135.5%)))), <a>,
-  figure(move(dx:3em,dy:0em,(image("images/I2_normal_test_cont.png", width: 115%)))), <b>,
-  columns: (1fr, 1fr),
-  label: <full>,
-),caption:[Iteration 2 Normal Test Results])
+  subpar.grid(
+    figure(move(dx: -1em, dy: 0em, (image("images/I2_normal_test.png", width: 135.5%)))), <a>,
+    figure(move(dx: 3em, dy: 0em, (image("images/I2_normal_test_cont.png", width: 115%)))), <b>,
+    columns: (1fr, 1fr),
+    label: <full>,
+  ),
+  caption: [Iteration 2 Normal Test Results],
+)
 Looking at the test result, I have shown that different functions working in action, and how they are successfully connected to each other. For example, with the block mining in `myChain.minePendingTransaction()`, there is some log from the console which tells how long the mining took, this is from the `startMining()` function from Iteration 2. The log showing also implies that when the `myChain.minePendingTransaction()` is called, it is sucessfully connected to `Block.getLatestBlock()` and `Block.mineBlock()` which calls the `startMining` function. The annotations show that how each functions are involved in the algorithm.
 
 ===== Boundary Tests Result
-#figure(align(image("images/I2-boundary.png", width: 44%), center), caption:[Iteration 2 Boundary Tests Result])
+#figure(align(image("images/I2-boundary.png", width: 44%), center), caption: [Iteration 2 Boundary Tests Result])
 I have truncated some of the transactions output and them after being turned into a string due to the space it's taking (this will not be showned in the GUI), denoted by my `...` in my annotations. The boundary tests have successfully shown that:
 - The validation for empty mempool is correct
 - The `fakeHash()` function working as the transaction length doesn't matter
 - The more time taken by higher difficulty blockchain network level
 ===== Errorneous Tests Result
-#figure(image("images/I2-error.png",width:50%),caption:[Iteration 2 Errorneous Tests Result])
-There are a few things going on here. Firstly, for my "Invalid Transaction type" test, there was no error being raised, which was what is expected. However, the error actually did raise, but not in runtime. TypeScript automatically highlights the invalid type in the IDE, which is shown like this: 
-#figure(image("images/I2-erroneous.png"), caption:[TypeScript raising type error])
+#figure(image("images/I2-error.png", width: 50%), caption: [Iteration 2 Errorneous Tests Result])
+There are a few things going on here. Firstly, for my "Invalid Transaction type" test, there was no error being raised, which was what is expected. However, the error actually did raise, but not in runtime. TypeScript automatically highlights the invalid type in the IDE, which is shown like this:
+#figure(image("images/I2-erroneous.png"), caption: [TypeScript raising type error])
 This is good as I can spot the wrong input during development. However, at the end product, the code will not be shown to the users, therefore data has to be validated. This will be done in Iteration 5 where I improve the user experience.\
-\ 
+\
 Another problem in this test is the `InvalidStateError` in the reMining tests. This error is sometimes raised and sometimes not. This is beacuse each worker runs `assignWork()` repeatedly with `setTimeout(assignwork, 0)` -- meaning it's in an infinite async loop, posting new work until mining stops. When `stopMining()` is called (after one worker finds a valid hash), it terminates all workers. The problem though is that some workers still have pending `setTimeout(assignWork,0)` callbacks queued. So they wake up, try to call `worker.postMessage()` again but the worker has already been terminated, causing the `InvalidStateError`. \
 #pagebreak()
 This only happens in the 'Re-mining Test' because the test that triggers this (reMiningTest) calls `mineBlock()` directly again after mining once. This means that the global worker pool and `running` flag from the previous mining session are still in use. The new workers are starting while the old ones are mid-termination. Therfore they're racing.\
@@ -2168,7 +2171,7 @@ To fix this, I will have to clear all the workers before the program being calle
 ```ts
 workers = []
 ```
-This fixes the issue of workers being terminated but still tries to do `postMessage`. However as the code is fixed, another problem is arised: The blockchain is valid after being remined. This shouldn't be the case as the blockchain shouldn't allow tampering, as this will invalidate the chain. This is because the `Block` class doesn't track whether it's already mined, so calling `mineBlock()` again just overwrites nonce and hash. Therefore I will have to add a `mined` flag (variable) to track if a block has been mined before. 
+This fixes the issue of workers being terminated but still tries to do `postMessage`. However as the code is fixed, another problem is arised: The blockchain is valid after being remined. This shouldn't be the case as the blockchain shouldn't allow tampering, as this will invalidate the chain. This is because the `Block` class doesn't track whether it's already mined, so calling `mineBlock()` again just overwrites nonce and hash. Therefore I will have to add a `mined` flag (variable) to track if a block has been mined before.
 ```ts
 mined: boolean = false;
 ```
@@ -2192,24 +2195,41 @@ I have invited one of my stakeholders, Ben, to review my blockchain core structu
 // WWW
 
 // EBI
+// Data Validation
 In Iteration 2, most of the functions have been developed very specifically for one case. For example, the `minePendingTransactions()` function is way too tied with the blockchain's internal state -- it hard-coded `this.mempool` as the only source of transactions. In Iteration this can work because we are only doing everything in one user (node), which means that the only transactions are the ones in the local mempool. However, in Iteration 3 when I start to develop the CLI, I will have multiple users (nodes) in the network, each with their own mempool. Therefore I will have to modify the `minePendingTransactions()` functions to take in the transactions as a parameter, instead of directly accessing from `this.mempool`. This will make the function more reusable for different users (nodes) in the network. Although the functions in this Iteration were modular, they should be more pure to make it more reusable.\
 \
 In Iteration 3, I will fix the functions that have to be reused to be more pure functions. This means that the functions can be reused, especially between different users (nodes) in the network. This will make the code more maintainable and easier to test in the future.
 
 #pagebreak()
 == Iteration 3
-In Iteration 3, I will start to code a Command Line Interface (CLI) for my simulator. This will be a Minimum Viable Product (MVP). In this iteration, I will be linking everything that I had in the proof of concepts in Iteration 1 and the core block structure in Iteration 2 into one command line interface. This includes the demomstration of adding users to the blockchain network, connecting the users to each other, algorithm to prevent double spending and tracking users' balances, showing how the blocks are propagating through the network after being added to the network, and the basic core structure which has been developed in Iteration 2.
+In Iteration 3, I will start to code a Command Line Interface (CLI) for my simulator. This will be a Minimum Viable Product (MVP). In this iteration, I will be linking everything that I had in the proof of concepts in Iteration 1 and the core block structure in Iteration 2 into one command line interface. In addition, this will also include the demomstration of adding users to the blockchain network, connecting the users to each other, algorithm to prevent double spending and tracking users' balances, showing how the blocks are propagating through the network after being added to the network.
 
 === Decomposition for Iteration 3
+#figure(image("images/I3-decomposition.png"), caption: [Iteration 3 Decomposition])
+In the decomposition diagram, I have splitted this Iteration into 4 main categories:
++ implementing the `Balances` class which validates if the transaction is correct, i.e. sufficient balance for sender before transactions, checking if user has double spend a coin
++ Implementing the `Node` class which represent users in nodes, and it will contain individual user data, such as name, local copy of blockchain and the user's neighbours (who they're connected to in the network) 
++ Implementing the `Network` class which controls the whole blockchain, doing actions such as adding users into the network
++ Create a CLI which takes input from learners which allows them to manipulate the blockchain
 
-=== Goals
+I have decided to make 3 files for this Iteration, excluding the testing files. This includes the `balances.ts` which contains the transaction validation algorithm, `network.ts` which contains the algorihtms for each individual users and the entire network, and `cli.ts` which includes the interface and the menu of the CLI.
+=== Iteration 3 Goal
 - Create class `Balances` which tracks user balances and prevents double spending
 - Create class `Node` which represents a user in the blockchain network
-- Create class `Network` which manages multiple nodes and their connections
-- Create functions for adding nodes, connecting nodes, broadcasting blocks
+- Create class `Network` which manages multiple nodes and their connections, including functions for adding nodes, connecting nodes, broadcasting blocks
 - Create a Command Line Interface (CLI) for the blockchain Simulator
 
-
+=== Design for Balances class
+I decide to track the user balances with a class. This is because it allows me to create functions to validate the transactions. In my research section (@research) under the transaction validity, I had an initial design as a flowchart. However, they are how real blockchain ones work, and without simplification. To allow my stakeholders -- A level students to understand the concept of blockchain, I will make some abstract the idea of blockchain and implement it differently. Here is the decomposition of the `Balances` class.
+#figure(image("images/balances.png"), caption:[Decomposition for the Balances class])
+Attributes: 
+- balances (Map\<string,number>): This is an array to track the users with the  
+- initialBalance (number): The amount of coins when users join the network, set to 100 by default
+Methods:
+- Get 
+Simlification that I have made:
+Initially, when each users join the network, they will be assigned 100 coins, this is obviously not the case in real world since they are not given free coins by joining a blockchain network. \
+=== Design for Node
 === Design for CLI
 I quite like the menu from Sean CLI from @sean-cli due to the readability of the menu and easy to understand interface. When I start his simulator, there is a menu page which allows you to navigate to different sections such as the `blockchain` section and the `p2p` section. Therefore I am going to use this idea to create the menu page for my simulator. After research into different command line libraries, I have decided to choose `readline` API library. This is because the `readline` API provides a simple and built-in way to handle user input directly from the terminal, without needing to install any extra packages. It also works seamlessly with Bun, since Bun implements Node's core `readline` module by default. On top of that, it makes the cli look cleaner and more organised -- similar to Sean CLI -- allowing me to create a visually clear and intuitive menu system for navigating between different components of my blockchain simulator.\
 \
@@ -2217,10 +2237,16 @@ I quite like the menu from Sean CLI from @sean-cli due to the readability of the
 
 
 // TODO: making the functions more pure
-As mention in the Analysis of Iteration 2, I will be modifying some functions to make them more pure and do not alter the global variables or state. 
+As mention in the Analysis of Iteration 2, I will be modifying some functions to make them more pure and do not alter the global variables or state.
 // TODO: adding `if (!transactions)` into the Blockchain.mineBlock() function
 === Testing
+
+
+=== Manual Testing
+// Users shouldn't have debt
+
 === Evaluation
+I have invited x of my stakeholders
 // TODO: data validation in the future
 == Iteration 4
 In Iteration 4, I will be developing a Graphical User Interface (GUI) for my blockchain simulator.
