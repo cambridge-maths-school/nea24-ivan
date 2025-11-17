@@ -128,7 +128,7 @@ Transactions are first broadcast to the network and stored in the mempool -- a c
 
 \
 
-2. Transaction Validity 
+2. Transaction Validity
 Transactions must satisfy several criteria before being considered valid. Miners only include valid transactions in blocks.
 
 Algorithm: Validate Transaction \
@@ -2208,7 +2208,7 @@ In Iteration 3, I will start to code a Command Line Interface (CLI) for my simul
 #figure(image("images/I3-decomposition.png"), caption: [Iteration 3 Decomposition])
 In the decomposition diagram, I have splitted this Iteration into 4 main categories:
 + Implementing the `Balances` class which validates if the transaction is correct, i.e. sufficient balance for sender before transactions, checking if user has double spend a coin
-+ Implementing the `Node` class which represent users in nodes, and it will contain individual user data, such as name, local copy of blockchain and the user's neighbours (who they're connected to in the network) 
++ Implementing the `Node` class which represent users in nodes, and it will contain individual user data, such as name, local copy of blockchain and the user's neighbours (who they're connected to in the network)
 + Implementing the `Network` class which controls the whole blockchain, doing actions such as adding users into the network
 + Create a CLI which takes input from learners which allows them to manipulate the blockchain
 
@@ -2221,9 +2221,9 @@ I have decided to make 3 files for this Iteration, excluding the testing files. 
 
 === Design for Balances class
 I decide to track the user balances with a class. This is because it allows me to create functions to validate the transactions. In my research section (@research) under the transaction validity, I had an initial design as a flowchart. However, they are how real blockchain ones work, and without simplification. To allow my stakeholders -- A level students to understand the concept of blockchain, I will make some abstract the idea of blockchain and implement it differently. Here is the decomposition of the `Balances` class.
-#figure(image("images/balances.png"), caption:[Decomposition for the Balances class])
-Attributes: 
-- balances (Map\<string,number>): This is an array to track the users with the  
+#figure(image("images/balances.png"), caption: [Decomposition for the Balances class])
+Attributes:
+- balances (Map\<string,number>): This is an array to track the users with the
 - initialBalance (number): The amount of coins when users join the network, set to 100 by default
 Methods:
 - getBalances(username: string): number -- This function takes in the username as a string and return the balance of the user as a number. Validation: If the user doesn't exist, return 0
@@ -2235,7 +2235,170 @@ Simplification that I have made:\
 Initially, when each users join the network, they will be assigned 100 coins, this is obviously not the case in real world since they are not given free coins by joining a blockchain network. \
 === Design for Testing Balances class
 I will be making unit tests for the `Balances` class. This is because the functions are pure functions and they don't depend on any other classes. Therefore I can test them individually without worrying about the other classes. The tests will be done in a separate file called `balances.test.ts`. The tests will include:
-=== Design for Node
+- Adding users to the blockchain network
+- Check if user has got enough balances before transaction
+- Checking the logic when transaction is applied
+- testing the printBalances return the correct balances of users
++ Adding users to the blockchain network can be tested by the addUser() function and the getBalance() function. The addUser() perform the actual function to add the users into the network while the getBalance() verifies that the user is in the network and has the right amount of balances in the map.
+```ts
+// ====== Adding Users Test ====== (addUser() and getBalance())
+test("Adding Users to the network", () => {
+  let balances = new Balances();
+  balances.addUser("Ada");
+  expect(balances.getBalance("Ada")).toBe(100);
+  balances.addUser("Bob");
+  expect(balances.getBalance("Bob")).toBe(100);
+  // Mutiple users
+  for (let i = 0; i < 10; i++) {
+    balances.addUser(`User${i}`);
+    expect(balances.getBalance(`User${i}`)).toBe(100);
+  }
+});
+```
+2. Since the hasFunds() function only returns a boolean, this will be easy to test. I can make a few boundary tests and unexpected input.
+```ts
+// ======= hasFunds() ======
+test("hasFunds()", () => {
+  let balances = new Balances();
+  balances.addUser("Alice");
+  console.log(balances.getBalance("Alice"));
+  expect(balances.hasFunds("Alice", 50)).toBe(true);
+  expect(balances.hasFunds("Alice", 150)).toBe(false);
+  expect(balances.hasFunds("Alice", 100)).toBe(true); // Boundary
+  expect(balances.hasFunds("Bob", 10)).toBe(false); // Bob does not exist
+});
+```
+3. To test the transaction logic, I will have to track the balances of the sender and the receiver.
+```ts
+// ======= applyTransaction() ======
+test("applyTransaction()", () => {
+  let balances = new Balances();
+  balances.addUser("Alice");
+  balances.addUser("Bob");
+
+  // Alice pays Bob 30 coins
+  balances.applyTransaction("Alice", "Bob", 30);
+  expect(balances.getBalance("Alice")).toBe(70);
+  expect(balances.getBalance("Bob")).toBe(130);
+
+  // Bob pays Alice 50 coins
+  balances.applyTransaction("Bob", "Alice", 50);
+  expect(balances.getBalance("Alice")).toBe(120);
+  expect(balances.getBalance("Bob")).toBe(80);
+});
+```
+4. The printBalances() function has two tests -- One to test when a specific user is passed in as a parameter, it returns the balance of that user. The other test is used when no specific user is passed in as a parameter, it should be able to return the balances of all users. Errorneous tests such as a invalid user could be used to test the validation I am going to make for the function.
+```ts
+// ======= printBalances() ======
+test("printBalances() - Specific User", () => {
+  let balances = new Balances();
+  balances.addUser("Alice");
+  balances.addUser("Bob");
+
+  expect(balances.printBalances("Alice")).toBe("Alice: 100");
+  expect(balances.printBalances("Bob")).toBe("Bob: 100");
+  expect(() => {
+    balances.printBalances("Charlie");
+  }).toThrowError("User Charlie not found.");
+});
+test("printBalances() - All Users", () => {
+  let balances = new Balances();
+  balances.addUser("Alice");
+  balances.addUser("Bob");
+
+  let allBalances = balances.printBalances();
+  expect(allBalances).toContain("Alice: 100");
+  expect(allBalances).toContain("Bob: 100");
+});
+```
+=== Development for Balances class
+It makes it a lot simpler to develop each functions after decomposing the work into small parts and setting goals of each functions by setting tests.\
+\
+Here is the code for the `Balances` class:
+```ts
+export class Balances {
+  private balances: Map<string, number> = new Map();
+  private initialBalance: number;
+
+  constructor(initialBalance: number = 100) {
+    this.initialBalance = initialBalance;
+  }
+
+  addUser(username: string) {
+    if (!this.balances.has(username)) {
+      this.balances.set(username, this.initialBalance);
+    }
+  }
+
+  getBalance(username: string): number {
+    return this.balances.get(username) ?? 0;
+  }
+
+  hasFunds(username: string, amount: number): boolean {
+    if (this.balances.has(username)) {
+      return this.getBalance(username) >= amount;
+    }
+    return false;
+  }
+
+  applyTransaction(from: string, to: string, amount: number): void {
+    if (!this.balances.has(from) || !this.balances.has(to)) {
+      throw new Error("Sender or receiver does not exist.");
+    }
+    let toBal = this.getBalance(to);
+    this.balances.set(to, toBal + amount);
+  }
+
+  printBalances(username?: string): string {
+    if (username && !this.balances.has(username)) {
+      console.log(`User ${username} not found.`);
+    }
+
+    if (username) {
+      let balance = this.balances.get(username);
+      if (balance === undefined) {
+        throw new Error(`User ${username} not found.`);
+      } else {
+        return `${username}: ${balance}`;
+      }
+    }
+
+    if (this.balances.size === 0) {
+      return "No users in network.";
+    }
+    let arr = "";
+    for (let [user, balance] of this.balances.entries()) {
+      arr += `${user}: ${balance}\n`;
+    }
+    return arr;
+  }
+}
+```
+A few special things in my code:
+- All of the attributes in the code are private so that it cacn prevent the alteration of the balances by outside function accidentally, or user trying to hack the console by accessing the Balances and changing them.
+- The nullish coalescing operation `??` is used in getBalance() to deal with possible invalid inputs in case `this.balances.get(username)` is null or undefined.\
+\
+=== Balances Tests Results
+#figure(image("images/balances_test.png"), caption:[Test for Balances Class])
+As expected, all of tests are passing without causing any issues. Therefore the Balances class is ready to be combined with other features of the simulator.
+=== Design for Node Class
+Similar to the Balance class, I start by decomposing the Node class:
+#figure(image("images/node_decomp.jpeg", width:80%))
+The Node class should be simple and only has 1 method. However they have 3 attributes: username, a local copy of blockchain, and its neighbours. This is because the Node class is more of a container to store the data for every user in the network.\
+\
+Attributes: 
+- username: string -- The name of the new user being added to the network
+- blockchain: Blockchain -- The local copy of the blockchain
+- neighbours: Node[] -- This includes the users that the new user is connected to in the network
+Method:
+- addNeighbour(node: Node) -- connecting a user in the network to the new user
+=== Design for Node Tests
+
+=== Development for Node
+
+
+=== Design 
+// TODO: Simplification I have made: The learner can decide to connect the users that they like
 === Design for CLI
 I quite like the menu from Sean CLI from @sean-cli due to the readability of the menu and easy to understand interface. When I start his simulator, there is a menu page which allows you to navigate to different sections such as the `blockchain` section and the `p2p` section. Therefore I am going to use this idea to create the menu page for my simulator. After research into different command line libraries, I have decided to choose `readline` API library. This is because the `readline` API provides a simple and built-in way to handle user input directly from the terminal, without needing to install any extra packages. It also works seamlessly with Bun, since Bun implements Node's core `readline` module by default. On top of that, it makes the cli look cleaner and more organised -- similar to Sean CLI -- allowing me to create a visually clear and intuitive menu system for navigating between different components of my blockchain simulator.\
 \
@@ -2253,6 +2416,8 @@ As mention in the Analysis of Iteration 2, I will be modifying some functions to
 === Manual Testing
 // Users shouldn't have debt
 
+=== Userbility Test
+// TODO: ask the stakeholder to try crash the code
 === Evaluation
 I have invited x of my stakeholders
 // TODO: data validation in the future

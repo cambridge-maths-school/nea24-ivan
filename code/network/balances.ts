@@ -40,7 +40,6 @@ export class Balances {
     if (username && !this.balances.has(username)) {
       console.log(`User ${username} not found.`);
     }
-    console.log("=== Balances ===");
 
     if (username) {
       let balance = this.balances.get(username);

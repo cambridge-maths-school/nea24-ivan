@@ -13,7 +13,7 @@ export class Node {
     this.blockchain = new Blockchain(difficulty);
   }
 
-  addneighbour(node: Node) {
+  addNeighbour(node: Node) {
     if (!this.neighbours.includes(node)) this.neighbours.push(node);
   }
 }
@@ -187,6 +187,7 @@ export class Network {
   }
   // Show user balances
   showBalances(username?: string) {
+    console.log("=== Balances ===");
     console.log(this.balances.printBalances(username));
   }
 
@@ -218,8 +219,8 @@ export class Network {
     let n1 = this.getNode(user1);
     let n2 = this.getNode(user2);
     if (!n1 || !n2) return;
-    n1.addneighbour(n2);
-    n2.addneighbour(n1);
+    n1.addNeighbour(n2);
+    n2.addNeighbour(n1);
     console.log(`${user1} and ${user2} are now neighbours.`);
   }
 }

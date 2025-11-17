@@ -20,9 +20,9 @@ test("Adding Users to the network", () => {
 test("hasFunds()", () => {
   let balances = new Balances();
   balances.addUser("Alice");
-  console.log(balances.getBalance("Alice"));
   expect(balances.hasFunds("Alice", 50)).toBe(true);
   expect(balances.hasFunds("Alice", 150)).toBe(false);
+  expect(balances.hasFunds("Alice", 100)).toBe(true); // Boundary
   expect(balances.hasFunds("Bob", 10)).toBe(false); // Bob does not exist
 });
 
