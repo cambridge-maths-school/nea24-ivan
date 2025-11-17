@@ -25,7 +25,7 @@ export class Network {
   balances: Balances = new Balances(100);
 
   // Add a new node
-  addUser(username: string) {
+  addUser(username: string): string {
     if (this.nodes.has(username)) {
       return `User ${username} already exists.`;
     }
@@ -40,24 +40,40 @@ export class Network {
   }
 
   // Add transaction to global mempool
-  addTransaction(from: string, to: string, amount: number) {
+  addTransaction(from: string, to: string, amount: number): void {
     let sender = this.getNode(from);
     let receiver = this.getNode(to);
     if (!sender || !receiver) {
       console.log("Sender or receiver not found.");
       return;
     }
+
+    // Fix Debt Issues
+    // let pendingBalance = this.balances.getBalance(from);
+    // for (let tx of this.mempool) {
+    //   let [f, , , amtStr] = tx.split(" ");
+    //   let a = parseInt(amtStr);
+    //   if (f === from) pendingBalance -= a;
+    // }
+    // if (pendingBalance < amount) {
+    //   console.log(
+    //     `${from} does not have enough coins after pending transactions.`
+    //   );
+    //   return;
+    // }
+
     if (!this.balances.hasFunds(from, amount)) {
       console.log(`${from} does not have enough coins.`);
       return;
     }
+
     let tx = `${from} pays ${to} ${amount} coins`;
     this.mempool.push(tx);
     console.log(`Transaction added to global mempool: ${tx}`);
   }
 
   // Mine transactions for a given node
-  async mine(username: string) {
+  async mine(username: string): Promise<void> {
     let node = this.getNode(username);
     if (!node) {
       console.log(`User ${username} not found.`);
@@ -95,7 +111,7 @@ export class Network {
   }
 
   // BFS/DFS propagation of latest block using imported traversals
-  propagate(startUsername: string, method: "bfs" | "dfs") {
+  propagate(startUsername: string, method: "bfs" | "dfs"): void {
     let startNode = this.getNode(startUsername);
     if (!startNode) {
       console.log(`Start user ${startUsername} not found.`);
@@ -136,7 +152,7 @@ export class Network {
   }
 
   // Display a user's blockchain
-  showChain(username: string) {
+  showChain(username: string): void {
     let node = this.getNode(username);
     if (!node) {
       console.log(`User ${username} not found.`);
@@ -149,7 +165,7 @@ export class Network {
   }
 
   // Validate a user's blockchain
-  validate(username: string) {
+  validate(username: string): void {
     let node = this.getNode(username);
     if (!node) {
       console.log(`User ${username} not found.`);
@@ -161,7 +177,7 @@ export class Network {
   }
 
   // Show all users
-  showUsers() {
+  showUsers(): IterableIterator<string> | void {
     if (this.nodes.size === 0) {
       console.log("No users in the network.");
       return;
@@ -171,7 +187,7 @@ export class Network {
   }
   // Show user balances
   showBalances(username?: string) {
-    this.balances.printBalances(username);
+    console.log(this.balances.printBalances(username));
   }
 
   // Show a user's neighbours

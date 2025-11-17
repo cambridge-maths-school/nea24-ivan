@@ -17,10 +17,17 @@ export class Balances {
   }
 
   hasFunds(username: string, amount: number): boolean {
-    return this.getBalance(username) >= amount;
+    if (this.balances.has(username)) {
+      return this.getBalance(username) >= amount;
+    }
+    return false;
   }
 
-  applyTransaction(from: string, to: string, amount: number) {
+  applyTransaction(from: string, to: string, amount: number): void {
+    if (!this.balances.has(from) || !this.balances.has(to)) {
+      throw new Error("Sender or receiver does not exist.");
+    }
+    // Mining reward
     if (from !== "system") {
       let fromBal = this.getBalance(from);
       this.balances.set(from, fromBal - amount);
@@ -29,26 +36,28 @@ export class Balances {
     this.balances.set(to, toBal + amount);
   }
 
-  printBalances(username?: string) {
+  printBalances(username?: string): string {
+    if (username && !this.balances.has(username)) {
+      console.log(`User ${username} not found.`);
+    }
     console.log("=== Balances ===");
 
     if (username) {
       let balance = this.balances.get(username);
       if (balance === undefined) {
-        console.log(`User ${username} not found.`);
+        throw new Error(`User ${username} not found.`);
       } else {
-        console.log(`${username}: ${balance}`);
+        return `${username}: ${balance}`;
       }
-      return;
     }
 
     if (this.balances.size === 0) {
-      console.log("No users in network.");
-      return;
+      return "No users in network.";
     }
-
+    let arr = "";
     for (let [user, balance] of this.balances.entries()) {
-      console.log(`${user}: ${balance}`);
+      arr += `${user}: ${balance}\n`;
     }
+    return arr;
   }
 }

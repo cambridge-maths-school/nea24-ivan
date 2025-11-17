@@ -2207,7 +2207,7 @@ In Iteration 3, I will start to code a Command Line Interface (CLI) for my simul
 === Decomposition for Iteration 3
 #figure(image("images/I3-decomposition.png"), caption: [Iteration 3 Decomposition])
 In the decomposition diagram, I have splitted this Iteration into 4 main categories:
-+ implementing the `Balances` class which validates if the transaction is correct, i.e. sufficient balance for sender before transactions, checking if user has double spend a coin
++ Implementing the `Balances` class which validates if the transaction is correct, i.e. sufficient balance for sender before transactions, checking if user has double spend a coin
 + Implementing the `Node` class which represent users in nodes, and it will contain individual user data, such as name, local copy of blockchain and the user's neighbours (who they're connected to in the network) 
 + Implementing the `Network` class which controls the whole blockchain, doing actions such as adding users into the network
 + Create a CLI which takes input from learners which allows them to manipulate the blockchain
@@ -2226,28 +2226,37 @@ Attributes:
 - balances (Map\<string,number>): This is an array to track the users with the  
 - initialBalance (number): The amount of coins when users join the network, set to 100 by default
 Methods:
-- Get 
-Simlification that I have made:
+- getBalances(username: string): number -- This function takes in the username as a string and return the balance of the user as a number. Validation: If the user doesn't exist, return 0
+- addUser(username: string): string -- This function takes in the username as a string and add the user into the balances array (map) with the initial balance. It returns a string message of who is being added to the network. Validation: If the user already exists, a string message will be returned saying the user already exists
+- applyTransaction(from: string, to: string, amount: number): void -- This is a function that applies the transaction to the balances map. It takes in the sender username, receiver username and the amount of coins to be transferred. Validation: If the sender doesn't have enough balance, an error will be thrown. This can be done by using the getBalances() function to get the sender's balance and compare it with the amount to be transferred. If the sender doesn't have enough balance, an error will be thrown. If the usernames don't exist, an error will also be thrown.
+- printBalances(username?: string): string -- This function takes in an optional username as a string. If the username is provided, it will return the balance of the user. If not, it will return the balances of all users in the network. Validation: If the user doesn't exist, a message will be printed saying the user doesn't exist.
+- hasFunds(username: string, amount: number): boolean -- This function takes in the username and the amount of coins to be transferred. It returns a boolean indicating whether the user has enough balance to make the transaction. Validation: If the user doesn't exist, return false.
+Simplification that I have made:\
 Initially, when each users join the network, they will be assigned 100 coins, this is obviously not the case in real world since they are not given free coins by joining a blockchain network. \
+=== Design for Testing Balances class
+I will be making unit tests for the `Balances` class. This is because the functions are pure functions and they don't depend on any other classes. Therefore I can test them individually without worrying about the other classes. The tests will be done in a separate file called `balances.test.ts`. The tests will include:
 === Design for Node
 === Design for CLI
 I quite like the menu from Sean CLI from @sean-cli due to the readability of the menu and easy to understand interface. When I start his simulator, there is a menu page which allows you to navigate to different sections such as the `blockchain` section and the `p2p` section. Therefore I am going to use this idea to create the menu page for my simulator. After research into different command line libraries, I have decided to choose `readline` API library. This is because the `readline` API provides a simple and built-in way to handle user input directly from the terminal, without needing to install any extra packages. It also works seamlessly with Bun, since Bun implements Node's core `readline` module by default. On top of that, it makes the cli look cleaner and more organised -- similar to Sean CLI -- allowing me to create a visually clear and intuitive menu system for navigating between different components of my blockchain simulator.\
 \
 === Designing tests for CLI
 
-
+=== Enhancing Features
+// TODO: Mining Reward
 // TODO: making the functions more pure
 As mention in the Analysis of Iteration 2, I will be modifying some functions to make them more pure and do not alter the global variables or state.
 // TODO: adding `if (!transactions)` into the Blockchain.mineBlock() function
 === Testing
 
-
+=== Post Testing Modifications
+// TODO: add validation to prevent debt issues
 === Manual Testing
 // Users shouldn't have debt
 
 === Evaluation
 I have invited x of my stakeholders
 // TODO: data validation in the future
+// TODO: conflicted blocks
 == Iteration 4
 In Iteration 4, I will be developing a Graphical User Interface (GUI) for my blockchain simulator.
 
