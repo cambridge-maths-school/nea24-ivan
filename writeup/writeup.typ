@@ -2376,7 +2376,7 @@ export class Balances {
 ```
 A few special things in my code:
 - All of the attributes in the code are private so that it cacn prevent the alteration of the balances by outside function accidentally, or user trying to hack the console by accessing the Balances and changing them.
-- The nullish coalescing operation `??` is used in getBalance() to deal with possible invalid inputs in case `this.balances.get(username)` is null or undefined.\
+- The nullish coalescing operator `??` is used in getBalance() to deal with possible invalid inputs in case `this.balances.get(username)` is null or undefined.\
 \
 === Balances Tests Results
 #figure(image("images/balances_test.png"), caption:[Test for Balances Class])
@@ -2392,11 +2392,38 @@ Attributes:
 - neighbours: Node[] -- This includes the users that the new user is connected to in the network
 Method:
 - addNeighbour(node: Node) -- connecting a user in the network to the new user
+
+The implementation of neighbours store the connected nodes in an array. This is good as it looks like the adjacency list in Iteration 1. This allows me to propagate the local copy of blockchain across the whole network with the DFS/BFS algorithms that I have made in Iteration 1.
 === Design for Node Tests
 
 === Development for Node
+A lot of the code for this part is just the constructor. Therefore there isn't a lot to talk about. 
+```ts
+export class Node {
+  username: string;
+  blockchain: Blockchain;
+  neighbours: Node[] = [];
+
+  constructor(username: string, difficulty = 2) {
+    this.username = username;
+    this.blockchain = new Blockchain(difficulty);
+  }
+
+  addNeighbour(node: Node) {
+    if (!this.neighbours.includes(node)) this.neighbours.push(node);
+  }
+}
+```
+=== Node Test Results
+
+=== Decomposing Network Class
+The `Network` class should contains a lot of methods. This is because it should handle all the events within the blockchain network.
 
 
+
+// Image
+
+The majority of the output of the functions are strings. This is because I want all the processing to be done in this class, with the help of the built functions from the previous Iterations. Therefore, only the state message will be returned. This can help me to make a cli a lot easier.
 === Design 
 // TODO: Simplification I have made: The learner can decide to connect the users that they like
 === Design for CLI

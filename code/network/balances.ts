@@ -24,6 +24,7 @@ export class Balances {
   }
 
   applyTransaction(from: string, to: string, amount: number): void {
+    console.log(from, to, amount)
     if (!this.balances.has(from) || !this.balances.has(to)) {
       throw new Error("Sender or receiver does not exist.");
     }

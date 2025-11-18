@@ -40,12 +40,11 @@ export class Network {
   }
 
   // Add transaction to global mempool
-  addTransaction(from: string, to: string, amount: number): void {
+  addTransaction(from: string, to: string, amount: number): string {
     let sender = this.getNode(from);
     let receiver = this.getNode(to);
     if (!sender || !receiver) {
-      console.log("Sender or receiver not found.");
-      return;
+      return "Sender or receiver not found.";
     }
 
     // Fix Debt Issues
@@ -63,26 +62,23 @@ export class Network {
     // }
 
     if (!this.balances.hasFunds(from, amount)) {
-      console.log(`${from} does not have enough coins.`);
-      return;
+      return `${from} does not have enough coins.`;
     }
 
     let tx = `${from} pays ${to} ${amount} coins`;
     this.mempool.push(tx);
-    console.log(`Transaction added to global mempool: ${tx}`);
+    return `Transaction added to global mempool: ${tx}`;
   }
 
   // Mine transactions for a given node
-  async mine(username: string): Promise<void> {
+  async mine(username: string): Promise<string> {
     let node = this.getNode(username);
     if (!node) {
-      console.log(`User ${username} not found.`);
-      return;
+      return `User ${username} not found.`;
     }
 
     if (this.mempool.length === 0) {
-      console.log("No transactions to mine.");
-      return;
+      return "No transactions to mine.";
     }
     let transactionsToMine = [...this.mempool];
     let newBlock = await node.blockchain.minePendingTransactions(
@@ -95,6 +91,7 @@ export class Network {
       let from = parts[0];
       let to = parts[2];
       let amount = parseInt(parts[3]);
+      console.log(from, to, amount)
       this.balances.applyTransaction(from, to, amount);
     }
 
@@ -105,27 +102,21 @@ export class Network {
     this.mempool = [];
 
     let latestBlock = node.blockchain.getLatestBlock();
-    console.log(
-      `Block mined by ${username}: Index=${latestBlock.index}, Hash=${latestBlock.hash}, Nonce=${latestBlock.nonce}`
-    );
+    return `Block mined by ${username}: Index=${latestBlock.index}, Hash=${latestBlock.hash}, Nonce=${latestBlock.nonce}`;
   }
 
   // BFS/DFS propagation of latest block using imported traversals
-  propagate(startUsername: string, method: "bfs" | "dfs"): void {
+  propagate(startUsername: string, method: "bfs" | "dfs"): string {
     let startNode = this.getNode(startUsername);
     if (!startNode) {
-      console.log(`Start user ${startUsername} not found.`);
-      return;
+      return `Start user ${startUsername} not found.`;
     }
 
     let latestBlock = startNode.blockchain.getLatestBlock();
     let targetPrefix = "0".repeat(startNode.blockchain.difficulty);
 
     if (!latestBlock.hash.startsWith(targetPrefix)) {
-      console.log(
-        `Cannot propagate: latest block by ${startUsername} is not mined yet.`
-      );
-      return;
+      return `Cannot propagate: latest block by ${startUsername} is not mined yet.`;
     }
 
     // Build adjacency list for traversal
@@ -148,20 +139,20 @@ export class Network {
       }
     }
 
-    console.log(`${method.toUpperCase()} propagation: ${order.join(" -> ")}`);
+    return `${method.toUpperCase()} propagation: ${order.join(" -> ")}`;
   }
 
   // Display a user's blockchain
-  showChain(username: string): void {
+  showChain(username: string): string {
     let node = this.getNode(username);
-    if (!node) {
-      console.log(`User ${username} not found.`);
-      return;
-    }
+    if (!node) return `User ${username} not found.`;
+    let output_str = "";
     node.blockchain.chain.forEach((block) => {
-      console.log(`Index: ${block.index}, Hash: ${block.hash}`);
-      console.log(`Transactions: ${block.transactions.join(", ")}`);
+      output_str += `Index: ${block.index}, Hash: ${
+        block.hash
+      }\n Transactions: ${block.transactions.join(", ")}`;
     });
+    return output_str;
   }
 
   // Validate a user's blockchain

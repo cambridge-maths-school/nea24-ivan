@@ -5,10 +5,18 @@ import { Node, Network } from "./network.ts";
 // ====== Node Test =======
 test("Adding new node to the network", () => {
   let Dave = new Node("Dave");
-  let Alice = new Node("Alice")
-  Dave.addNeighbour(Alice)
-  expect(Dave.neighbours.includes(Alice))
-  expect(Alice.neighbours.includes(Dave))
+  let Alice = new Node("Alice");
+  Dave.addNeighbour(Alice);
+  expect(Dave.neighbours.includes(Alice));
+  expect(Alice.neighbours.includes(Dave));
+});
+
+test("Adding a whole network", () => {
+  let users = [];
+  for (let node of ["A", "B", "C"]) {
+    users.push(new Node(node));
+  }
+  console.log(users[0]);
 });
 
 // // ====== Adding Users Test ======

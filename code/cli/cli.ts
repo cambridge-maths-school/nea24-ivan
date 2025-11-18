@@ -42,20 +42,22 @@ async function main() {
         console.log(network.addUser(args[0]));
         break;
       case "add_tx":
-        network.addTransaction(args[0], args[1], parseInt(args[2]));
+        console.log(
+          network.addTransaction(args[0], args[1], parseInt(args[2]))
+        );
         break;
       case "mine":
-        await network.mine(args[0]);
+        console.log(await network.mine(args[0]));
         break;
       case "propagate":
         if (args.length != 2) {
           console.log("Usage: propagate <username> <bfs|dfs>");
           break;
         }
-        network.propagate(args[0], args[1] as "bfs" | "dfs");
+        console.log(network.propagate(args[0], args[1] as "bfs" | "dfs"));
         break;
       case "show_chain":
-        network.showChain(args[0]);
+        console.log(network.showChain(args[0]));
         break;
       case "validate":
         network.validate(args[0]);
