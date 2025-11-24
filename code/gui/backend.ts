@@ -7,7 +7,7 @@ export function addUser(username: string) {
 }
 
 export function connectUsers(from: string, to: string) {
-  backend.connectUsers(from, to);
+  return backend.connectUsers(from, to);
 }
 
 export function sendTransaction(from: string, to: string, amount: number) {

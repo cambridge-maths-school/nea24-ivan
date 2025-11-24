@@ -139,13 +139,23 @@ export class Network {
   }
 
   // Connect two users as neighbours
-  connectUsers(user1: string, user2: string) {
+  connectUsers(user1: string, user2: string): string {
     let n1 = this.getNode(user1);
     let n2 = this.getNode(user2);
-    if (!n1 || !n2) return;
+    if (!n1 || !n2) return ``;
     n1.addNeighbour(n2);
     n2.addNeighbour(n1);
-    console.log(`${user1} and ${user2} are now neighbours.`);
+    return `${user1}`, `${user2}`
+    return `${user1} and ${user2} are now neighbours.`;
+  }
+
+  // Validate a user's blockchain
+  validate(username: string): string {
+    let node = this.getNode(username);
+    if (!node) {
+      return `User ${username} not found.`;
+    }
+    return `Blockchain valid for ${username}? ${node.blockchain.isChainValid()}`;
   }
   // Display a user's blockchain
   showChain(username: string): string {
@@ -158,15 +168,6 @@ export class Network {
       }\n Transactions: ${block.transactions.join(", ")}`;
     });
     return output_str;
-  }
-
-  // Validate a user's blockchain
-  validate(username: string): string {
-    let node = this.getNode(username);
-    if (!node) {
-      return `User ${username} not found.`;
-    }
-    return `Blockchain valid for ${username}? ${node.blockchain.isChainValid()}`;
   }
 
   // Show all users
