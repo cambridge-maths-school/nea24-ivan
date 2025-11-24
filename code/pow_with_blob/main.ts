@@ -1,6 +1,8 @@
 // @ts-ignore
 import os from "os";
-let numThreads = os.cpus().length; // no. of threads
+// let numThreads = os.cpus().length; // no. of threads
+// let eighty_percent_of_threads = Math.max(1, Math.floor(numThreads * 0.8));
+let numThreads = navigator.hardwareConcurrency || 4;
 let eighty_percent_of_threads = Math.max(1, Math.floor(numThreads * 0.8));
 console.log(`Detected ${numThreads} logical CPU cores.`);
 let startTime: number;

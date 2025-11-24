@@ -2415,6 +2415,8 @@ export class Node {
 }
 ```
 === Node Test Results
+=== Design for Network Class
+The `Network` class will be the main part of my Iteration 3. This is because it will allow learners to 
 
 === Decomposing Network Class
 The `Network` class should contains a lot of methods. This is because it should handle all the events within the blockchain network.
@@ -2423,7 +2425,7 @@ The `Network` class should contains a lot of methods. This is because it should 
 
 // Image
 
-The majority of the output of the functions are strings. This is because I want all the processing to be done in this class, with the help of the built functions from the previous Iterations. Therefore, only the state message will be returned. This can help me to make a cli a lot easier.
+The majority of the output of the functions are strings. This is because I want all the processing to be done in this class, with the help of the built functions from the previous Iterations. Therefore, only the state message will be returned. This can help me to make a cli a lot easier as it only has to console.log() the output of the functions to show the state of the network.
 === Design 
 // TODO: Simplification I have made: The learner can decide to connect the users that they like
 === Design for CLI

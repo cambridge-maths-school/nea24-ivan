@@ -55,10 +55,7 @@ export class Network {
     //   if (f === from) pendingBalance -= a;
     // }
     // if (pendingBalance < amount) {
-    //   console.log(
-    //     `${from} does not have enough coins after pending transactions.`
-    //   );
-    //   return;
+    //   return `${from} does not have enough coins after pending transactions.`;
     // }
 
     if (!this.balances.hasFunds(from, amount)) {
@@ -91,12 +88,11 @@ export class Network {
       let from = parts[0];
       let to = parts[2];
       let amount = parseInt(parts[3]);
-      console.log(from, to, amount)
       this.balances.applyTransaction(from, to, amount);
     }
 
     // Give miner a reward
-    this.balances.applyTransaction("system", username, 10);
+    // this.balances.applyTransaction("system", username, 10);
 
     // Clear mempool after mining
     this.mempool = [];
@@ -142,13 +138,22 @@ export class Network {
     return `${method.toUpperCase()} propagation: ${order.join(" -> ")}`;
   }
 
+  // Connect two users as neighbours
+  connectUsers(user1: string, user2: string) {
+    let n1 = this.getNode(user1);
+    let n2 = this.getNode(user2);
+    if (!n1 || !n2) return;
+    n1.addNeighbour(n2);
+    n2.addNeighbour(n1);
+    console.log(`${user1} and ${user2} are now neighbours.`);
+  }
   // Display a user's blockchain
   showChain(username: string): string {
     let node = this.getNode(username);
     if (!node) return `User ${username} not found.`;
-    let output_str = "";
+    let output_str = `===== ${username}'s Blockchain =====`;
     node.blockchain.chain.forEach((block) => {
-      output_str += `Index: ${block.index}, Hash: ${
+      output_str += `\n\nIndex: ${block.index}, Hash: ${
         block.hash
       }\n Transactions: ${block.transactions.join(", ")}`;
     });
@@ -156,30 +161,25 @@ export class Network {
   }
 
   // Validate a user's blockchain
-  validate(username: string): void {
+  validate(username: string): string {
     let node = this.getNode(username);
     if (!node) {
-      console.log(`User ${username} not found.`);
-      return;
+      return `User ${username} not found.`;
     }
-    console.log(
-      `Blockchain valid for ${username}? ${node.blockchain.isChainValid()}`
-    );
+    return `Blockchain valid for ${username}? ${node.blockchain.isChainValid()}`;
   }
 
   // Show all users
-  showUsers(): IterableIterator<string> | void {
+  showUsers(): IterableIterator<string> | string {
     if (this.nodes.size === 0) {
-      console.log("No users in the network.");
-      return;
+      return "No users in the network.";
     }
     console.log(this.nodes.keys());
     return this.nodes.keys();
   }
   // Show user balances
   showBalances(username?: string) {
-    console.log("=== Balances ===");
-    console.log(this.balances.printBalances(username));
+    return "=== Balances ===\n" + this.balances.printBalances(username);
   }
 
   // Show a user's neighbours
@@ -201,17 +201,17 @@ export class Network {
   }
 
   // Show global mempool or per-user mempool
-  showMempool() {
+  showMempool(): string[] {
     return this.mempool;
   }
 
-  // Connect two users as neighbours
-  connectUsers(user1: string, user2: string) {
-    let n1 = this.getNode(user1);
-    let n2 = this.getNode(user2);
-    if (!n1 || !n2) return;
-    n1.addNeighbour(n2);
-    n2.addNeighbour(n1);
-    console.log(`${user1} and ${user2} are now neighbours.`);
+  getEdges() {
+    let result = [];
+    for (let [name, node] of this.nodes.entries()) {
+      for (let n of node.neighbours) {
+        result.push({ from: name, to: n.username });
+      }
+    }
+    return result;
   }
 }

@@ -1,12 +1,53 @@
 <!DOCTYPE html>
-<head>
-  <link href="index.css" rel="stylesheet" />
-</head>
-<title>Introduction</title>
-<div id="app">IvanChain</div>
-<p>
-  IvanChain is a platform for investors, developeds, learners to learn about
-  BlockChains, the underlying
-</p>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Blockchain Simulator</title>
+    <link rel="stylesheet" href="index.css" />
+    <script src="https://unpkg.com/vis-network@9.1.2/standalone/umd/vis-network.min.js"></script>
+  </head>
+  <body>
+    <div id="app-container">
+      <div id="network-container">
+        <div id="network"></div>
+      </div>
+      <div id="sidebar">
+        <h2>Balances</h2>
+        <div id="balances"></div>
 
-<script type="module" src="app.ts"></script>
+        <h2>Blockchain</h2>
+        <div id="blockchain"></div>
+
+        <h2>Mempool</h2>
+        <div id="mempool"></div>
+
+        <h2>User Actions</h2>
+        <div class="control-group">
+          <input type="text" id="usernameInput" placeholder="New Username" />
+          <button id="addUserBtn">Add User</button>
+        </div>
+        <div class="control-group">
+          <input type="text" id="connectFrom" placeholder="Connect From" />
+          <input type="text" id="connectTo" placeholder="Connect To" />
+          <button id="connectBtn">Connect Users</button>
+        </div>
+        <div class="control-group">
+          <input type="text" id="txFrom" placeholder="From" />
+          <input type="text" id="txTo" placeholder="To" />
+          <input type="number" id="txAmount" placeholder="Amount" />
+          <button id="sendTxBtn">Send Transaction</button>
+        </div>
+        <div class="control-group">
+          <button id="mineBtn">Mine Block</button>
+          <div id="mineStatus"></div>
+        </div>
+        <div class="control-group">
+          <button id="propagateBFS">Propagate BFS</button>
+          <button id="propagateDFS">Propagate DFS</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./app.ts"></script>
+  </body>
+</html>

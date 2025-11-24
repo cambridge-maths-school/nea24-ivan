@@ -1,3 +1,5 @@
-// @ts-ignore
-import.meta.hot.accept(); // makes HMR faster
-console.log("hello world!");
+import { initVisNetwork } from "../code/gui/visManager.ts";
+import { initUI } from "../code/gui/ui.ts";
+
+initVisNetwork("network"); // container id
+initUI();

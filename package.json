@@ -4,6 +4,6 @@
   },
   "dependencies": {
     "os": "^0.1.2",
-    "process": "^0.11.10"
+    "vis-network": "^10.0.2"
   }
 }
