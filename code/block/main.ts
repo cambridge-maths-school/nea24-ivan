@@ -3,7 +3,7 @@ import { Blockchain } from "./blockchain.ts";
 // === Normal Behaviour Test ===
 async function normalTest() {
   console.log("=== NORMAL TEST ===");
-  let myChain = new Blockchain(3);
+  let myChain = new Blockchain(2);
 
   // Add first batch of transactions
   console.log("Adding transactions...");

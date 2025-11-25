@@ -2051,7 +2051,7 @@ console.log(JSON.stringify(myChain.chain, null, 2))
 ```
 The ouptut has to be 'JSONified' since the attribute `myChain.chain` is an array consists of blocks, which contains the methods of `calculateHash()` and `mineBlock()`. Using a `JSONify` doesn't print the functions of the block, increasing the readability of the output. When printed directly, TypeScript doesn't automatically display the full object structure — it just shows `[object Object]`. \
 \
-Using JSON.stringify() converts the object data (its properties and values) into a readable JSON string format that can be shown neatly in the console, making it easier to inspect the entire blockchain state. In `JSON.stringify(myChain.chain, null, 2)`:
+Using JSON.stringify() #footnote[https://akshaymattoo.medium.com/what-is-null-in-json-stringify-obj-null-2-8282b2e4eee1] converts the object data (its properties and values) into a readable JSON string format that can be shown neatly in the console, making it easier to inspect the entire blockchain state. In `JSON.stringify(myChain.chain, null, 2)`:
 - The first parameter (myChain.chain) is the object or array you want to convert into JSON
 - The second parameter (null) is the replacer, which lets you filter or transform values before converting — null means “include everything as-is.”
 - The third parameter (2) sets the indentation level, telling the output to use 2 spaces per level for readability.
@@ -2190,15 +2190,20 @@ Therefore, the blockchain simulator can now:
 - prevent remining of blocks
 #pagebreak()
 === Iteration 2 Evaluation
-I have invited one of my stakeholders, Ben, to review my blockchain core structure. This is because Ben has some prior knowledge about blockchain technologies and he has also used some blockchain simulators and developed some proof of stake algorithm before. Therefore he would be able to understand what I have been doing and give me some feedback on my work, since there isn't a CLI for this iteration yet.
-
-// WWW
-
-// EBI
-// Data Validation
+I have invited one of my stakeholders, Ben, to review my blockchain core structure. This is because Ben has some prior knowledge about blockchain technologies and he has also used some blockchain simulators and developed some proof of stake algorithm before. Therefore he would be able to understand what I have been doing and give me some feedback on my work, since there isn't a CLI for this iteration yet. He enjoys seeing the blockchain structures and the mining actually happening in web workers using multiple threads/logical processors in the CPU. This can give a more efficient mining speed. He also says the blockchain core structure has included everything about blockchain that he knows. He believes that with the structure, it gives a very full on introduction to students that have never been exposed to blockchain before.\
+\
+In this iteration, I have successfully delivered the core structure of blockchain technologies, they include all the necessary functions to allow me to continue to develop a whole network, which will contain users as nodes since I have made everything in an object oriented programming way. This is very helpful as the blockchain class can be used across different nodes in the network.\
+\
+===== Pure functions
 In Iteration 2, most of the functions have been developed very specifically for one case. For example, the `minePendingTransactions()` function is way too tied with the blockchain's internal state -- it hard-coded `this.mempool` as the only source of transactions. In Iteration this can work because we are only doing everything in one user (node), which means that the only transactions are the ones in the local mempool. However, in Iteration 3 when I start to develop the CLI, I will have multiple users (nodes) in the network, each with their own mempool. Therefore I will have to modify the `minePendingTransactions()` functions to take in the transactions as a parameter, instead of directly accessing from `this.mempool`. This will make the function more reusable for different users (nodes) in the network. Although the functions in this Iteration were modular, they should be more pure to make it more reusable.\
 \
-In Iteration 3, I will fix the functions that have to be reused to be more pure functions. This means that the functions can be reused, especially between different users (nodes) in the network. This will make the code more maintainable and easier to test in the future.
+In Iteration 3, I will fix the functions that have to be reused to be more pure functions. This means that the functions can be reused, especially between different users (nodes) in the network. This will make the code more maintainable and easier to test in the future.\
+\
+===== Data Validation
+In Iteration 2, there is a lack of data validation before the data is being passed into the functions. For example, the transactions only take in the form of a string. This is not ideal as users might be adding invalid messages into the transactions. However, this doesn't get checked.\
+\
+In Iteration 3, I will spend more time focusing on the data validation for each function before doing processing. This will help my stakeholders to not accidentally/purposely enter invalid inputs and crashing the CLI.
+
 
 #pagebreak()
 == Iteration 3
@@ -2379,14 +2384,14 @@ A few special things in my code:
 - The nullish coalescing operator `??` is used in getBalance() to deal with possible invalid inputs in case `this.balances.get(username)` is null or undefined.\
 \
 === Balances Tests Results
-#figure(image("images/balances_test.png"), caption:[Test for Balances Class])
+#figure(image("images/balances_test.png"), caption: [Test for Balances Class])
 As expected, all of tests are passing without causing any issues. Therefore the Balances class is ready to be combined with other features of the simulator.
 === Design for Node Class
 Similar to the Balance class, I start by decomposing the Node class:
-#figure(image("images/node_decomp.jpeg", width:80%))
+#figure(image("images/node_decomp.jpeg", width: 80%))
 The Node class should be simple and only has 1 method. However they have 3 attributes: username, a local copy of blockchain, and its neighbours. This is because the Node class is more of a container to store the data for every user in the network.\
 \
-Attributes: 
+Attributes:
 - username: string -- The name of the new user being added to the network
 - blockchain: Blockchain -- The local copy of the blockchain
 - neighbours: Node[] -- This includes the users that the new user is connected to in the network
@@ -2394,10 +2399,28 @@ Method:
 - addNeighbour(node: Node) -- connecting a user in the network to the new user
 
 The implementation of neighbours store the connected nodes in an array. This is good as it looks like the adjacency list in Iteration 1. This allows me to propagate the local copy of blockchain across the whole network with the DFS/BFS algorithms that I have made in Iteration 1.
+#pagebreak()
 === Design for Node Tests
+To test for nodes, I just have to simply adding nodes/users into the network, and connect the users, then to check who is connected to who. This is very easy to do. We can test it by simple unit tests. I will simply do a test of adding only two users and a test for larger network being added.
+```ts
+test("Adding new node to the network", () => {
+  let Dave = new Node("Dave");
+  let Alice = new Node("Alice");
+  Dave.addNeighbour(Alice);
+  expect(Dave.neighbours.includes(Alice));
+  expect(Alice.neighbours.includes(Dave));
+});
 
+test("Adding a whole network", () => {
+  let nodes: string[] = ["A", "B", "C", "D", "E", "F", "G", "H"];
+  let users: Node[] = [];
+  for (let node of nodes) users.push(new Node(node));
+  for (let i = 0; i < users.length - 1; i++) users[i].addNeighbour(users[i + 1]);
+  for (let i = 0; i < users.length - 1; i++) expect(users[i].neighbours.includes(users[i + 1]));
+});
+```
 === Development for Node
-A lot of the code for this part is just the constructor. Therefore there isn't a lot to talk about. 
+A lot of the code for this part is just the constructor. Therefore there isn't a lot to talk about.
 ```ts
 export class Node {
   username: string;
@@ -2415,19 +2438,47 @@ export class Node {
 }
 ```
 === Node Test Results
-=== Design for Network Class
-The `Network` class will be the main part of my Iteration 3. This is because it will allow learners to 
-
+As expected, the node works completely fine, passing all the unit tests created
+```ts
+bun test v1.2.18 (0d4089ea)
+network.test.ts:
+Detected 12 logical CPU cores.
+✓ Adding new node to the network [4.82ms]
+✓ Adding a whole network [0.49ms]
+ 2 pass
+ 0 fail
+Ran 2 tests across 1 file. [57.00ms]
+```
 === Decomposing Network Class
 The `Network` class should contains a lot of methods. This is because it should handle all the events within the blockchain network.
 
-
-
-// Image
+#figure(image("images/network_decomp.png"), caption: [Decomposition for network class])
 
 The majority of the output of the functions are strings. This is because I want all the processing to be done in this class, with the help of the built functions from the previous Iterations. Therefore, only the state message will be returned. This can help me to make a cli a lot easier as it only has to console.log() the output of the functions to show the state of the network.
-=== Design 
-// TODO: Simplification I have made: The learner can decide to connect the users that they like
+
+=== Design for Network Class
+The `Network` class will be the main part of my Iteration 3. This is because it will allow my stakeholders to manipulate the network. This includes:
+- Adding users
+- Adding transactions between users
+- Mining a new block and adding it to their local copy of blockchain
+- Connect the users so that they will be able to share their local copy of blockchain
+- Propagate the local blockchain to every users/nodes in the network
+- Validate if a blockchain is consistent
+To visualise the process, I will also have printing functions in the class to show the state of the network, these functions include:
+- showing the local copy of blockchain for a specific user
+- showing the users in the network
+- showing the balances of users in the network
+- showing the global mempool -- the transactions to be mined to become a block
+- showing the neighbours of a specific user (who they are connected to)
+
+Algorithms Plan:
+- `addUser(username:string): string`
+
+
+There is a few simplification that I have done in this network. For example, the stakeholder will be able to decide who they want to connect in the network. This is not true in real life. In a real blockchain network, the users will be connected in two cases:
++ When a user is transacting with another user, they will be connected
++ When two users are transacting with one user at the same time, the two users will also be connected
+Although this shouldn't be too hard to implement, I believe that this will make my stakeholders a lot more confused on how the users are connected. This will not help them to understand blockchain technologies clearly.
 === Design for CLI
 I quite like the menu from Sean CLI from @sean-cli due to the readability of the menu and easy to understand interface. When I start his simulator, there is a menu page which allows you to navigate to different sections such as the `blockchain` section and the `p2p` section. Therefore I am going to use this idea to create the menu page for my simulator. After research into different command line libraries, I have decided to choose `readline` API library. This is because the `readline` API provides a simple and built-in way to handle user input directly from the terminal, without needing to install any extra packages. It also works seamlessly with Bun, since Bun implements Node's core `readline` module by default. On top of that, it makes the cli look cleaner and more organised -- similar to Sean CLI -- allowing me to create a visually clear and intuitive menu system for navigating between different components of my blockchain simulator.\
 \
@@ -2451,6 +2502,8 @@ As mention in the Analysis of Iteration 2, I will be modifying some functions to
 I have invited x of my stakeholders
 // TODO: data validation in the future
 // TODO: conflicted blocks
+
+=== Testing to inform evaluation
 == Iteration 4
 In Iteration 4, I will be developing a Graphical User Interface (GUI) for my blockchain simulator.
 
@@ -2463,29 +2516,15 @@ Over the 3 iterations that I have been through, I have gained more understanding
 In Iteration 5, I will be focusing on the data validation of each input of my simulator.
 === Testing to inform evaluation
 === End Product Evaluation
-// `Section 1: Participant Background
-// What is your familiarity with blockchain concepts?
-// ☐ None
-// ☐ Basic (heard of blockchain/Bitcoin)
-// ☐ Intermediate (know about mining, blocks, transactions)
-// ☐ Advanced (have coded or studied blockchain before)
-
-// How comfortable are you with using web-based or desktop software simulations?
-// ☐ Not comfortable
-// ☐ Somewhat comfortable
-// ☐ Comfortable
-// ☐ Very comfortable
-
-// Section 2: Usability
-// 3. How easy is it to navigate the simulator interface?
+// Section 1: Usability
+// 1. How easy is it to navigate the simulator interface?
 // ☐ Very difficult
 // ☐ Difficult
 // ☐ Neutral
 // ☐ Easy
 // ☐ Very easy
 
-// Section 3: Functionality and Features
-// 6. Which features do you find most useful? (Select all that apply)
+// 2. Which features do you find most useful? (Select all that apply)
 // ☐ Adding transactions
 // ☐ Mining blocks
 // ☐ Viewing block details

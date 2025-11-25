@@ -29,26 +29,6 @@ export class Blockchain {
   }
 
   // Mine all pending transactions and add as a new block
-  // async minePendingTransactions(transactions: string[]): Promise<Block> {
-  //   // async minePendingTransactions() {
-  //   // if (this.mempool.length === 0) {
-  //   //   console.log("No transactions to mine.");
-  //   //   return;
-  //   // }
-
-  //   console.log("Current mempool:", transactions);
-
-  //   let newBlock = new Block(
-  //     this.chain.length,
-  //     Date.now(),
-  //     transactions,
-  //     this.getLatestBlock().hash
-  //   );
-
-  //   await newBlock.mineBlock(this.difficulty);
-  //   return newBlock;
-  // }
-
   async minePendingTransactions(transactions: string[]): Promise<Block> {
     console.log("Current mempool:", transactions);
 
@@ -59,7 +39,7 @@ export class Blockchain {
       this.getLatestBlock().hash
     );
 
-    await newBlock.mineBlock(this.difficulty); // runs web workers internally
+    await newBlock.mineBlock(this.difficulty);
     return newBlock;
   }
 
