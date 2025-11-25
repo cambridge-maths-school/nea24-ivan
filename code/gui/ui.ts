@@ -1,5 +1,7 @@
 import * as Backend from "./backend.ts";
 import * as Vis from "./visManager.ts";
+import { startMining } from "../pow_with_blob/main.ts";
+export let visNetwork: any;
 
 export function initUI() {
   let usernameInput = document.getElementById(
@@ -17,12 +19,15 @@ export function initUI() {
   let sendTxBtn = document.getElementById("sendTxBtn")!;
   let mineBtn = document.getElementById("mineBtn")!;
   let mineStatus = document.getElementById("mineStatus")!;
-  // TODO: Propagation
   let propagateBFSBtn = document.getElementById("propagateBFS")!;
   let propagateDFSBtn = document.getElementById("propagateDFS")!;
   let balancesDiv = document.getElementById("balances")!;
   let blockchainDiv = document.getElementById("blockchain")!;
   let mempoolDiv = document.getElementById("mempool")!;
+  let difficultySlider = document.getElementById(
+    "difficultySlider"
+  ) as HTMLInputElement;
+  let difficultyValue = document.getElementById("difficultyValue")!;
 
   // --- ADD USER ---
   addUserBtn.onclick = () => {
@@ -70,12 +75,58 @@ export function initUI() {
   // --- MINING ---
   mineBtn.onclick = async () => {
     if (!Vis.selectedUser) return alert("Select a node first!");
-    mineStatus.innerHTML = "Mining...";
+
+    mineStatus.innerHTML = `Mining...`;
+    Vis.highlightNode(Vis.selectedUser!);
+
     try {
-      let result = await Backend.mineUser(Vis.selectedUser);
-      mineStatus.innerHTML = result.replace(/\n/g, "<br>");
-      Vis.highlightNode(Vis.selectedUser);
+      let node = Backend.backend.getNode(Vis.selectedUser!);
+      if (!node) {
+        alert(`User ${Vis.selectedUser} not found.`);
+        Vis.resetNodeColor(Vis.selectedUser!);
+        return;
+      }
+
+      let mempool = Backend.backend.showMempool();
+      if (!mempool || mempool.length === 0) {
+        alert("No transactions to mine.");
+        Vis.resetNodeColor(Vis.selectedUser!);
+        mineStatus.innerHTML = "";
+        return;
+      }
+
+      let index = node.blockchain.chain.length;
+      let previousHash = node.blockchain.getLatestBlock().hash;
+      let timestamp = Date.now();
+      let transactions = [...mempool];
+      let baseData =
+        index + previousHash + timestamp + JSON.stringify(transactions);
+
+      let lastNonce = 0;
+
+      let result = await startMining(
+        baseData,
+        Backend.backend.difficulty,
+        (nonce: number) => {
+          mineStatus.innerHTML = `Mining... Nonce: ${lastNonce}`;
+          lastNonce = nonce;
+        }
+      );
+
+      // finalise the mined block in the backend using the produced nonce/hash
+      let finaliseMsg = Backend.finaliseMinedBlock(
+        Vis.selectedUser!,
+        result.nonce,
+        result.hash,
+        timestamp,
+        transactions
+      );
+
+      mineStatus.innerHTML = `${finaliseMsg.replace(/\n/g, "<br>")}<br>
+      Nonce: ${result.nonce}, Hash: ${result.hash}`;
+
       setTimeout(() => Vis.resetNodeColor(Vis.selectedUser!), 500);
+
       mempoolDiv.innerHTML = Backend.backend.showMempool().join("<br>");
     } catch (err) {
       alert("Mining error: " + err);
@@ -103,5 +154,62 @@ export function initUI() {
   setInterval(updateSidebar, 0);
 
   // --- PROPAGATION ---
-  // TODO
+  propagateBFSBtn.onclick = () => {
+    if (!Vis.selectedUser) return alert("Select a node first!");
+
+    let result = Backend.propagate(Vis.selectedUser, "bfs");
+
+    if (typeof result === "string") {
+      alert(result);
+      return;
+    }
+
+    animatePropagation(result);
+  };
+
+  propagateDFSBtn.onclick = () => {
+    if (!Vis.selectedUser) return alert("Select a node first!");
+
+    let result = Backend.propagate(Vis.selectedUser, "dfs");
+
+    if (typeof result === "string") {
+      alert(result);
+      return;
+    }
+
+    animatePropagation(result);
+  };
+
+  function animatePropagation(order: string[]) {
+    if (!order || order.length === 0) return;
+
+    let i = 0;
+
+    function step() {
+      if (i < order.length) {
+        // Highlight current node, leave previous highlighted nodes as they are
+        Vis.highlightNodes([order[i]], {
+          background: "#12bd1bff",
+          border: "rgba(8, 222, 230, 1)",
+        });
+        i++;
+        setTimeout(step, 400);
+      } else {
+        // After all nodes are highlighted, wait a bit then reset everything
+        setTimeout(() => {
+          Vis.resetNodes(order);
+        }, 1000); // Reset all the nodes back to default colour
+      }
+    }
+
+    step();
+  }
+
+  // Difficulty slider
+  difficultyValue.textContent = Backend.backend.difficulty.toString();
+  difficultySlider.oninput = () => {
+    let newDifficulty = parseInt(difficultySlider.value);
+    Backend.setDifficulty(newDifficulty);
+    difficultyValue.textContent = newDifficulty.toString();
+  };
 }

@@ -1,6 +1,10 @@
 import { Network as BlockchainNetwork } from "../network/network.ts";
 
-export let backend = new BlockchainNetwork();
+export let backend = new BlockchainNetwork(2);
+export function setDifficulty(newDifficulty: number) {
+  backend.difficulty = newDifficulty;
+  console.log(newDifficulty);
+}
 
 export function addUser(username: string) {
   return backend.addUser(username);
@@ -14,8 +18,24 @@ export function sendTransaction(from: string, to: string, amount: number) {
   return backend.addTransaction(from, to, amount);
 }
 
+// export async function mineUser(username: string) {
+//   return backend.mine(username);
+// }
+
+// returns {message, nonce}
 export async function mineUser(username: string) {
-  return backend.mine(username);
+  let nodeExists = backend.getNode(username);
+  if (!nodeExists) {
+    return { message: `User ${username} not found.`, nonce: null };
+  }
+
+  let resultMessage = await backend.mine(username);
+  let latestBlock = backend.getNode(username)?.blockchain.getLatestBlock();
+
+  return {
+    message: resultMessage,
+    nonce: latestBlock?.nonce ?? null,
+  };
 }
 
 export function getBalances(username?: string) {
@@ -28,4 +48,21 @@ export function getBlockchain(username: string) {
 
 export function propagate(username: string, method: "bfs" | "dfs") {
   return backend.propagate(username, method);
+}
+
+// Finalise a mined block using externally computed nonce/hash (used by UI)
+export function finaliseMinedBlock(
+  username: string,
+  nonce: number,
+  hash: string,
+  timestamp: number,
+  transactions: string[]
+) {
+  return backend.finaliseMinedBlock(
+    username,
+    nonce,
+    hash,
+    timestamp,
+    transactions
+  );
 }

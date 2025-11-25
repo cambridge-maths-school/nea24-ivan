@@ -9,45 +9,173 @@
   <body>
     <div id="app-container">
       <div id="network-container">
+        <h1>
+          BlockChain Simulator
+          <span
+            class="tooltip-icon"
+            data-tooltip="Welcome to the Blockchain Simulator! This is a simulator that visualises what is actually going on in a blockchain network."
+            >?</span
+          >
+        </h1>
         <div id="network"></div>
+
+        <div id="tooltip-circle">
+          <span id="tooltip-text"></span>
+        </div>
       </div>
+
       <div id="sidebar">
-        <h2>Balances</h2>
+        <h2>
+          Balances
+          <span
+            class="tooltip-icon"
+            data-tooltip="Shows all user/node balances. Select a specific user to see their balance."
+            >?</span
+          >
+        </h2>
         <div id="balances"></div>
 
-        <h2>Blockchain</h2>
+        <h2>
+          Blockchain
+          <span
+            class="tooltip-icon"
+            data-tooltip="Select a user/node to view their local copy of the blockchain."
+            >?</span
+          >
+        </h2>
         <div id="blockchain"></div>
 
-        <h2>Mempool</h2>
+        <h2>
+          Mempool
+          <span
+            class="tooltip-icon"
+            data-tooltip="Mempool stores the transactions waiting to be mined. All transactions in the network will be automatically added here. After mining a block by a user/node, the mempoool will be cleared and they will be added to the new block created."
+            >?</span
+          >
+        </h2>
         <div id="mempool"></div>
 
-        <h2>User Actions</h2>
+        <h2>
+          User Actions
+          <span
+            class="tooltip-icon"
+            data-tooltip="Input fields for adding users, connecting, and sending transactions."
+            >?</span
+          >
+        </h2>
+
         <div class="control-group">
           <input type="text" id="usernameInput" placeholder="New Username" />
-          <button id="addUserBtn">Add User</button>
+          <div class="button-wrapper">
+            <button id="addUserBtn">Add User</button>
+            <span class="tooltip-icon" data-tooltip="Click to add a new user."
+              >?</span
+            >
+          </div>
         </div>
+
         <div class="control-group">
           <input type="text" id="connectFrom" placeholder="Connect From" />
           <input type="text" id="connectTo" placeholder="Connect To" />
-          <button id="connectBtn">Connect Users</button>
+          <div class="button-wrapper">
+            <button id="connectBtn">Connect Users</button>
+            <span
+              class="tooltip-icon"
+              data-tooltip="Connect two existing users in the network. Local copy of blockchain will then be shared by them after propagating block."
+              >?</span
+            >
+          </div>
         </div>
+
         <div class="control-group">
           <input type="text" id="txFrom" placeholder="From" />
           <input type="text" id="txTo" placeholder="To" />
           <input type="number" id="txAmount" placeholder="Amount" />
-          <button id="sendTxBtn">Send Transaction</button>
+          <div class="button-wrapper">
+            <button id="sendTxBtn">Send Transaction</button>
+            <span
+              class="tooltip-icon"
+              data-tooltip="Send a transaction from one user to another."
+              >?</span
+            >
+          </div>
         </div>
+
         <div class="control-group">
-          <button id="mineBtn">Mine Block</button>
+          <div class="button-wrapper">
+            <button id="mineBtn">Mine Block</button>
+            <span
+              class="tooltip-icon"
+              data-tooltip="Mine a new block from pending transactions."
+              >?</span
+            >
+          </div>
           <div id="mineStatus"></div>
+          <div id="mineProgress"></div>
         </div>
+        <h2>
+          Propagate Block
+          <span
+            class="tooltip-icon"
+            data-tooltip="Share a local blockchain to the whole network through different algorithms, Breadth First Search and Depth First Search"
+            >?</span
+          >
+        </h2>
         <div class="control-group">
-          <button id="propagateBFS">Propagate BFS</button>
-          <button id="propagateDFS">Propagate DFS</button>
+          <div class="button-wrapper">
+            <button id="propagateBFS">Propagate BFS</button>
+            <span
+              class="tooltip-icon"
+              data-tooltip="Propagate blocks using BFS."
+              >?</span
+            >
+          </div>
+          <div class="button-wrapper">
+            <button id="propagateDFS">Propagate DFS</button>
+            <span
+              class="tooltip-icon"
+              data-tooltip="Propagate blocks using DFS."
+              >?</span
+            >
+          </div>
+          <div class="control-group">
+            <div style="display: flex; align-items: center; gap: 0.5rem">
+              <label for="difficultySlider"
+                >Network Difficulty: <span id="difficultyValue">3</span></label
+              >
+              <span
+                class="tooltip-icon"
+                data-tooltip="Higher difficulty means mining takes longer."
+                >?</span
+              >
+            </div>
+            <input
+              type="range"
+              id="difficultySlider"
+              min="1"
+              max="6"
+              value="3"
+              step="1"
+            />
+          </div>
         </div>
       </div>
     </div>
 
     <script type="module" src="./app.ts"></script>
+    <script>
+      let tooltipCircle = document.getElementById("tooltip-circle");
+      let tooltipText = document.getElementById("tooltip-text");
+
+      document.querySelectorAll(".tooltip-icon").forEach((e) => {
+        e.addEventListener("mouseenter", () => {
+          tooltipText.textContent = e.dataset.tooltip;
+          tooltipCircle.style.opacity = "1";
+        });
+        e.addEventListener("mouseleave", () => {
+          tooltipCircle.style.opacity = "0";
+        });
+      });
+    </script>
   </body>
 </html>

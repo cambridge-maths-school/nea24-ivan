@@ -65,3 +65,25 @@ export function highlightNode(id: string) {
 export function resetNodeColor(id: string) {
   nodes.update({ id, color: { background: "#0077ff", border: "#fff" } });
 }
+
+interface VisNode {
+  id: string | number;
+  label: string;
+}
+
+// Changing colour of  multiple nodes
+export function highlightNodes(
+  usernames: string[],
+  color: { background: string; border: string }
+) {
+  (nodes.get() as VisNode[]).forEach((node) => {
+    if (usernames.includes(node.label)) {
+      nodes.update({ id: node.id, color });
+    }
+  });
+}
+
+// Reset multiple nodes colour
+export function resetNodes(usernames: string[]) {
+  highlightNodes(usernames, { background: "#0077ff", border: "#fff" });
+}

@@ -1,4 +1,5 @@
 import { Blockchain } from "../block/blockchain.ts";
+import { Block } from "../block/block.ts";
 import { bfs_traverse } from "../bfs/bfs.ts";
 import { dfs_traverse } from "../dfs/dfs.ts";
 import { Balances } from "./balances.ts";
@@ -23,6 +24,15 @@ export class Network {
   nodes: Map<string, Node> = new Map();
   mempool: string[] = []; // global mempool
   balances: Balances = new Balances(100);
+  difficulty: number;
+
+  constructor(difficulty = 2) {
+    this.nodes = new Map();
+    this.mempool = [];
+    this.balances = new Balances(100);
+    this.balances.addUser("system");
+    this.difficulty = difficulty;
+  }
 
   // Add a new node
   addUser(username: string): string {
@@ -68,21 +78,51 @@ export class Network {
   }
 
   // Mine transactions for a given node
+  // async mine(username: string): Promise<string> {
+  //   let node = this.getNode(username);
+  //   if (!node) {
+  //     return `User ${username} not found.`;
+  //   }
+
+  //   if (this.mempool.length === 0) {
+  //     return "No transactions to mine.";
+  //   }
+  //   let transactionsToMine = [...this.mempool];
+  //   let newBlock = await node.blockchain.minePendingTransactions(
+  //     transactionsToMine
+  //   );
+  //   node.blockchain.chain.push(newBlock);
+
+  //   for (let tx of transactionsToMine) {
+  //     let parts = tx.split(" ");
+  //     let from = parts[0];
+  //     let to = parts[2];
+  //     let amount = parseInt(parts[3]);
+  //     this.balances.applyTransaction(from, to, amount);
+  //   }
+
+  //   // Give miner a reward
+  //   // this.balances.applyTransaction("system", username, 10);
+
+  //   // Clear mempool after mining
+  //   this.mempool = [];
+
+  //   let latestBlock = node.blockchain.getLatestBlock();
+  //   return `Block mined by ${username}: Index=${latestBlock.index}, Hash=${latestBlock.hash}, Nonce=${latestBlock.nonce}`;
+  // }
+
   async mine(username: string): Promise<string> {
     let node = this.getNode(username);
-    if (!node) {
-      return `User ${username} not found.`;
-    }
+    if (!node) return `User ${username} not found.`;
+    if (this.mempool.length === 0) return "No transactions to mine.";
 
-    if (this.mempool.length === 0) {
-      return "No transactions to mine.";
-    }
     let transactionsToMine = [...this.mempool];
     let newBlock = await node.blockchain.minePendingTransactions(
       transactionsToMine
     );
     node.blockchain.chain.push(newBlock);
 
+    // apply transactions
     for (let tx of transactionsToMine) {
       let parts = tx.split(" ");
       let from = parts[0];
@@ -92,42 +132,88 @@ export class Network {
     }
 
     // Give miner a reward
-    // this.balances.applyTransaction("system", username, 10);
-
-    // Clear mempool after mining
+    this.balances.applyTransaction("system", username, 10);
+    // clear mempool
     this.mempool = [];
 
     let latestBlock = node.blockchain.getLatestBlock();
-    return `Block mined by ${username}: Index=${latestBlock.index}, Hash=${latestBlock.hash}, Nonce=${latestBlock.nonce}`;
+    return `Block mined by ${username}: Index=${latestBlock.index}, Hash=${latestBlock.hash}`;
   }
 
   // BFS/DFS propagation of latest block using imported traversals
-  propagate(startUsername: string, method: "bfs" | "dfs"): string {
+  // propagate(startUsername: string, method: "bfs" | "dfs"): string {
+  //   let startNode = this.getNode(startUsername);
+  //   if (!startNode) {
+  //     return `Start user ${startUsername} not found.`;
+  //   }
+
+  //   let latestBlock = startNode.blockchain.getLatestBlock();
+  //   let targetPrefix = "0".repeat(startNode.blockchain.difficulty);
+
+  //   if (!latestBlock.hash.startsWith(targetPrefix)) {
+  //     return `Cannot propagate: latest block by ${startUsername} is not mined yet.`;
+  //   }
+
+  //   // Build adjacency list for traversal
+  //   let adjacencyList: Record<string, string[]> = {};
+  //   for (let [username, node] of this.nodes.entries()) {
+  //     adjacencyList[username] = node.neighbours.map((n) => n.username);
+  //   }
+
+  //   // Get traversal order
+  //   let order =
+  //     method === "dfs"
+  //       ? dfs_traverse(adjacencyList, startUsername)
+  //       : bfs_traverse(adjacencyList, startUsername);
+
+  //   // Propagate block along traversal order
+  //   for (let username of order) {
+  //     let node = this.getNode(username)!;
+  //     if (node.blockchain.chain.length <= latestBlock.index) {
+  //       node.blockchain.chain.push(latestBlock);
+  //     }
+  //   }
+
+  //   return `${method.toUpperCase()} propagation: ${order.join(" -> ")}`;
+  // }
+
+  // Propagate for both GUI and CLI
+  propagate(startUsername: string, method: "bfs" | "dfs"): string[] | string {
     let startNode = this.getNode(startUsername);
-    if (!startNode) {
-      return `Start user ${startUsername} not found.`;
-    }
+    if (!startNode) return [];
 
     let latestBlock = startNode.blockchain.getLatestBlock();
     let targetPrefix = "0".repeat(startNode.blockchain.difficulty);
 
-    if (!latestBlock.hash.startsWith(targetPrefix)) {
-      return `Cannot propagate: latest block by ${startUsername} is not mined yet.`;
-    }
+    // Block must be mined before propagation
+    if (!latestBlock.hash.startsWith(targetPrefix)) return [];
 
-    // Build adjacency list for traversal
+    // Build adjacency list
     let adjacencyList: Record<string, string[]> = {};
     for (let [username, node] of this.nodes.entries()) {
       adjacencyList[username] = node.neighbours.map((n) => n.username);
     }
 
-    // Get traversal order
+    // BFS or DFS traversal
     let order =
       method === "dfs"
         ? dfs_traverse(adjacencyList, startUsername)
         : bfs_traverse(adjacencyList, startUsername);
 
-    // Propagate block along traversal order
+    // Check if propagation is needed
+    let alreadyPropagated = order.every((username) => {
+      let node = this.getNode(username)!;
+      return (
+        node.blockchain.chain.length > latestBlock.index &&
+        node.blockchain.chain[latestBlock.index].hash === latestBlock.hash
+      );
+    });
+
+    if (alreadyPropagated) {
+      return [];
+    }
+
+    // Propagate block across visited nodes
     for (let username of order) {
       let node = this.getNode(username)!;
       if (node.blockchain.chain.length <= latestBlock.index) {
@@ -135,7 +221,8 @@ export class Network {
       }
     }
 
-    return `${method.toUpperCase()} propagation: ${order.join(" -> ")}`;
+    // Only return the list of visited usernames for animation
+    return order;
   }
 
   // Connect two users as neighbours
@@ -145,7 +232,6 @@ export class Network {
     if (!n1 || !n2) return ``;
     n1.addNeighbour(n2);
     n2.addNeighbour(n1);
-    return `${user1}`, `${user2}`
     return `${user1} and ${user2} are now neighbours.`;
   }
 
@@ -163,8 +249,8 @@ export class Network {
     if (!node) return `User ${username} not found.`;
     let output_str = `===== ${username}'s Blockchain =====`;
     node.blockchain.chain.forEach((block) => {
-      output_str += `\n\nIndex: ${block.index}, Hash: ${
-        block.hash
+      output_str += `\n\nIndex: ${block.index}, Hash: ${block.hash}, Nonce: ${
+        block.nonce
       }\n Transactions: ${block.transactions.join(", ")}`;
     });
     return output_str;
@@ -214,5 +300,49 @@ export class Network {
       }
     }
     return result;
+  }
+
+  // Finalise a mined block using externally computed nonce and hash
+  finaliseMinedBlock(
+    username: string,
+    nonce: number,
+    hash: string,
+    timestamp: number,
+    transactions?: string[]
+  ): string {
+    let node = this.getNode(username);
+    if (!node) return `User ${username} not found.`;
+    if (this.mempool.length === 0) return "No transactions to mine.";
+
+    let transactionsToMine = transactions ?? [...this.mempool];
+
+    let newBlock = new Block(
+      node.blockchain.chain.length,
+      timestamp,
+      transactionsToMine,
+      node.blockchain.getLatestBlock().hash
+    );
+
+    newBlock.nonce = nonce;
+    newBlock.hash = hash;
+    newBlock.mined = true;
+
+    node.blockchain.chain.push(newBlock);
+
+    // apply transactions
+    for (let tx of transactionsToMine) {
+      let parts = tx.split(" ");
+      let from = parts[0];
+      let to = parts[2];
+      let amount = parseInt(parts[3]);
+      this.balances.applyTransaction(from, to, amount);
+    }
+
+    // miner reward
+    this.balances.applyTransaction("system", username, 10);
+    // clear mempool
+    this.mempool = [];
+
+    return `Block mined by ${username}: Index=${newBlock.index}, Hash=${newBlock.hash}`;
   }
 }
