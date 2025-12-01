@@ -383,7 +383,7 @@ Controls (buttons):
 - Network view \u{27F6} graph of nodes (circles), with edges showing connections
 
 Limitations:
-- This is a simplified model of the blockchain, which means that // TODO: Justify the limitations of the blockchain simulator
+- This is a simplified model of the blockchain, which means that I will abstract the idea of blockchain and ignore a few details. For example, there will not be a handler for colliding blocks (forks) in the blockchain. This is because handling forks requires more complex consensus algorithms and network communication, which is beyond the scope of this project. Instead, I will assume that all nodes are honest and always extend the longest chain. Besides, I will also assume that there will be no attackers in the network, so I will not be implementing any security measures against malicious nodes. This is because implementing security measures would require more complex cryptographic techniques and network protocols, which are beyond the scope of this project.
 #pagebreak()
 === Usability Features
 This is my initial rough sketch on the graphical user interface (GUI) design of my blockchain simulator. It shows shows the user interface design of different sections of the platform, including the Introduction Page, Main Page, Users Page, Chains Page, Mining Page, Transactions Page, and the Settings Page.
@@ -419,7 +419,7 @@ In the project, all the algorithms will be developed using the following computa
 - Thinking Ahead
 - Problem solving using
   - Visualisation
-=== Technology
+=== Technology <technology>
 The simulator will run purely on client side code to reduce server costs and workload, improve scalability, and create a more interactive and responsive user experience\
 Frontend: HTML + CSS + TypeScript \
 Graph visualisation: canvas
@@ -430,7 +430,114 @@ I will be using TypeScript to develop my blockchain simulator. TypeScript is a s
 + Type Safety: TypeScript's static typing helps catch errors at compile time, reducing bugs in runtime. This is  important in a complex project like a blockchain simulator where data structures and algorithms need to be precise. It also helps me to think about the input and output of the functions while doing modular coding
 + Sustainability: TypeScript's type makes it easier to understand and maintain code over time. This is important because it allows other developers to look at the code and understand it to develop new features and improvements
 However, when the website gets online, the TypeScript code will be transpiled (convert between two high-level languages) into JavaScript, so that it can be run on all Chromium browsers. Therefore, users do not have to install TypeScript on their devices to run the Blockchain Simulator. Their browsers only have to support JavaScript. Since I will be developing in Bun, the TypeScript will be automatically transpiled into JavaScript and I could just plug the file into the html file.
+#pagebreak()
+== Stakeholders <stakeholders>
+Primary Stakeholders:
++ Students: My blockchain simulator is aimed at A level student who would like to go beyond the standard A level . This will serve as a great resource for them to gain an insight of what blockchain is, how they can propagate
++ Teachers: They could use it as a teaching tool in lessons or demonstrations.
+\
+Secondary Stakeholders
++ Developer: As a developer myself, I will be a stakeholder myself. This means that I will be responsible for design, coding, testing, and documentation.
+\
+=== Interview
+I have selected a few A level students to represent my target users to interview them about their expectations of blockchain simulator. These are the questions that I have asked during the interview:
+`Section 1: Background and Experience
+1. How familiar are you with blockchain concepts such as blocks, mining, and transactions?
+2. Have you ever used any blockchain simulator or visualisation tool before? If yes, which ones and what did you like/dislike about them?
 
+Section 2: Learning Goals
+3. What would you like to learn or understand better about blockchain through a simulator?
+4. Are there specific concepts (e.g., network propagation, mining difficulty) that you find difficult and would like the simulator to explain visually?
+
+Section 3: Features and Usability
+5. Which features would you consider essential in a blockchain simulator?
+6. How should the simulator allow you to interact with the blockchain (e.g., add transactions, mine blocks, view the network)?
+7. Do you prefer a simple interface for learning or more detailed technical controls? Why?
+
+Section 4: Performance and Limits
+8. How fast or responsive do you expect the simulator to be when adding blocks or mining blocks?
+9. Would you like the simulator to simulate multiple nodes on one computer, or one node on each computer over the network?
+
+Section 5: Expectations and Concerns
+10. What potential difficulties or frustrations do you anticipate when using a blockchain simulator?
+11. How important is it for the simulator to be visually engaging (e.g., showing block links, network paths)?
+12. If you could suggest one unique feature for this simulator, what would it be?`
+#pagebreak()
+I have interviewed 4 A level students (Ben, James, Jeremy, and William), in which all of them takes Computer Science as their A level subject. Here are some key points that I have gathered from the interview:
+
+Most of them are very unfamiliar with the blockchain technology. However, one of them -- Ben, did some research in the blockchain in his free time. The majority of my stakeholders have never used a blockchain simulator or any visualisation tools before, except from Ben who has used the Ethereum Virtual Machine (EVM) to learn about proof of stake algorithm (one of the algorithm to mine blocks in the blockchain). However, the EVM doesn't provide any graphical visualisation of any blockchain concepts. \
+\
+Most of them have different aims that they would like to achieve from using a blockchain simulator. However, there are some common themes that they would like to learn about mining and how blocks are connected together. They also find network propagation quite difficult to understand. \
+\
+All of them would like to see visualisation of the blockchain process, as this is a completely new concept to them. They believe that visualisation can help them to understand the abstract concepts better. They would also like to interact with the blockchain by adding transactions and mining blocks. Most of them prefer a simple interface for learning as they are new to blockchain concepts.\
+\
+They would like the simulator to be responsive within 5 to 10 seconds while processing blockchain actions. This is because they have a short attention span and would like to see the results quickly. All of them would like the simulator to simulate multiple nodes on one computer, as they do not have access to multiple computers to run the simulator on a network. \
+\
+William considers graph as an important visual element to help him understand the blockchain concepts. Jeremy would like to see instructions on how to use the simulator. Ben would like to see visualisation for the blocks to be linked, representing links between nodes. James didn't provide any unique feature.\
+\
+Therefore, I aim to create a blockchain simulator that simplifies the blockchain concepts so that the majority of A level students will be able to understand them. I will also include visualisation of different blockchain concepts such as network propagation, mining, and block linking to help students to understand them. The network difficulty should be able to be altered by the learners to see how it affects the mining speed. This allows the simulator to be responsive within their attention span if they set a lower difficulty. Finally, I will implement multiple nodes on one computer so that learners can experience the peer to peer network without needing multiple computers.
+// William Stone -- A level Computer Science student:
+// 1. Not at all
+// 2. No
+// 3. Learn about mining and how the blocks are connected together
+// 4. network propagation
+// 5. Blocks being in a chain
+// 6. Mine blocks
+// 7. Simple
+// 8. within william's attention span (5 seconds) -- Visual stuff extends his attention span
+// 9. multiple nodes on one computer
+// 10. dont know whats actually happening
+// 11. very
+// 12. graphs
+// Note:
+// - I am a visual learner
+
+// Jeremy Courten -- A level Computer Science Student
+// 1. Not at all
+// 2. no
+// 3. learn how the blocks are shared
+// 4. sharing of blocks
+// 5. Visualisation
+// 6. let you simulates a transaction
+// 7. simple
+// 8. within 10 seconds
+// 9. multiple nodes on one computer
+// 10. lack of features
+// 11. very
+// 12. instructions
+
+// Ben Varea -- A level computer science student
+// 1. Very familiar
+// 2. yes -- EVM (proof of stake)
+// 3. Visual process -- EVM doesn't provide
+// 4. Validation -- agreement between nodes
+// 5. Mining blocks
+// 6. mine, create, add transactions into mempool
+// 7. simple
+// 8. sub 10 seconds
+// 9. multiple nodes on one computer
+// 10. not being able to find the nonce and hash (long runtimes)
+// 11. very
+// 12. visualisation for the blocks to be linked, represent links between nodes
+
+// James Charles Bouttell -- A level Computer Science student
+// 1. Not at all
+// 2. no
+// 3. how the blocks link together
+// 4. how its mined
+// 5. simple
+// 6. create a new transaction and then turn it block
+// 7. simple
+// 8. 5 seconds (note: I dont wanna wait)
+// 9. single computer (cuz no friends)
+// 10. not knowing what it is or how to use it
+// 11. very
+// 12.
+
+
+// TODO
+\
+Unfortunately, due to time constrains, I wasn't able to find a teacher who is interested in teaching blockchain to interview.
 #pagebreak()
 == Intital Sucess Criteria
 These are the initial Success Criteria (SC) which is what I am aiming for while developing a MVP (Minimum Viable Product). As I am developing in an agile methodology, the Success Critea might be ammended or new Success Criteria might be added in the process of iterations.
@@ -449,13 +556,13 @@ These are the initial Success Criteria (SC) which is what I am aiming for while 
     ],
   ),
   $ 1.1 $,
-  [Users can create a new block with a hash linked to the previous block within 10 second],
+  [Users can create a new block with a hash linked to the previous block within 1 second],
   [Ensures blocks are linked correctly and the blockchain structure is maintained; 1 second chosen so that block creation is fast enough for interactive testing and demonstration],
-  [Click “Add Block” and verify `block.previousHash === previousBlock.hash` and block.hash calculated correctly],
+  [Click 'Add Block' and a new block appears with previousHash matching last block's hash],
 
   $ 1.2 $,
-  [Users can add up to 10 transactions per block before mining],
-  [Ensures multiple transactions can be stored and tested; 10 transactions chosen as a reasonable limit for a small-scale simulator without overloading memory or UI],
+  [Users can at least 10 transactions per block before mining],
+  [Ensures multiple transactions can be stored and tested; 10 transactions chosen as the amount of transaction shouldn't matter as they are hashed to strings],
   [Add transactions and verify block.transactions.length matches number added],
 
   $ 1.3 $,
@@ -585,112 +692,6 @@ These are the initial Success Criteria (SC) which is what I am aiming for while 
   [Ensures efficient resource usage on a single computer; prevents crashes and keeps simulator responsive],
   [Monitor memory usage during simulation with 100 blocks in local storage],
 )
-#pagebreak()
-== Stakeholders <stakeholders>
-Primary Stakeholders:
-+ Students: My blockchain simulator is aimed at A level student who would like to go beyond the standard A level . This will serve as a great resource for them to gain an insight of what blockchain is, how they can propagate
-+ Teachers: They could use it as a teaching tool in lessons or demonstrations.
-\
-Secondary Stakeholders
-+ Developer: As a developer myself, I will be a stakeholder myself. This means that I will be responsible for design, coding, testing, and documentation.
-\
-// ☐ How transactions are added to blocks
-// ☐ How mining works
-// ☐ How blocks are linked to form a chain
-// ☐ How network updates propagate (e.g., BFS/DFS)
-// ☐ How to validate a blockchain
-// ☐ Other: (Open text box)
-=== Interview
-I have selected a few A level students to represent my target users to interview them about their expectations of blockchain simulator. These are the questions that I have asked during the interview:
-`Section 1: Background and Experience
-1. How familiar are you with blockchain concepts such as blocks, mining, and transactions?
-2. Have you ever used any blockchain simulator or visualisation tool before? If yes, which ones and what did you like/dislike about them?
-
-Section 2: Learning Goals
-3. What would you like to learn or understand better about blockchain through a simulator?
-4. Are there specific concepts (e.g., network propagation, mining difficulty) that you find difficult and would like the simulator to explain visually?
-
-Section 3: Features and Usability
-5. Which features would you consider essential in a blockchain simulator?
-6. How should the simulator allow you to interact with the blockchain (e.g., add transactions, mine blocks, view the network)?
-7. Do you prefer a simple interface for learning or more detailed technical controls? Why?
-
-Section 4: Performance and Limits
-8. How fast or responsive do you expect the simulator to be when adding blocks or mining blocks?
-9. Would you like the simulator to simulate multiple nodes on one computer, or one node on each computer over the network?
-
-Section 5: Expectations and Concerns
-10. What potential difficulties or frustrations do you anticipate when using a blockchain simulator?
-11. How important is it for the simulator to be visually engaging (e.g., showing block links, network paths)?
-12. If you could suggest one unique feature for this simulator, what would it be?`
-
-I have interviewed 4 A level students (Ben, James, Jeremy, and William), in which all of them takes Computer Science as their A level subject. Here are some key points that I have gathered from the interview:
-
-Most of them are very unfamiliar with the blockchain technology. However, one of them -- Ben, did some research in the blockchain in his free time. The majority of my stakeholders have never used a blockchain simulator or any visualisation tools before, except from Ben who has used the Ethereum Virtual Machine (EVM) to learn about proof of stake algorithm (one of the algorithm to mine blocks in the blockchain). However, the EVM doesn't provide any graphical visualisation of any blockchain concepts.
-
-Therefore, I aim to create a blockchain simulator that simplifies the blockchain concepts so that the majority of A level students will be able to understand them. I will also include visualisation of different blockchain concepts such as network propagation, mining, and block linking to help students to understand them.
-// William Stone -- A level Computer Science student:
-// 1. Not at all
-// 2. No
-// 3. Learn about mining and how the blocks are connected together
-// 4. network propagation
-// 5. Blocks being in a chain
-// 6. Mine blocks
-// 7. Simple
-// 8. within william's attention span (5 seconds) -- Visual stuff extends his attention span
-// 9. multiple nodes on one computer
-// 10. dont know whats actually happening
-// 11. very
-// 12. graphs
-// Note:
-// - I am a visual learner
-
-// Jeremy Courten -- A level Computer Science Student
-// 1. Not at all
-// 2. no
-// 3. learn how the blocks are shared
-// 4. sharing of blocks
-// 5. Visualisation
-// 6. let you simulates a transaction
-// 7. simple
-// 8. within 10 seconds
-// 9. multiple nodes on one computer
-// 10. lack of features
-// 11. very
-// 12. instructions
-
-// Ben Varea -- A level computer science student
-// 1. Very familiar
-// 2. yes -- EVM (proof of stake)
-// 3. Visual process -- EVM doesn't provide
-// 4. Validation -- agreement between nodes
-// 5. Mining blocks
-// 6. mine, create, add transactions into mempool
-// 7. simple
-// 8. sub 10 seconds
-// 9. multiple nodes on one computer
-// 10. not being able to find the nonce and hash (long runtimes)
-// 11. very
-// 12. visualisation for the blocks to be linked, represent links between nodes
-
-// James Charles Bouttell -- A level Computer Science student
-// 1. Not at all
-// 2. no
-// 3. how the blocks link together
-// 4. how its mined
-// 5. simple
-// 6. create a new transaction and then turn it block
-// 7. simple
-// 8. 5 seconds (note: I dont wanna wait)
-// 9. single computer (cuz no friends)
-// 10. not knowing what it is or how to use it
-// 11. very
-// 12.
-
-
-// TODO
-
-I have also interviewed a Maths and Physics teacher at my school who is //TODO
 = Iterations
 == Iteration 1
 In Interation 1, I will be focusing on the proof of concept for the technologies that I will be using in my blockchain simulator. These includes the Breadth First Search (BFS) and Depth First Search (DFS) algorithms to simulate the propagation of blockchain within a peer-to-peer network. I will also be implementing a simplified SHA-256 hash function called fakeHash() function to generate hashes for blocks. Finally, I will be building a mining algorithm that uses the concept of nonce to find the hash of a block using web workers to improve performance.
@@ -2190,7 +2191,7 @@ Therefore, the blockchain simulator can now:
 - prevent remining of blocks
 #pagebreak()
 === Iteration 2 Evaluation
-I have invited one of my stakeholders, Ben, to review my blockchain core structure. This is because Ben has some prior knowledge about blockchain technologies and he has also used some blockchain simulators and developed some proof of stake algorithm before. Therefore he would be able to understand what I have been doing and give me some feedback on my work, since there isn't a CLI for this iteration yet. He enjoys seeing the blockchain structures and the mining actually happening in web workers using multiple threads/logical processors in the CPU. This can give a more efficient mining speed. He also says the blockchain core structure has included everything about blockchain that he knows. He believes that with the structure, it gives a very full on introduction to students that have never been exposed to blockchain before.\
+I have invited one of my stakeholders, Ben, to review my prototype -- blockchain core structure. This is because Ben has some prior knowledge about blockchain technologies and he has also used some blockchain simulators and developed some proof of stake algorithm before. Therefore he would be able to understand what I have been doing and give me some feedback on my work, since there isn't a CLI for this iteration yet. He enjoys seeing the blockchain structures and the mining actually happening in web workers using multiple threads/logical processors in the CPU. This can give a more efficient mining speed. He also says the blockchain core structure has included everything about blockchain that he knows. He believes that with the structure, it gives a very full on introduction to students that have never been exposed to blockchain before.\
 \
 In this iteration, I have successfully delivered the core structure of blockchain technologies, they include all the necessary functions to allow me to continue to develop a whole network, which will contain users as nodes since I have made everything in an object oriented programming way. This is very helpful as the blockchain class can be used across different nodes in the network.\
 \
@@ -2473,6 +2474,100 @@ To visualise the process, I will also have printing functions in the class to sh
 
 Algorithms Plan:
 - `addUser(username:string): string`
+  - This function takes in a username as a string and create a new Node with the username. 
+  It follows a basic logic:
+    - Check if the username already exists in the network (for data validation)
+    - If not, create a new Node with the username and add it to the nodes array
+    - Add the user to the Balances class
+    - Return a string message saying the user has been added\
+    \
+- `addTransaction(from:string, to:string, amount:number): string`
+  - This function takes in the sender username, receiver username and the amount of coins to be transferred. It follows a basic logic:
+    - Check if both usernames exist in the network (for data validation)
+    - Check if the sender has enough balance to make the transaction using the Balances class
+    - If both checks pass, add the transaction to the global mempool
+    - Return a string message saying the transaction has been added\
+    \
+- `mine(username:string): Promise<string>`
+  - This function takes in the username of the user who wants to mine a new block. It follows a basic logic:
+    - Check if the username exists in the network (for data validation)
+    - Check if the global mempool is not empty
+    - If both checks pass, mine a new block with the transactions in the global mempool using the user's local copy of blockchain
+    - Create a for loop that actually do the transactions in the mempool using the `applyTransaction()` function from the Balances class
+    - Clear the global mempool after mining
+    - Return a string message saying the block has been mined\
+    \
+- `connectUsers(user1:string, user2:string): string`
+  - This function takes in two usernames and connect them in the network. It follows a basic logic:
+    - Check if both usernames exist in the network (for data validation)
+    - If both checks pass, connect the two users using the `addNeighbour()` function from the Node class
+    - Return a string message saying the users have been connected\
+    \
+- `propagate(startUsername:string, method:"bfs" | "dfs"): string`
+  - This function takes in the username of the user who wants to start the propagation and the method of traversal (BFS or DFS). It follows a basic logic:
+    - Check if the username exists in the network (for data validation)
+    - Get the latest block from the user's local copy of blockchain
+    - Check if the latest block is mined (hash starts with required number of leading zeros)
+    - If both checks pass, use the imported BFS/DFS traversal functions to get the order of users to propagate to
+    - For each user in the order, update their local copy of blockchain with the latest block if they don't already have it
+    - Return a string message showing the order of propagation\
+    \
+- `validate(username: string): string`
+  - This is just a basic check if a user's local blockchain is valid. This means that it will be matching the hashes and see if previous hash actually match the hash of the previous block, and that the whole blockchain is connected. I will be using the `isChainValid()` from the Blockchain class to do that\
+  \
+- `getNode(username) : Node | undefined`
+  - As the majority of the functions above require selecting nodes, it is better off to make a simple function which select the required nodes. This is a helper function that takes in a username and returns the corresponding Node object from the nodes map. If the username does not exist, it returns undefined. This function will be used in other methods to get the Node object for a given username.\
+
+=== Network Class Development
+Here is the code for:
+- 
+- `propagate(startUsername: string, method: "bfs" | "dfs"): string`
+```ts
+  // BFS/DFS propagation of latest block using imported traversals
+  propagate(startUsername: string, method: "bfs" | "dfs"): string {
+    let startNode = this.getNode(startUsername);
+    if (!startNode) {
+      return `Start user ${startUsername} not found.`;
+    }
+
+    let latestBlock = startNode.blockchain.getLatestBlock();
+    let targetPrefix = "0".repeat(startNode.blockchain.difficulty);
+
+    if (!latestBlock.hash.startsWith(targetPrefix)) {
+      return `Cannot propagate: latest block by ${startUsername} is not mined yet.`;
+    }
+
+    // Build adjacency list for traversal
+    let adjacencyList: Record<string, string[]> = {};
+    for (let [username, node] of this.nodes.entries()) {
+      adjacencyList[username] = node.neighbours.map((n) => n.username);
+    }
+
+    // Get traversal order
+    let order =
+      method === "dfs"
+        ? dfs_traverse(adjacencyList, startUsername)
+        : bfs_traverse(adjacencyList, startUsername);
+
+    // Propagate block along traversal order
+    for (let username of order) {
+      let node = this.getNode(username)!;
+      if (node.blockchain.chain.length <= latestBlock.index) {
+        node.blockchain.chain.push(latestBlock);
+      }
+    }
+
+    return `${method.toUpperCase()} propagation: ${order.join(" -> ")}`;
+  }
+  ```
+
+
+
+
+=== Testing
+Although unit tests can be awesome in terms of testing small parts of the code, it takes too much time to design and write. Therefore, I will be using manual testing for the Network class. This is also because a lot of the functions in the Network class are not pure functions, and they depend on the state of the network. 
+
+When I finish developing the CLI, I will be using the CLI to test the functions in the Network class. This is because the CLI will be the main interface for my stakeholders to interact with the blockchain simulator. Therefore, I will be able to test the functions in the Network class through the CLI.
 
 
 There is a few simplification that I have done in this network. For example, the stakeholder will be able to decide who they want to connect in the network. This is not true in real life. In a real blockchain network, the users will be connected in two cases:
@@ -2485,7 +2580,34 @@ I quite like the menu from Sean CLI from @sean-cli due to the readability of the
 === Designing tests for CLI
 
 === Enhancing Features
-// TODO: Mining Reward
+In real world blockchain networks, miners are given rewards for mining new blocks. For example, in Bitcoin, miners are rewarded with newly created bitcoins and transaction fees for successfully mining a block. This gives miners an incentive to participate in the mining process and helps to secure the network.\
+\
+Therefore, to make the blockchain simulator more realistic, I will be adding a mining reward feature. This means that when a user mine a new block, they will be rewarded with a certain amount of coins by the system. Therefore, I will have to add a line in the `mineBlock()` function in the `Network` class. 
+
+```ts
+// Give miner a reward
+this.balances.applyTransaction("system", username, 10);
+```
+
+However, to achieve this, I will have to add a special user called 'system' into the Balances class when the network is created. This is because the system will be the one that gives the reward to the miner. Therefore, I will add this line in the constructor of the `Network` class:
+```ts
+  constructor(initialBalance: number = 100) {
+    this.initialBalance = initialBalance;
+    this.balances.set("system", 10000000);
+  }
+```
+This will create a user called 'system' with a large amount of coins to give rewards to miners.\
+\
+Some data validation will also be altered such as the applyTransaction() function in the Balance class to force stakeholders not to make transactions from the 'system' user. This is easy as I only have to wrap the function with an if statement:
+```ts
+if (from !== "system") {
+  let fromBal = this.getBalance(from);
+  this.balances.set(from, fromBal - amount);
+}
+```
+Other validation changes include not allowing users to print 'system' balance in the printBalances() function, and returning true for hasFunds() function when the username is 'system'.
+\
+\
 // TODO: making the functions more pure
 As mention in the Analysis of Iteration 2, I will be modifying some functions to make them more pure and do not alter the global variables or state.
 // TODO: adding `if (!transactions)` into the Blockchain.mineBlock() function
@@ -2493,6 +2615,9 @@ As mention in the Analysis of Iteration 2, I will be modifying some functions to
 
 === Post Testing Modifications
 // TODO: add validation to prevent debt issues
+One of the issues that I have found during the manual testing is that users can have negative balances. Although the Balances class prevents users from making transactions that exceed their balance, there is no check to prevent users having multiple transactions that together exceed their balance. This will happen because a transaction is only confirmed once the block is mined. Therefore, if a user makes multiple transactions before the block is mined, they can end up with a negative balance.\
+\
+Therefore, to solve this, 
 === Manual Testing
 // Users shouldn't have debt
 
@@ -2504,8 +2629,12 @@ I have invited x of my stakeholders
 // TODO: conflicted blocks
 
 === Testing to inform evaluation
+To increase usability, I have included clear error messages when invalid inputs are provided. For example, if a user tries to add a transaction with a sender that doesn't exist in the network, the CLI will display an error message indicating that the sender is not found. This helps users understand what went wrong and how to fix it.\
+// TODO: image proof
 == Iteration 4
-In Iteration 4, I will be developing a Graphical User Interface (GUI) for my blockchain simulator.
+In Iteration 4, I will be developing a Graphical User Interface (GUI) for my blockchain simulator. Due to the lack of time and experience in creating graphs visualisation tools. I am going to use a library called vis.js. This is because vis.js is a dynamic, browser-based visualisation library that is easy to use and has a lot of features that can help me to create a more visually appealing and interactive GUI for my blockchain simulator. For example, vis.js allows user to drag the nodes around, zoom in and out, and move the graph back to the centre by default. This will help my stakeholders to navigate the nodes/users structure more easily.\
+\
+However, since I am using a library to create the GUI, I will have to modify the requirement for the GUI. Since vis.js doesn't work in canvas but instead only HTML elements, the web app will no longer require canvas, which was mentioned in the initial GUI design (@Initial-GUI-Design).\
 
 === GUI Design
 Over the 3 iterations that I have been through, I have gained more understanding on blockchain technologies and I realised that the @Initial-GUI-Design might not be a very accurate representation of the blockchain simulator that I expected. Therefore I will develop the GUI orienting the design for my CLI.
@@ -2513,7 +2642,10 @@ Over the 3 iterations that I have been through, I have gained more understanding
 === Evaluation
 == Iteration 5
 // TODO: before unload
-In Iteration 5, I will be focusing on the data validation of each input of my simulator.
+In Iteration 5, I will be focusing on the visualisation of the network propagation and the mining processes. This is because in Iteration 4, I have successfully created a GUI for my blockchain simulator. However, the mining and network propagation processes has not been visualised. Therefore, in this iteration, I will animate these two processes to help my stakeholders understand how blockchain works in a more intuitive way.\
+
+To consider the mining process, I will also be thinking about the difficulty of the network. This is because to 
+
 === Testing to inform evaluation
 === End Product Evaluation
 // Section 1: Usability

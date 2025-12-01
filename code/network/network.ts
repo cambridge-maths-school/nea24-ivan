@@ -78,39 +78,6 @@ export class Network {
   }
 
   // Mine transactions for a given node
-  // async mine(username: string): Promise<string> {
-  //   let node = this.getNode(username);
-  //   if (!node) {
-  //     return `User ${username} not found.`;
-  //   }
-
-  //   if (this.mempool.length === 0) {
-  //     return "No transactions to mine.";
-  //   }
-  //   let transactionsToMine = [...this.mempool];
-  //   let newBlock = await node.blockchain.minePendingTransactions(
-  //     transactionsToMine
-  //   );
-  //   node.blockchain.chain.push(newBlock);
-
-  //   for (let tx of transactionsToMine) {
-  //     let parts = tx.split(" ");
-  //     let from = parts[0];
-  //     let to = parts[2];
-  //     let amount = parseInt(parts[3]);
-  //     this.balances.applyTransaction(from, to, amount);
-  //   }
-
-  //   // Give miner a reward
-  //   // this.balances.applyTransaction("system", username, 10);
-
-  //   // Clear mempool after mining
-  //   this.mempool = [];
-
-  //   let latestBlock = node.blockchain.getLatestBlock();
-  //   return `Block mined by ${username}: Index=${latestBlock.index}, Hash=${latestBlock.hash}, Nonce=${latestBlock.nonce}`;
-  // }
-
   async mine(username: string): Promise<string> {
     let node = this.getNode(username);
     if (!node) return `User ${username} not found.`;
@@ -133,11 +100,22 @@ export class Network {
 
     // Give miner a reward
     this.balances.applyTransaction("system", username, 10);
-    // clear mempool
+
+    // Clear mempool after mining
     this.mempool = [];
 
     let latestBlock = node.blockchain.getLatestBlock();
-    return `Block mined by ${username}: Index=${latestBlock.index}, Hash=${latestBlock.hash}`;
+    return `Block mined by ${username}: Index=${latestBlock.index}, Hash=${latestBlock.hash}, nonce=${latestBlock.nonce}`;
+  }
+
+  // Connect two users as neighbours
+  connectUsers(user1: string, user2: string): string {
+    let n1 = this.getNode(user1);
+    let n2 = this.getNode(user2);
+    if (!n1 || !n2) return ``;
+    n1.addNeighbour(n2);
+    n2.addNeighbour(n1);
+    return `${user1} and ${user2} are now neighbours.`;
   }
 
   // BFS/DFS propagation of latest block using imported traversals
@@ -225,16 +203,6 @@ export class Network {
     return order;
   }
 
-  // Connect two users as neighbours
-  connectUsers(user1: string, user2: string): string {
-    let n1 = this.getNode(user1);
-    let n2 = this.getNode(user2);
-    if (!n1 || !n2) return ``;
-    n1.addNeighbour(n2);
-    n2.addNeighbour(n1);
-    return `${user1} and ${user2} are now neighbours.`;
-  }
-
   // Validate a user's blockchain
   validate(username: string): string {
     let node = this.getNode(username);
@@ -292,6 +260,7 @@ export class Network {
     return this.mempool;
   }
 
+  // GUI: Get edges for visualization
   getEdges() {
     let result = [];
     for (let [name, node] of this.nodes.entries()) {
@@ -302,7 +271,7 @@ export class Network {
     return result;
   }
 
-  // Finalise a mined block using externally computed nonce and hash
+  // GUI: Finalise a mined block using externally computed nonce and hash
   finaliseMinedBlock(
     username: string,
     nonce: number,
