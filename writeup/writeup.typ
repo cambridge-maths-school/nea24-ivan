@@ -2612,6 +2612,12 @@ Other validation changes include not allowing users to print 'system' balance in
 As mention in the Analysis of Iteration 2, I will be modifying some functions to make them more pure and do not alter the global variables or state.
 // TODO: adding `if (!transactions)` into the Blockchain.mineBlock() function
 === Testing
+// TODO: Limit the length of input
+// Testing for robustness
+// BEN: export and import the state of network with json
+// Since james hasnt propagated after mining, the other nodes will be able to mine it, but in my simulation it doesn't allow that to happen 
+// James: Default inputs
+// #image("/assets/image-1.png")
 
 === Post Testing Modifications
 // TODO: add validation to prevent debt issues
@@ -2640,6 +2646,15 @@ However, since I am using a library to create the GUI, I will have to modify the
 Over the 3 iterations that I have been through, I have gained more understanding on blockchain technologies and I realised that the @Initial-GUI-Design might not be a very accurate representation of the blockchain simulator that I expected. Therefore I will develop the GUI orienting the design for my CLI.
 === Testing
 === Evaluation
+// TODO: stakeholders
+// William
+// Userbility features -- nice aesthetic of graph 
+// likes the help box
+// all fit on the screen, no need to scroll although he likes scrolling
+// connecting users can be easier (Enter key)
+// 
+// 
+// Everything is used and intuitive with the help box
 == Iteration 5
 // TODO: before unload
 In Iteration 5, I will be focusing on the visualisation of the network propagation and the mining processes. This is because in Iteration 4, I have successfully created a GUI for my blockchain simulator. However, the mining and network propagation processes has not been visualised. Therefore, in this iteration, I will animate these two processes to help my stakeholders understand how blockchain works in a more intuitive way.\
@@ -2709,6 +2724,11 @@ To consider the mining process, I will also be thinking about the difficulty of 
 // ☐ Moderately
 // ☐ Mostly
 // ☐ Completely`
+// 
+== Maintenance
+Currently, my teacher Mr Gordon is hosting the website. When
+
+// Comments across the whole code
 == Test Data <test-data>
 == Data Validation
 = Evaluation <evaluation>
