@@ -2814,8 +2814,38 @@ async function main() {
   }
 }
 ```
+Majority of the functions takes in input, therefore I had to split their arguments `args` that they input into the console and input them to the correct functions respectively.
+
+
+=== Manual Testing
+I have tested the CLI and Network class by actually using each features in the CLI one by one and trying to break them by inputting erroneous data. One of the issues that I have encountered is that the code could be exited automatically 
+A logical error that I have found during the manual testing is that users can have negative balances. Although the Balances class prevents users from making transactions that exceed their balance, there is no check to prevent users having multiple transactions that together exceed their balance. This will happen because a transaction is only confirmed once the block is mined. Therefore, if a user makes multiple transactions before the block is mined, they can end up with a negative balance.\
+\
+Therefore, to fix this issue, I decided to do a check before adding each transaction. This following code is added to the `Network.addTransaction(from: string, to: string, amount: number)` before pushing the transaction to the mempool.
+```ts
+    // Fix Debt Issues
+    let pendingBalance = this.balances.getBalance(from);
+    for (let tx of this.mempool) {
+      let [f, , , amtStr] = tx.split(" ");
+      let a = parseInt(amtStr);
+      if (f === from) pendingBalance -= a;
+    }
+    if (pendingBalance < amount) {
+      return `${from} does not have enough coins after pending transactions.`;
+    }
+```\
+\
+
+After adding this new validation, I reconsidered about the logic of the validation and this part of the code can also be deleted:
+```ts
+    if (!this.balances.hasFunds(from, amount)) {
+      return `${from} does not have enough coins.`;
+    }
+```
+This is beacuse `hasFunds()` only checks the sender's confirmed on-chain balance. Before a block is mined, the sender might have already received coins from other users through pending transactions, meaning their actual spendable balance could be higher than what `hasFunds()` sees. Since transactions are only applied during block mining, `hasFunds()` ends up checking the wrong state — it looks at the balance right after the previous block was mined, not the balance that reflects the current pending activity.
+
 === Enhancing Features
-In real world blockchain networks, miners are given rewards for mining new blocks. For example, in Bitcoin, miners are rewarded with newly created bitcoins and transaction fees for successfully mining a block. This gives miners an incentive to participate in the mining process and helps to secure the network.\
+After the manual testing, I decided to add a few more features to simulate the blockchain network more realistically. In real world blockchain networks, miners are given rewards for mining new blocks. For example, in Bitcoin, miners are rewarded with newly created bitcoins and transaction fees for successfully mining a block. This gives miners an incentive to participate in the mining process and helps to secure the network.\
 \
 Therefore, to make the blockchain simulator more realistic, I will be adding a mining reward feature. This means that when a user mine a new block, they will be rewarded with a certain amount of coins by the system. Therefore, I will have to add a line in the `mineBlock()` function in the `Network` class. 
 
@@ -2844,47 +2874,9 @@ Other validation changes include not allowing users to print 'system' balance in
 \
 \
 // TODO: making the functions more pure
-As mention in the Analysis of Iteration 2, I will be modifying some functions to make them more pure and do not alter the global variables or state.
+As mention in the Analysis of Iteration 2, I will be modifying some functions to make them more pure and do not alter the global variables or state. In this Iteration I have made the majority of them to return the state of the blockchain, as messages printing what they are. Another example that I have made previous functions more pure is that I have 
 // TODO: adding `if (!transactions)` into the Blockchain.mineBlock() function
-
-
-=== Manual Testing
-One of the issues that I have found during the manual testing is that users can have negative balances. Although the Balances class prevents users from making transactions that exceed their balance, there is no check to prevent users having multiple transactions that together exceed their balance. This will happen because a transaction is only confirmed once the block is mined. Therefore, if a user makes multiple transactions before the block is mined, they can end up with a negative balance.\
-\
-Therefore, to fix this issue, I decided to do a check before adding each transaction. This following code is added to the `Network.addTransaction(from: string, to: string, amount: number)` before pushing the transaction to the mempool.
-```ts
-    // Fix Debt Issues
-    let pendingBalance = this.balances.getBalance(from);
-    for (let tx of this.mempool) {
-      let [f, , , amtStr] = tx.split(" ");
-      let a = parseInt(amtStr);
-      if (f === from) pendingBalance -= a;
-    }
-    if (pendingBalance < amount) {
-      return `${from} does not have enough coins after pending transactions.`;
-    }
-```\
-\
-
-After adding this new validation, I reconsidered about the logic of the validation and this part of the code can also be deleted:
-```ts
-    if (!this.balances.hasFunds(from, amount)) {
-      return `${from} does not have enough coins.`;
-    }
-```
-This is beacuse `hasFunds()` only checks the sender's confirmed on-chain balance. Before a block is mined, the sender might have already received coins from other users through pending transactions, meaning their actual spendable balance could be higher than what `hasFunds()` sees. Since transactions are only applied during block mining, `hasFunds()` ends up checking the wrong state — it looks at the balance right after the previous block was mined, not the balance that reflects the current pending activity.
-
-
-
-=== Userbility Test
-// TODO: ask the stakeholder to try crash the code
-
-=== Testing to inform evaluation
-Since this is one of the main prototypes, I will be able to do a manual test to inform evaluation. This means that I will be able to film a screen recording of me manipulating the CLI. 
-
-To increase usability, I have included clear error messages when invalid inputs are provided. For example, if a user tries to add a transaction with a sender that doesn't exist in the network, the CLI will display an error message indicating that the sender is not found. This helps users understand what went wrong and how to fix it.\
-// TODO: image proof
-// Video
+Besides, as mentioned in the Iteration 2 Evaluation under data validation, I have mentioned that transactions take in the form of a string, as in `A gives B 3 coins`. This is not ideal for checking if the user exist or if the transaction is valid. Therefore in this iteration, I have changed the function to take in a sender, a receiver, and an amount of transaction, which helps a lot in terms of checking the validity of input.
 === Stakeholders review
 I have invited all of my stakeholders to review this CLI. 
 // TODO: conflicted blocks
@@ -2894,10 +2886,51 @@ I have invited all of my stakeholders to review this CLI.
 // Since james hasnt propagated after mining, the other nodes will be able to mine it, but in my simulation it doesn't allow that to happen 
 // James: Default inputs
 // William: Fails to break the code
-// #image("/assets/image-1.png")
+
+
+=== Usability Test
+// TODO: ask the stakeholder to try crash the code
+To test the robustness of the code, I have asked my stakeholders to try crashing my CLI by smashing my keyboard and adding unexpected inputs. This can help me to potentially spot some missing validations in the code. William and James have tried to add in different inputs to try crash it, but my code still manages to work perfectly and output the expected outputs.\
+\
+However, Jeremy has successfully 'crashed' the CLI by adding an extremely long username input. The terminal stops working and he wasn't able to exit the program. Therefore, in the future, except from the input data type, I will also have to validate the length of the input data.\
+\
+Ben tried to crash my code by cross-site scripting (XSS) #footnote[https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/XSS]. This means to 
+#image("/assets/image-1.png")
+=== Testing to inform evaluation
+Since this is one of the main prototypes, I will be able to do a manual test to inform evaluation. This means that I will be able to film a screen recording of me manipulating the CLI. 
+// Video
+Please check the 'Iteration 3 CLI test to inform evaluation' for the following time stamps:\
+0:00 - 0:15 -- Adding users to the network\
+0:16 - 0:18 -- Printing users\
+0:20 - 0:32 -- Connecting the users/nodes in the graph\
+0:33 - 0:46 -- Printing all the neighbours of all users, showing that the network is connected correctly\
+0:47 - 0:50 -- Printing the initial balances of the users\
+0:51 - 1:08 -- Printing the local copy of blockchain on different nodes\
+1:09 - 1:47 -- Adding transactions between different nodes and add them to the mempool\
+1:16 -- 'A' doesn't have enough money\
+1:48 - 1:50 -- Printing the global mempool which prints all the transactions that has been done\
+1:51 - 1:57 -- Printing all the balances, confirming that the balances will not be changed before the transactions are confirmed by mining the block\
+1:58 - 2:04 -- user 'A' mines the block\
+2:05 - 2:17 -- printing the local copy of blockchain, showing that only A has the updated blockchain as they are the one who mined the block\
+2:18 - 2:33 -- Showing that if I propagate from user 'B', it would do nothing. This is because user 'B' doesn't have the latest version of the mined blockchain\
+2:34 - 2:57 -- If I propagate the local copy of blockchain by 'A', then everyone will copy that blockchain to their local copy of blockchain, since it is the longest chain in the network.\
+2:58 - 3:03 -- Adding another transaction after mining the first block\
+3:04 - 3:07 -- Showing that the mempool now only contains the new transaction\
+3:08 - 3:18 -- Mining a second block with the new mempool\
+3:19 - 3:38 -- Propagating the second block to every node, and checking if every nodes receives it. It also shows that the second block with be connected to the first block by the previousHash attribute within the block.\
+3:39 - 3:43 -- Exiting the simulator
+
+This video shows all the features in my CLI. This is showing that the time taken to mine a block with multiple transaction is 
+
+
+
+
+To increase usability, I have included clear error messages when invalid inputs are provided. For example, if a user tries to add a transaction with a sender that doesn't exist in the network, the CLI will display an error message indicating that the sender is not found. This helps users understand what went wrong and how to fix it.\
+// TODO: image proof
 === Evaluation
 
-While explaining how to use the CLI to William, I drew out the graph that he was actually making on a whiteboard. This has sparked my idea of how I am going to make my GUI
+While explaining how to use the CLI to William, I drew out the graph that he was actually making on a whiteboard. This has sparked my idea of how I am going to make my GUI. My idea is to make a graph of the users/nodes in the network, and you can click on them to show details or the state of the network.\
+
 == Iteration 4
 In Iteration 4, I will be developing a Graphical User Interface (GUI) for my blockchain simulator. Due to the lack of time and experience in creating graphs visualisation tools. I am going to use a library called vis.js. This is because vis.js is a dynamic, browser-based visualisation library that is easy to use and has a lot of features that can help me to create a more visually appealing and interactive GUI for my blockchain simulator. For example, vis.js allows user to drag the nodes around, zoom in and out, and move the graph back to the centre by default. This will help my stakeholders to navigate the nodes/users structure more easily.\
 \
@@ -2909,7 +2942,7 @@ Over the 3 iterations that I have been through, I have gained more understanding
 === Evaluation
 // TODO: stakeholders
 // William
-// Userbility features -- nice aesthetic of graph 
+// Usability features -- nice aesthetic of graph 
 // likes the help box
 // all fit on the screen, no need to scroll although he likes scrolling
 // connecting users can be easier (Enter key)
@@ -2999,3 +3032,15 @@ Every features included in the Blockchain simulator has been commented, stating 
 // TODO:Justify for decomposition
 = Appendix
 Here I will attach all the code files that I have written for my blockchain simulator project. They are sorted in alphabetical order for easy navigation.
+// format code blocks with a background and margin
+// #show raw.where(block: true): block.with(inset: 0em)
+
+// #set text(size: 5pt)
+// #set page(columns: 3, margin: (x: 8pt))
+// #set columns(gutter: 5pt)
+
+// File `cli.ts`:
+// #raw(read("../code/cli/cli.ts"), lang: "ts", block: true)
+
+// File `lmc.html`:
+// #raw(read("lmc.html"), lang: "html", block: true)
