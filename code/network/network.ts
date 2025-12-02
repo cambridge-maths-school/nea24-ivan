@@ -58,18 +58,14 @@ export class Network {
     }
 
     // Fix Debt Issues
-    // let pendingBalance = this.balances.getBalance(from);
-    // for (let tx of this.mempool) {
-    //   let [f, , , amtStr] = tx.split(" ");
-    //   let a = parseInt(amtStr);
-    //   if (f === from) pendingBalance -= a;
-    // }
-    // if (pendingBalance < amount) {
-    //   return `${from} does not have enough coins after pending transactions.`;
-    // }
-
-    if (!this.balances.hasFunds(from, amount)) {
-      return `${from} does not have enough coins.`;
+    let pendingBalance = this.balances.getBalance(from);
+    for (let tx of this.mempool) {
+      let [f, , , amtStr] = tx.split(" ");
+      let a = parseInt(amtStr);
+      if (f === from) pendingBalance -= a;
+    }
+    if (pendingBalance < amount) {
+      return `${from} does not have enough coins after pending transactions.`;
     }
 
     let tx = `${from} pays ${to} ${amount} coins`;
@@ -260,7 +256,7 @@ export class Network {
     return this.mempool;
   }
 
-  // GUI: Get edges for visualization
+  // GUI: Get edges for visualisation
   getEdges() {
     let result = [];
     for (let [name, node] of this.nodes.entries()) {

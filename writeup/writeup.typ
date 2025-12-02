@@ -424,7 +424,7 @@ The simulator will run purely on client side code to reduce server costs and wor
 Frontend: HTML + CSS + TypeScript \
 Graph visualisation: canvas
 === Device Compatibility
-The blockchain simulator is designed to run entirely in the browser. Therefore a JavaScript supporting browser is required. The simulator will be optimised for modern desktop and laptop environments using Chromium browsers (Google Chrome, Microsoft Edge, Opera). Mobile browsers may support basic interactios, but visualisation features are best experienced on computer systems. The device running to program should have at least a refresh rate of 60Hz to run the `requestAnimationFrame()` function in canvas to visualise blockchain workflow.
+The blockchain simulator is designed to run entirely in the browser. Therefore a JavaScript supporting browser is required. The simulator will be optimised for modern desktop and laptop environments using Chromium browsers (Google Chrome, Microsoft Edge, Opera). Mobile browsers may support basic interactios, but visualisation features are best experienced on computer systems. The device running to program should have at least a refresh rate of 60Hz to run the `requestAnimationFrame()` function in canvas to visualise blockchain workflow. Since the code for mining will be using multiple threads (>10 logical processors) in the CPU, a computer of a better specification will be more optimised.
 ==== TypeScript
 I will be using TypeScript to develop my blockchain simulator. TypeScript is a superset of JavaScript that adds types, interfaces, and other features to enhance code quality and maintainability. Here are some reasons why TypeScript is a good choice for this project:
 + Type Safety: TypeScript's static typing helps catch errors at compile time, reducing bugs in runtime. This is  important in a complex project like a blockchain simulator where data structures and algorithms need to be precise. It also helps me to think about the input and output of the functions while doing modular coding
@@ -2382,7 +2382,8 @@ export class Balances {
 ```
 A few special things in my code:
 - All of the attributes in the code are private so that it cacn prevent the alteration of the balances by outside function accidentally, or user trying to hack the console by accessing the Balances and changing them.
-- The nullish coalescing operator `??` is used in getBalance() to deal with possible invalid inputs in case `this.balances.get(username)` is null or undefined.\
+- The nullish coalescing operator `??` is used in getBalance() to deal with possible invalid inputs in case `this.balances.get(username)` is null or undefined.
+- The functions `set()`, `get()`, `has()`,`.entries()` were used instead of functions like `push()`, `includes()`, etc. because this.balances takes in the form of a Map #footnote[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map], instead of an array.\
 \
 === Balances Tests Results
 #figure(image("images/balances_test.png"), caption: [Test for Balances Class])
@@ -2520,65 +2521,299 @@ Algorithms Plan:
 
 === Network Class Development
 Here is the code for:
-- 
-- `propagate(startUsername: string, method: "bfs" | "dfs"): string`
+- `addUser()`
 ```ts
-  // BFS/DFS propagation of latest block using imported traversals
-  propagate(startUsername: string, method: "bfs" | "dfs"): string {
-    let startNode = this.getNode(startUsername);
-    if (!startNode) {
-      return `Start user ${startUsername} not found.`;
+  addUser(username: string): string {
+    if (this.nodes.has(username)) {
+      return `User ${username} already exists.`;
+    }
+    let node = new Node(username);
+    this.nodes.set(username, node);
+    this.balances.addUser(username);
+    return `User ${username} added.`;
+  }
+```
+I used `set()` instead of `push()` to append the new node into the nodes. This is because I am interacting with this.balances, which is a Map.
+- `getNode(username:string): Node| undefined`
+```ts
+  getNode(username: string): Node | undefined {
+    return this.nodes.get(username);
+  }
+```
+By the same reason that this.balances is a Map, I am using `get()`.\
+\
+- `addTransaction(from: string, to: string, amount: number): string`
+```ts
+  // Add transaction to global mempool
+  addTransaction(from: string, to: string, amount: number): string {
+    let sender = this.getNode(from);
+    let receiver = this.getNode(to);
+    if (!sender || !receiver) {
+      return "Sender or receiver not found.";
     }
 
-    let latestBlock = startNode.blockchain.getLatestBlock();
-    let targetPrefix = "0".repeat(startNode.blockchain.difficulty);
-
-    if (!latestBlock.hash.startsWith(targetPrefix)) {
-      return `Cannot propagate: latest block by ${startUsername} is not mined yet.`;
+    if (!this.balances.hasFunds(from, amount)) {
+      return `${from} does not have enough coins.`;
     }
 
-    // Build adjacency list for traversal
-    let adjacencyList: Record<string, string[]> = {};
-    for (let [username, node] of this.nodes.entries()) {
-      adjacencyList[username] = node.neighbours.map((n) => n.username);
-    }
-
-    // Get traversal order
-    let order =
-      method === "dfs"
-        ? dfs_traverse(adjacencyList, startUsername)
-        : bfs_traverse(adjacencyList, startUsername);
-
-    // Propagate block along traversal order
-    for (let username of order) {
-      let node = this.getNode(username)!;
-      if (node.blockchain.chain.length <= latestBlock.index) {
-        node.blockchain.chain.push(latestBlock);
-      }
-    }
-
-    return `${method.toUpperCase()} propagation: ${order.join(" -> ")}`;
+    let tx = `${from} pays ${to} ${amount} coins`;
+    this.mempool.push(tx);
+    return `Transaction added to global mempool: ${tx}`;
   }
   ```
+  A few validations had been made, e.g., the check for enough balances and existing receiver/sender.\
+  \
+- `mine(username: string): Promise<string>`
+```ts
+// Mine transactions for a given node
+async mine(username: string): Promise<string> {
+  let node = this.getNode(username);
+  if (!node) {
+    return `User ${username} not found.`;
+  }
+  if (this.mempool.length === 0) {
+    return "No transactions to mine.";
+  }
+  let transactionsToMine = [...this.mempool];
+  let newBlock = await node.blockchain.minePendingTransactions(
+    transactionsToMine
+  );
+  node.blockchain.chain.push(newBlock);
 
+  // apply transactions
+  for (let tx of transactionsToMine) {
+    let parts = tx.split(" ");
+    let from = parts[0];
+    let to = parts[2];
+    let amount = parseInt(parts[3]);
+    this.balances.applyTransaction(from, to, amount);
+  }
 
+  // Clear mempool after mining
+  this.mempool = [];
 
+  let latestBlock = node.blockchain.getLatestBlock();
+  return `Block mined by ${username}: Index=${latestBlock.index}, Hash=${latestBlock.hash}, nonce=${latestBlock.nonce}`;
+}
+```
+Since my minePendingTransactions() function connects to startMining function which has a resolve function, I will have to return a Promise #footnote[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise] of string instead of pure strings.\
+\
+Another point to mention is that since each transaction takes in a form of ``` tx = ${from} pays ${to} ${amount} coins`;```, therefore I will have to split them back up into parts to extract the sender/receiver and amount to apply the transaction.\
+\
+- `connectUsers(user1: string, user2: string): string`
+```ts
+// Connect two users as neighbours
+connectUsers(user1: string, user2: string): string {
+  let n1 = this.getNode(user1);
+  let n2 = this.getNode(user2);
+  if (!n1 || !n2) return ``;
+  n1.addNeighbour(n2);
+  n2.addNeighbour(n1);
+  return `${user1} and ${user2} are now neighbours.`;
+}
+```
+This is a basic function to just use the addNeighbour function from the Nodes class.\
+\
+- `propagate(startUsername: string, method: "bfs" | "dfs"): string`
+```ts
+// BFS/DFS propagation of latest block using imported traversals
+propagate(startUsername: string, method: "bfs" | "dfs"): string {
+  let startNode = this.getNode(startUsername);
+  if (!startNode) {
+    return `Start user ${startUsername} not found.`;
+  }
 
+  let latestBlock = startNode.blockchain.getLatestBlock();
+  let targetPrefix = "0".repeat(startNode.blockchain.difficulty);
+
+  if (!latestBlock.hash.startsWith(targetPrefix)) {
+    return `Cannot propagate: latest block by ${startUsername} is not mined yet.`;
+  }
+
+  // Build adjacency list for traversal
+  let adjacencyList: Record<string, string[]> = {};
+  for (let [username, node] of this.nodes.entries()) {
+    adjacencyList[username] = node.neighbours.map((n) => n.username);
+  }
+
+  // Get traversal order
+  let order =
+    method === "dfs"
+      ? dfs_traverse(adjacencyList, startUsername)
+      : bfs_traverse(adjacencyList, startUsername);
+
+  // Propagate block along traversal order
+  for (let username of order) {
+    let node = this.getNode(username)!;
+    if (node.blockchain.chain.length <= latestBlock.index) {
+      node.blockchain.chain.push(latestBlock);
+    }
+  }
+
+  return `${method.toUpperCase()} propagation: ${order.join(" -> ")}`;
+}
+```
+I am building the adjacencyList to fit the program which I have done in Iteration 1 for bfs and dfs which takes input in the form of an adjacencyList. This is done by setting the key of the adjacencyList as the username from each node, and add their neighbours into the value of that key. This adjacencyList is passed into the dfs/bfs function to get a traversal order over the nodes/users in the network. \
+\
+The local blockchain is then copied to all connected nodes within the network by the order of bfs/dfs returned by the traversal functions.\
+\
+The following are the code for printing the state of the blockchain:
+```ts
+// Display a user's blockchain
+showChain(username: string): string {
+  let node = this.getNode(username);
+  if (!node) return `User ${username} not found.`;
+  let output_str = `===== ${username}'s Blockchain =====`;
+  node.blockchain.chain.forEach((block) => {
+    output_str += `\n\nIndex: ${block.index}, Hash: ${block.hash}, Nonce: ${
+      block.nonce
+    }\n Transactions: ${block.transactions.join(", ")}`;
+  });
+  return output_str;
+}
+
+// Show all users
+showUsers(): IterableIterator<string> | string {
+  if (this.nodes.size === 0) {
+    return "No users in the network.";
+  }
+  console.log(this.nodes.keys());
+  return this.nodes.keys();
+}
+// Show user balances
+showBalances(username?: string) {
+  return "=== Balances ===\n" + this.balances.printBalances(username);
+}
+
+// Show a user's neighbours
+showneighbours(username: string) {
+  let node = this.getNode(username);
+  if (!node) {
+    console.log(`User ${username} not found.`);
+    return;
+  }
+  if (node.neighbours.length === 0) {
+    console.log(`${username} has no neighbours.`);
+    return;
+  }
+  console.log(
+    `neighbours of ${username}: ${node.neighbours
+      .map((n) => n.username)
+      .join(", ")}`
+  );
+}
+
+// Show global mempool or per-user mempool
+showMempool(): string[] {
+  return this.mempool;
+}
+```
+For some of the print functions, for example, the showBalances(username?: string), I had to use an optional paramter to either show everyone's balances when nothing is passed in and show a specific user's balances when a specific user is being input.\
+\
+The showUsers() function actually returns an `IterableIterator<string>`#footnote[ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols]. This is because I want to do the count for the number of the users in the cli.ts. Thinking ahead, I also believe that this will help the future me to develop the GUI when I want to just get all the users in the network.\
+\
 === Testing
 Although unit tests can be awesome in terms of testing small parts of the code, it takes too much time to design and write. Therefore, I will be using manual testing for the Network class. This is also because a lot of the functions in the Network class are not pure functions, and they depend on the state of the network. 
 
 When I finish developing the CLI, I will be using the CLI to test the functions in the Network class. This is because the CLI will be the main interface for my stakeholders to interact with the blockchain simulator. Therefore, I will be able to test the functions in the Network class through the CLI.
 
-
+=== Abstraction made
 There is a few simplification that I have done in this network. For example, the stakeholder will be able to decide who they want to connect in the network. This is not true in real life. In a real blockchain network, the users will be connected in two cases:
 + When a user is transacting with another user, they will be connected
 + When two users are transacting with one user at the same time, the two users will also be connected
 Although this shouldn't be too hard to implement, I believe that this will make my stakeholders a lot more confused on how the users are connected. This will not help them to understand blockchain technologies clearly.
+
 === Design for CLI
-I quite like the menu from Sean CLI from @sean-cli due to the readability of the menu and easy to understand interface. When I start his simulator, there is a menu page which allows you to navigate to different sections such as the `blockchain` section and the `p2p` section. Therefore I am going to use this idea to create the menu page for my simulator. After research into different command line libraries, I have decided to choose `readline` API library. This is because the `readline` API provides a simple and built-in way to handle user input directly from the terminal, without needing to install any extra packages. It also works seamlessly with Bun, since Bun implements Node's core `readline` module by default. On top of that, it makes the cli look cleaner and more organised -- similar to Sean CLI -- allowing me to create a visually clear and intuitive menu system for navigating between different components of my blockchain simulator.\
+I quite like the menu from Sean CLI from @sean-cli due to the readability of the menu and easy to understand interface. When I started his simulator, there was a menu page which allows you to navigate to different sections such as the `blockchain` section and the `p2p` section. Therefore I am going to use this idea to create the menu page for my simulator. After researching into different command line libraries, I have decided to choose `readline` API library#footnote[https://nodejs.org/api/readline.html]. This is because the `readline` API provides a simple and built-in way to handle user input directly from the terminal, without needing to install any extra packages. It also works seamlessly with Bun, since Bun implements Node's core `readline` module by default. On top of that, it makes the cli look cleaner and more organised -- similar to Sean CLI -- allowing me to create a visually clear and intuitive menu system for navigating between different components of my blockchain simulator.\
 \
 === Designing tests for CLI
+I want a menu for my CLI which shows all the commands available to use, just like the one in Sean CLI. I can do this by making a string of menu and printing it at the start.\
+\ Since all the features have already been developed in the Network class, the `cli.ts` just has to import those 
 
+=== Implementing CLI
+To setup the readline library it is actually very easy. I will just have to make a function which takes in prompts from the users, which is where user can perform actions.
+```ts
+import readline from "readline";
+
+let rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
+function prompt(): Promise<string> {
+  return new Promise((resolve) => rl.question("> ", resolve));
+}
+```
+This is the only code required to setup the basic command line interface.
+#pagebreak()
+The main part of `cli.ts` is actually to connect the functions from the Network class, which is not that hard to do. For the `main` function of the CLI, I decided to do it with `switch` and `case` #footnote[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/switch]instead of `if` functions just because it looks cleaner in the code, but doesn't actually increase performance of the cli:
+```ts
+async function main() {
+  console.log("=== Blockchain Network Simulator ===");
+  console.log(MENU);
+  while (true) {
+    let input = (await prompt()).trim();
+    let [cmd, ...args] = input.split(" ");
+    switch (cmd) {
+      case "help":
+        console.log(MENU);
+      case "add_user":
+        console.log(network.addUser(args[0]));
+        break;
+      case "add_tx":
+        console.log(
+          network.addTransaction(args[0], args[1], parseInt(args[2]))
+        );
+        break;
+      case "mine":
+        console.log(await network.mine(args[0]));
+        break;
+      case "propagate":
+        if (args.length != 2) {
+          console.log("Usage: propagate <username> <bfs|dfs>");
+          break;
+        }
+        console.log(network.propagate(args[0], args[1] as "bfs" | "dfs"));
+        break;
+      case "show_chain":
+        console.log(network.showChain(args[0]));
+        break;
+      case "validate":
+        network.validate(args[0]);
+        break;
+      case "connect":
+        console.log(network.connectUsers(args[0], args[1]));
+        break;
+      case "exit":
+        rl.close();
+        return;
+      case "show_users":
+        console.log("Users in network:");
+        let user_num = 0;
+        for (let username of network.nodes.keys()) {
+          user_num += 1;
+          console.log(`${user_num}. ${username}`);
+        }
+        console.log(`There are ${user_num} users in the network.`);
+        break;
+      case "show_neighbours":
+        network.showneighbours(args[0]);
+        break;
+      case "show_mempool":
+        for (let tx of network.showMempool()) console.log(`- ${tx}`);
+        break;
+      case "show_balances":
+        args[0]
+          ? console.log(network.showBalances(args[0]))
+          : console.log(network.showBalances());
+        break;
+
+      default:
+        console.log("Unknown command. Type 'help' for menu.");
+    }
+  }
+}
+```
 === Enhancing Features
 In real world blockchain networks, miners are given rewards for mining new blocks. For example, in Bitcoin, miners are rewarded with newly created bitcoins and transaction fees for successfully mining a block. This gives miners an incentive to participate in the mining process and helps to secure the network.\
 \
@@ -2611,32 +2846,58 @@ Other validation changes include not allowing users to print 'system' balance in
 // TODO: making the functions more pure
 As mention in the Analysis of Iteration 2, I will be modifying some functions to make them more pure and do not alter the global variables or state.
 // TODO: adding `if (!transactions)` into the Blockchain.mineBlock() function
-=== Testing
+
+
+=== Manual Testing
+One of the issues that I have found during the manual testing is that users can have negative balances. Although the Balances class prevents users from making transactions that exceed their balance, there is no check to prevent users having multiple transactions that together exceed their balance. This will happen because a transaction is only confirmed once the block is mined. Therefore, if a user makes multiple transactions before the block is mined, they can end up with a negative balance.\
+\
+Therefore, to fix this issue, I decided to do a check before adding each transaction. This following code is added to the `Network.addTransaction(from: string, to: string, amount: number)` before pushing the transaction to the mempool.
+```ts
+    // Fix Debt Issues
+    let pendingBalance = this.balances.getBalance(from);
+    for (let tx of this.mempool) {
+      let [f, , , amtStr] = tx.split(" ");
+      let a = parseInt(amtStr);
+      if (f === from) pendingBalance -= a;
+    }
+    if (pendingBalance < amount) {
+      return `${from} does not have enough coins after pending transactions.`;
+    }
+```\
+\
+
+After adding this new validation, I reconsidered about the logic of the validation and this part of the code can also be deleted:
+```ts
+    if (!this.balances.hasFunds(from, amount)) {
+      return `${from} does not have enough coins.`;
+    }
+```
+This is beacuse `hasFunds()` only checks the sender's confirmed on-chain balance. Before a block is mined, the sender might have already received coins from other users through pending transactions, meaning their actual spendable balance could be higher than what `hasFunds()` sees. Since transactions are only applied during block mining, `hasFunds()` ends up checking the wrong state — it looks at the balance right after the previous block was mined, not the balance that reflects the current pending activity.
+
+
+
+=== Userbility Test
+// TODO: ask the stakeholder to try crash the code
+
+=== Testing to inform evaluation
+Since this is one of the main prototypes, I will be able to do a manual test to inform evaluation. This means that I will be able to film a screen recording of me manipulating the CLI. 
+
+To increase usability, I have included clear error messages when invalid inputs are provided. For example, if a user tries to add a transaction with a sender that doesn't exist in the network, the CLI will display an error message indicating that the sender is not found. This helps users understand what went wrong and how to fix it.\
+// TODO: image proof
+// Video
+=== Stakeholders review
+I have invited all of my stakeholders to review this CLI. 
+// TODO: conflicted blocks
 // TODO: Limit the length of input
 // Testing for robustness
 // BEN: export and import the state of network with json
 // Since james hasnt propagated after mining, the other nodes will be able to mine it, but in my simulation it doesn't allow that to happen 
 // James: Default inputs
+// William: Fails to break the code
 // #image("/assets/image-1.png")
-
-=== Post Testing Modifications
-// TODO: add validation to prevent debt issues
-One of the issues that I have found during the manual testing is that users can have negative balances. Although the Balances class prevents users from making transactions that exceed their balance, there is no check to prevent users having multiple transactions that together exceed their balance. This will happen because a transaction is only confirmed once the block is mined. Therefore, if a user makes multiple transactions before the block is mined, they can end up with a negative balance.\
-\
-Therefore, to solve this, 
-=== Manual Testing
-// Users shouldn't have debt
-
-=== Userbility Test
-// TODO: ask the stakeholder to try crash the code
 === Evaluation
-I have invited x of my stakeholders
-// TODO: data validation in the future
-// TODO: conflicted blocks
 
-=== Testing to inform evaluation
-To increase usability, I have included clear error messages when invalid inputs are provided. For example, if a user tries to add a transaction with a sender that doesn't exist in the network, the CLI will display an error message indicating that the sender is not found. This helps users understand what went wrong and how to fix it.\
-// TODO: image proof
+While explaining how to use the CLI to William, I drew out the graph that he was actually making on a whiteboard. This has sparked my idea of how I am going to make my GUI
 == Iteration 4
 In Iteration 4, I will be developing a Graphical User Interface (GUI) for my blockchain simulator. Due to the lack of time and experience in creating graphs visualisation tools. I am going to use a library called vis.js. This is because vis.js is a dynamic, browser-based visualisation library that is easy to use and has a lot of features that can help me to create a more visually appealing and interactive GUI for my blockchain simulator. For example, vis.js allows user to drag the nodes around, zoom in and out, and move the graph back to the centre by default. This will help my stakeholders to navigate the nodes/users structure more easily.\
 \
@@ -2725,10 +2986,10 @@ To consider the mining process, I will also be thinking about the difficulty of 
 // ☐ Mostly
 // ☐ Completely`
 // 
-== Maintenance
-Currently, my teacher Mr Gordon is hosting the website. When
+=== Maintenance
+Currently, my teacher Mr Gordon is hosting the website. All the code has been pushed to a repository on GitHub. Therefore, if Mr Gordon stops hosting the website, me or other developers with the repository will be able to host it on a different web server.
 
-// Comments across the whole code
+Every features included in the Blockchain simulator has been commented, stating what the functions do. This is useful for sustainability of my code as other developers or me in the future will still be able to understand what is going on with the code.
 == Test Data <test-data>
 == Data Validation
 = Evaluation <evaluation>
@@ -2736,8 +2997,5 @@ Currently, my teacher Mr Gordon is hosting the website. When
 
 == Decomposition <decomposition>
 // TODO:Justify for decomposition
-
-= Bibliography
-
 = Appendix
 Here I will attach all the code files that I have written for my blockchain simulator project. They are sorted in alphabetical order for easy navigation.

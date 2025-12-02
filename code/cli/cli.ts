@@ -17,7 +17,7 @@ let MENU: string = `Menu:
     - show_mempool
     - show_neighbours <username>
     - show_chain <username>
-    - validate <username>
+    - show_balances <optional:username>
     - propagate <username> <bfs|dfs>
     - mine <username>
     - help
@@ -54,12 +54,11 @@ async function main() {
           console.log("Usage: propagate <username> <bfs|dfs>");
           break;
         }
-        // console.log(network.propagate(args[0], args[1] as "bfs" | "dfs"));
-        // Propagate for both CLI/GUI
-        let order = network.propagate(args[0], args[1] as "bfs" | "dfs");
-
-        console.log("Propagation order:", order.join(" -> "));
-        break;
+        console.log(network.propagate(args[0], args[1] as "bfs" | "dfs"));
+      // Propagate for both CLI/GUI
+      // let order = network.propagate(args[0], args[1] as "bfs" | "dfs");
+      // console.log("Propagation order:", order.join(" -> "));
+      // break;
       case "show_chain":
         console.log(network.showChain(args[0]));
         break;
