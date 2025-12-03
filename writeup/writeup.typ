@@ -327,19 +327,34 @@ A very broad summary of the blockchain network workflow is as follows:
 - This process repeats for each new block being mined
 Note:
 - The difficulty of mining is set by the network and cannot be changed by miners.
-
-== Existing models <sean-cli>
+#pagebreak()
+== Existing models 
+I have looked into two blockchain simulator. One of them is a Command Line Interface on GitHub while the other one is a Graphical User Interface with a few webpages.
+=== Sean's Blockchain Simulator
 I found this blockchain simulator Command Line Interface (CLI) #footnote[https://github.com/0xs34n/blockchain] on GitHub by Sean. I have forked the repository and ran it on my local machine using `node.js`. The simulator offers a basic understanding of blockchain technologies with features like possessing blockchains and connecting to peers in different networks. However, it doesn't contain features such as transactions of blockchains or the process of mining blockchains.
-#subpar.grid(
-  figure(image("images/SeanCLI.png", width: 140%, height: 60%)), <a>,
-  figure(image("images/SeanP2P.png", width: 50%, height: 20%)), <b>,
-  columns: (1fr, 1fr),
-  label: <full>,
-)
-In this image, Sean's Blockchain simulator has shown the connection between different ports in local host. However, there is not any features that allow different ports to interact, like trading blocks. It also doesn't allow user to see other's user blocks.
-
-
-Another blockchain simulator #footnote[https://andersbrownworth.com/blockchain/] I found is made by Anders Brownworth.
+#figure(image("images/Sean_CLI.jpg"), caption:[Sean's CLI p2p]) <sean-cli>
+Since Sean's Blockchain simulator allows connection between multiple devices, I opened two terminals to simulate two device running his program. In the first terminal (left of @sean-cli), I checked the initial state of the local copy of blockchain, then checked the initial state of the second terminal (right of @sean-cli). They both contain the same genesis block, which is an accurate representation of blockchain. Then, I mine a block on the second terminal with the data string of 'Ivan_gives_William_10_coins'. This updates the local copy of the blockchain, which is what we expected. Now, I opened port 2000 on the first terminal and allow my second terminal to connect. On the second terminal I used the command `peers` to show that the connection between the two terminals/devices is successful. Now, when I print the local copy of blockchain on the first terminal it shows that it has the updated version of blockchain as well. This is because when they are connected, the updated blockchain was propagated from the second terminal to the first one.\
+\
+In this image, Sean's Blockchain simulator has shown the connection between different ports in local host. This shows a peer to peer network between devices, and is an accurate representation. It also shows the basic core block structure of each block containing the index. previousHash, timestamp, data, hash, and nonce. The blocks are also shown to be connected with the previousHash attribute actually being the hash of the previous block. \
+\
+However, although listed in the help section, the discover feature actually does nothing. No matter which state of the network I am in, whenever I use the discover command, an error would pop up:
+#figure(image("images/discover.png", width:50%), caption:[Sean CLI's error while using discover])
+Therefore, I don't believe that the simulator is capable of finding devices around me and so that I can connect with them. Another feature that has bug is the peers command which sometimes prints 'null' when it is clearly connected to another device as their blockchains are shared.\
+\
+The mining process took within 1 second, when the difficulty level of the network says 3. This means that he didn't actually use SHA-256 for his hashing function but maybe an easier function, or that the mining process might not actually happened and those hashes and nonces are randomly generated. This is because mining a block with SHA-256 hashed in a difficulty level of 3 network will take a really long time and a lot of processing power.\
+\
+Besides, due to the lack of explanation, I took a really long time to figure out what each command actually does and how it relates to the real blockchain, even after doing research in blockchain technologies. This means that the simulator is not intuitive and lacks explanation on what is going on. Only people who are experienced or have some prior knowledge of blockchain would know what is going on. There was no concepts of mempool where I can store my transactions involved.\
+\
+In addition, there are no representations of the balances of each user. It made it seems like someone could send infinite coins to someone for example in a cryptocurrency network. The data string in the mined block also seem to be able to take in any data and there isn't any data validation. Only 1 string without spaces can be added to the mine data. Or else, the parts after the space will be truncated.\
+\
+Moreover, the simulator lacks the feature to deal with a fork with two blockchains, this means that the blockchain can potentially diverges into two potential paths forward:
+#figure(image("images/fork.png", width:70%),caption:[forking blockchains])
+As shown in the figure, the blockchain didn't change after connecting the two terminals. Therefore, there is no evidence of features handling forking blockchains. \
+\
+Lastly, it also lacks the GUI for non developer so they can navigate and learn about blockchain easily.\
+\
+=== Anders Brownworth Blockchain Simulator
+Another blockchain simulator #footnote[https://andersbrownworth.com/blockchain/] I found is made by Anders Brownworth. This simulator has a graphical user interface (GUI). This helps visualises
 
 Both of the simulators on the internet allows you to change the content in a blockchain but this is not a realistic feature as in real life, once a block is mined and added to the blockchain, it is immutable and cannot be changed. This is misleading for learners as they might think that blocks in a blockchain can be changed.
 Features like mempool also isn't implemented onto the online simulators. This makes the idea of the process of converting transactions into blocks quite hard to understand. Therefore we could try to implement that.
@@ -2895,7 +2910,7 @@ To test the robustness of the code, I have asked my stakeholders to try crashing
 However, Jeremy has successfully 'crashed' the CLI by adding an extremely long username input. The terminal stops working and he wasn't able to exit the program. Therefore, in the future, except from the input data type, I will also have to validate the length of the input data.\
 \
 Ben tried to crash my code by cross-site scripting (XSS) #footnote[https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/XSS]. This means to 
-#image("/assets/image-1.png")
+#image("images/xss.png")
 === Testing to inform evaluation
 Since this is one of the main prototypes, I will be able to do a manual test to inform evaluation. This means that I will be able to film a screen recording of me manipulating the CLI. 
 // Video
