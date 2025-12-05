@@ -55,15 +55,12 @@ async function main() {
           break;
         }
         console.log(network.propagate(args[0], args[1] as "bfs" | "dfs"));
-      // Propagate for both CLI/GUI
+      // Propagate for bothBlockchain.mineBlock() CLI/GUI
       // let order = network.propagate(args[0], args[1] as "bfs" | "dfs");
       // console.log("Propagation order:", order.join(" -> "));
       // break;
       case "show_chain":
         console.log(network.showChain(args[0]));
-        break;
-      case "validate":
-        network.validate(args[0]);
         break;
       case "connect":
         console.log(network.connectUsers(args[0], args[1]));

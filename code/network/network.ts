@@ -36,6 +36,9 @@ export class Network {
 
   // Add a new node
   addUser(username: string): string {
+    if (username.length<100){
+      return `Username is too long.`
+    }
     if (this.nodes.has(username)) {
       return `User ${username} already exists.`;
     }

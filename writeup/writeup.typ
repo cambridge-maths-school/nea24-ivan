@@ -328,17 +328,17 @@ A very broad summary of the blockchain network workflow is as follows:
 Note:
 - The difficulty of mining is set by the network and cannot be changed by miners.
 #pagebreak()
-== Existing models 
+== Existing models
 I have looked into two blockchain simulator. One of them is a Command Line Interface on GitHub while the other one is a Graphical User Interface with a few webpages.
 === Sean's Blockchain Simulator
 I found this blockchain simulator Command Line Interface (CLI) #footnote[https://github.com/0xs34n/blockchain] on GitHub by Sean. I have forked the repository and ran it on my local machine using `node.js`. The simulator offers a basic understanding of blockchain technologies with features like possessing blockchains and connecting to peers in different networks. However, it doesn't contain features such as transactions of blockchains or the process of mining blockchains.
-#figure(image("images/Sean_CLI.jpg"), caption:[Sean's CLI p2p]) <sean-cli>
+#figure(image("images/Sean_CLI.jpg"), caption: [Sean's CLI p2p]) <sean-cli>
 Since Sean's Blockchain simulator allows connection between multiple devices, I opened two terminals to simulate two device running his program. In the first terminal (left of @sean-cli), I checked the initial state of the local copy of blockchain, then checked the initial state of the second terminal (right of @sean-cli). They both contain the same genesis block, which is an accurate representation of blockchain. Then, I mine a block on the second terminal with the data string of 'Ivan_gives_William_10_coins'. This updates the local copy of the blockchain, which is what we expected. Now, I opened port 2000 on the first terminal and allow my second terminal to connect. On the second terminal I used the command `peers` to show that the connection between the two terminals/devices is successful. Now, when I print the local copy of blockchain on the first terminal it shows that it has the updated version of blockchain as well. This is because when they are connected, the updated blockchain was propagated from the second terminal to the first one.\
 \
 In this image, Sean's Blockchain simulator has shown the connection between different ports in local host. This shows a peer to peer network between devices, and is an accurate representation. It also shows the basic core block structure of each block containing the index. previousHash, timestamp, data, hash, and nonce. The blocks are also shown to be connected with the previousHash attribute actually being the hash of the previous block. \
 \
 However, although listed in the help section, the discover feature actually does nothing. No matter which state of the network I am in, whenever I use the discover command, an error would pop up:
-#figure(image("images/discover.png", width:50%), caption:[Sean CLI's error while using discover])
+#figure(image("images/discover.png", width: 50%), caption: [Sean CLI's error while using discover])
 Therefore, I don't believe that the simulator is capable of finding devices around me and so that I can connect with them. Another feature that has bug is the peers command which sometimes prints 'null' when it is clearly connected to another device as their blockchains are shared.\
 \
 The mining process took within 1 second, when the difficulty level of the network says 3. This means that he didn't actually use SHA-256 for his hashing function but maybe an easier function, or that the mining process might not actually happened and those hashes and nonces are randomly generated. This is because mining a block with SHA-256 hashed in a difficulty level of 3 network will take a really long time and a lot of processing power.\
@@ -348,7 +348,7 @@ Besides, due to the lack of explanation, I took a really long time to figure out
 In addition, there are no representations of the balances of each user. It made it seems like someone could send infinite coins to someone for example in a cryptocurrency network. The data string in the mined block also seem to be able to take in any data and there isn't any data validation. Only 1 string without spaces can be added to the mine data. Or else, the parts after the space will be truncated.\
 \
 Moreover, the simulator lacks the feature to deal with a fork with two blockchains, this means that the blockchain can potentially diverges into two potential paths forward:
-#figure(image("images/fork.png", width:70%),caption:[forking blockchains])
+#figure(image("images/fork.png", width: 70%), caption: [forking blockchains])
 As shown in the figure, the blockchain didn't change after connecting the two terminals. Therefore, there is no evidence of features handling forking blockchains. \
 \
 Lastly, it also lacks the GUI for non developer so they can navigate and learn about blockchain easily.\
@@ -555,7 +555,7 @@ Therefore, I aim to create a blockchain simulator that simplifies the blockchain
 Unfortunately, due to time constrains, I wasn't able to find a teacher who is interested in teaching blockchain to interview.
 #pagebreak()
 == Intital Sucess Criteria
-These are the initial Success Criteria (SC) which is what I am aiming for while developing a MVP (Minimum Viable Product). As I am developing in an agile methodology, the Success Critea might be ammended or new Success Criteria might be added in the process of iterations.
+These are the initial Success Criteria (SC) which is what I am aiming for while developing a MVP (Minimum Viable Product). As I am developing in an agile methodology, the Success Critea might be ammended or new Success Criteria might be added in the process of iterations. In further on in this document, I will refer my Success Criteria with SC.
 
 === Success Criteria
 #table(
@@ -581,8 +581,8 @@ These are the initial Success Criteria (SC) which is what I am aiming for while 
   [Add transactions and verify block.transactions.length matches number added],
 
   $ 1.3 $,
-  [Mining a block produces a hash satisfying difficulty (\u{2264}2 leading zeros) and completes \u{003C}5s],
-  [Demonstrates mining process works correctly and efficiently; 2 zeros chosen as low difficulty for demonstration, 5s ensures responsiveness for users],
+  [Mining a block produces a hash satisfying difficulty (\u{2264}1 leading zero) and completes \u{003C}5s],
+  [Demonstrates mining process works correctly and efficiently; 1 zero chosen as low difficulty for demonstration, 5s ensures responsiveness for users],
   [Mine a block and check hash meets difficulty; measure mining time],
 
   $ 1.4 $,
@@ -601,9 +601,9 @@ These are the initial Success Criteria (SC) which is what I am aiming for while 
   [Mine a block on one node and verify all connected nodes receive it within 2 seconds],
 
   $ 1.7 $,
-  [Simulator can broadcast a newly mined block to all connected nodes using DFS traversal within 3 seconds],
-  [Ensures correctness of alternative traversal method; DFS may be slower but must reach all nodes reliably],
-  [Mine a block on one node and verify all connected nodes receive it within 3 seconds],
+  [Simulator can broadcast a newly mined block to all connected nodes using DFS traversal within 2 seconds],
+  [Ensures correctness of alternative traversal method; 2s chosen for real-time demonstration],
+  [Mine a block on one node and verify all connected nodes receive it within 2 seconds],
 
   table.cell(
     rowspan: 6,
@@ -613,9 +613,9 @@ These are the initial Success Criteria (SC) which is what I am aiming for while 
     ],
   ),
   $ 2.1 $,
-  [Blocks visually display index, hash, previous hash, transactions on 100x100 pixel display],
-  [Ensures accessibility and usability across devices; 100x100 chosen as minimum usable resolution],
-  [Observe GUI or inspect DOM elements; verify visibility of all block data],
+  [Blocks visually display index, hash, previous hash, transactions],
+  [Ensures learners understand the content in blocks],
+  [Observe GUI; verify visibility of all block data],
 
   $ 2.2 $,
   [Transaction input form accepts strings ≤100 characters; longer inputs rejected],
@@ -633,7 +633,7 @@ These are the initial Success Criteria (SC) which is what I am aiming for while 
   [Click block and verify transactions displayed; measure expansion time],
 
   $ 2.5 $,
-  [GUI updates in \u{003C}1s after any user action (add transaction, mine block)],
+  [GUI updates within \u{003C}1s after any user action (add transaction, mine block)],
   [Ensures responsiveness and smooth interaction; 1 second ensures users see updates promptly without lag],
   [Add transaction or mine block; measure GUI update time],
 
@@ -641,6 +641,12 @@ These are the initial Success Criteria (SC) which is what I am aiming for while 
   [GUI prevents spamming (>5 transactions/sec not allowed)],
   [Prevents system overload and ensures usability; 5 per second chosen to allow quick entry but prevent crashing],
   [Attempt to add >5 transactions/sec; verify only 5 are accepted],
+
+  $ 2.7 $,
+  [The entire program is run in client side only],
+  [No server required. This means that I only have to serve static files. This is cheaper to maintain.],
+  [Check if there are any server side code in the repository except the one serving the static file],
+
   table.cell(
     rowspan: 6,
     align: center,
@@ -698,8 +704,8 @@ These are the initial Success Criteria (SC) which is what I am aiming for while 
   [Monitor memory usage during simulation],
 
   $ 4.3 $,
-  [Simulator and GUI pause when window unfocused],
-  [Reduces CPU usage when not actively used; increases efficiency and prevents unnecessary computations],
+  [Simulator and GUI running when window unfocused],
+  [increases efficiency of the simulator, especially the mining blocks],
   [Switch window focus; observe simulation pause],
 
   $ 4.4 $,
@@ -2490,13 +2496,13 @@ To visualise the process, I will also have printing functions in the class to sh
 
 Algorithms Plan:
 - `addUser(username:string): string`
-  - This function takes in a username as a string and create a new Node with the username. 
+  - This function takes in a username as a string and create a new Node with the username.
   It follows a basic logic:
-    - Check if the username already exists in the network (for data validation)
-    - If not, create a new Node with the username and add it to the nodes array
-    - Add the user to the Balances class
-    - Return a string message saying the user has been added\
-    \
+  - Check if the username already exists in the network (for data validation)
+  - If not, create a new Node with the username and add it to the nodes array
+  - Add the user to the Balances class
+  - Return a string message saying the user has been added\
+  \
 - `addTransaction(from:string, to:string, amount:number): string`
   - This function takes in the sender username, receiver username and the amount of coins to be transferred. It follows a basic logic:
     - Check if both usernames exist in the network (for data validation)
@@ -2559,25 +2565,25 @@ By the same reason that this.balances is a Map, I am using `get()`.\
 \
 - `addTransaction(from: string, to: string, amount: number): string`
 ```ts
-  // Add transaction to global mempool
-  addTransaction(from: string, to: string, amount: number): string {
-    let sender = this.getNode(from);
-    let receiver = this.getNode(to);
-    if (!sender || !receiver) {
-      return "Sender or receiver not found.";
-    }
-
-    if (!this.balances.hasFunds(from, amount)) {
-      return `${from} does not have enough coins.`;
-    }
-
-    let tx = `${from} pays ${to} ${amount} coins`;
-    this.mempool.push(tx);
-    return `Transaction added to global mempool: ${tx}`;
+// Add transaction to global mempool
+addTransaction(from: string, to: string, amount: number): string {
+  let sender = this.getNode(from);
+  let receiver = this.getNode(to);
+  if (!sender || !receiver) {
+    return "Sender or receiver not found.";
   }
-  ```
-  A few validations had been made, e.g., the check for enough balances and existing receiver/sender.\
-  \
+
+  if (!this.balances.hasFunds(from, amount)) {
+    return `${from} does not have enough coins.`;
+  }
+
+  let tx = `${from} pays ${to} ${amount} coins`;
+  this.mempool.push(tx);
+  return `Transaction added to global mempool: ${tx}`;
+}
+```
+A few validations had been made, e.g., the check for enough balances and existing receiver/sender.\
+\
 - `mine(username: string): Promise<string>`
 ```ts
 // Mine transactions for a given node
@@ -2728,10 +2734,10 @@ For some of the print functions, for example, the showBalances(username?: string
 The showUsers() function actually returns an `IterableIterator<string>`#footnote[ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols]. This is because I want to do the count for the number of the users in the cli.ts. Thinking ahead, I also believe that this will help the future me to develop the GUI when I want to just get all the users in the network.\
 \
 === Testing
-Although unit tests can be awesome in terms of testing small parts of the code, it takes too much time to design and write. Therefore, I will be using manual testing for the Network class. This is also because a lot of the functions in the Network class are not pure functions, and they depend on the state of the network. 
-
-When I finish developing the CLI, I will be using the CLI to test the functions in the Network class. This is because the CLI will be the main interface for my stakeholders to interact with the blockchain simulator. Therefore, I will be able to test the functions in the Network class through the CLI.
-
+Although unit tests can be awesome in terms of testing small parts of the code, it takes too much time to design and write. Therefore, I will be using manual testing for the Network class. This is also because a lot of the functions in the Network class are not pure functions, and they depend on the entire state of a network.\
+\
+When I finish developing the CLI, I will be using the CLI to test the functions in the Network class. This is because the CLI will be the main interface for my stakeholders to interact with the blockchain simulator. Therefore, I will be able to test the functions in the Network class through the CLI.\
+\
 === Abstraction made
 There is a few simplification that I have done in this network. For example, the stakeholder will be able to decide who they want to connect in the network. This is not true in real life. In a real blockchain network, the users will be connected in two cases:
 + When a user is transacting with another user, they will be connected
@@ -2743,7 +2749,7 @@ I quite like the menu from Sean CLI from @sean-cli due to the readability of the
 \
 === Designing tests for CLI
 I want a menu for my CLI which shows all the commands available to use, just like the one in Sean CLI. I can do this by making a string of menu and printing it at the start.\
-\ Since all the features have already been developed in the Network class, the `cli.ts` just has to import those 
+\ Since all the features have already been developed in the Network class, the `cli.ts` just has to import those
 
 === Implementing CLI
 To setup the readline library it is actually very easy. I will just have to make a function which takes in prompts from the users, which is where user can perform actions.
@@ -2833,7 +2839,7 @@ Majority of the functions takes in input, therefore I had to split their argumen
 
 
 === Manual Testing
-I have tested the CLI and Network class by actually using each features in the CLI one by one and trying to break them by inputting erroneous data. One of the issues that I have encountered is that the code could be exited automatically 
+I have tested the CLI and Network class by actually using each features in the CLI one by one and trying to break them by inputting erroneous data. One of the issues that I have encountered is that the code could be exited automatically
 A logical error that I have found during the manual testing is that users can have negative balances. Although the Balances class prevents users from making transactions that exceed their balance, there is no check to prevent users having multiple transactions that together exceed their balance. This will happen because a transaction is only confirmed once the block is mined. Therefore, if a user makes multiple transactions before the block is mined, they can end up with a negative balance.\
 \
 Therefore, to fix this issue, I decided to do a check before adding each transaction. This following code is added to the `Network.addTransaction(from: string, to: string, amount: number)` before pushing the transaction to the mempool.
@@ -2849,6 +2855,7 @@ Therefore, to fix this issue, I decided to do a check before adding each transac
       return `${from} does not have enough coins after pending transactions.`;
     }
 ```\
+The `[f, , , amtStr]` splits the transaction up and takes in the sender and the transaction amount to validate if the sender has the amount to transfer.
 \
 
 After adding this new validation, I reconsidered about the logic of the validation and this part of the code can also be deleted:
@@ -2862,7 +2869,7 @@ This is beacuse `hasFunds()` only checks the sender's confirmed on-chain balance
 === Enhancing Features
 After the manual testing, I decided to add a few more features to simulate the blockchain network more realistically. In real world blockchain networks, miners are given rewards for mining new blocks. For example, in Bitcoin, miners are rewarded with newly created bitcoins and transaction fees for successfully mining a block. This gives miners an incentive to participate in the mining process and helps to secure the network.\
 \
-Therefore, to make the blockchain simulator more realistic, I will be adding a mining reward feature. This means that when a user mine a new block, they will be rewarded with a certain amount of coins by the system. Therefore, I will have to add a line in the `mineBlock()` function in the `Network` class. 
+Therefore, to make the blockchain simulator more realistic, I will be adding a mining reward feature. This means that when a user mine a new block, they will be rewarded with a certain amount of coins by the system. Therefore, I will have to add a line in the `mineBlock()` function in the `Network` class.
 
 ```ts
 // Give miner a reward
@@ -2889,30 +2896,38 @@ Other validation changes include not allowing users to print 'system' balance in
 \
 \
 // TODO: making the functions more pure
-As mention in the Analysis of Iteration 2, I will be modifying some functions to make them more pure and do not alter the global variables or state. In this Iteration I have made the majority of them to return the state of the blockchain, as messages printing what they are. Another example that I have made previous functions more pure is that I have 
+As mention in the Analysis of Iteration 2, I will be modifying some functions to make them more pure and do not alter the global variables or state. In this Iteration I have made the majority of them to return the state of the blockchain, as messages printing what they are. Another example that I have made previous functions more pure is that I have
 // TODO: adding `if (!transactions)` into the Blockchain.mineBlock() function
 Besides, as mentioned in the Iteration 2 Evaluation under data validation, I have mentioned that transactions take in the form of a string, as in `A gives B 3 coins`. This is not ideal for checking if the user exist or if the transaction is valid. Therefore in this iteration, I have changed the function to take in a sender, a receiver, and an amount of transaction, which helps a lot in terms of checking the validity of input.
 === Stakeholders review
-I have invited all of my stakeholders to review this CLI. 
+I have invited all of my stakeholders to review this CLI.
 // TODO: conflicted blocks
-// TODO: Limit the length of input
 // Testing for robustness
 // BEN: export and import the state of network with json
-// Since james hasnt propagated after mining, the other nodes will be able to mine it, but in my simulation it doesn't allow that to happen 
+// Since james hasnt propagated after mining, the other nodes will be able to mine it, but in my simulation it doesn't allow that to happen
 // James: Default inputs
 // William: Fails to break the code
+Limitations:
+As mentioned in Analysis section, the simulator is incapable to deal with forked chains, similar to Sean's CLI. This is because
 
-
-=== Usability Test
+=== Robustness Test
 // TODO: ask the stakeholder to try crash the code
 To test the robustness of the code, I have asked my stakeholders to try crashing my CLI by smashing my keyboard and adding unexpected inputs. This can help me to potentially spot some missing validations in the code. William and James have tried to add in different inputs to try crash it, but my code still manages to work perfectly and output the expected outputs.\
 \
 However, Jeremy has successfully 'crashed' the CLI by adding an extremely long username input. The terminal stops working and he wasn't able to exit the program. Therefore, in the future, except from the input data type, I will also have to validate the length of the input data.\
 \
-Ben tried to crash my code by cross-site scripting (XSS) #footnote[https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/XSS]. This means to 
+This is simple to validate, I just have to add
+```ts
+if (username.length<100){
+  return `Username is too long.`
+}
+```
+in the network.addUser() function.\
+\
+Ben tried to crash my code by cross-site scripting (XSS) #footnote[https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/XSS]. This means to
 #image("images/xss.png")
 === Testing to inform evaluation
-Since this is one of the main prototypes, I will be able to do a manual test to inform evaluation. This means that I will be able to film a screen recording of me manipulating the CLI. 
+Since this is one of the main prototypes, I will be able to do a manual test to inform evaluation. This means that I will be able to film a screen recording of me manipulating the CLI.
 // Video
 Please check the 'Iteration 3 CLI test to inform evaluation' for the following time stamps:\
 0:00 - 0:15 -- Adding users to the network\
@@ -2935,7 +2950,7 @@ Please check the 'Iteration 3 CLI test to inform evaluation' for the following t
 3:19 - 3:38 -- Propagating the second block to every node, and checking if every nodes receives it. It also shows that the second block with be connected to the first block by the previousHash attribute within the block.\
 3:39 - 3:43 -- Exiting the simulator
 
-This video shows all the features in my CLI. This is showing that the time taken to mine a block with multiple transaction is 
+This video shows all the features in my CLI. This is showing that the time taken to mine a block with multiple transaction is
 
 
 
@@ -2943,8 +2958,10 @@ This video shows all the features in my CLI. This is showing that the time taken
 To increase usability, I have included clear error messages when invalid inputs are provided. For example, if a user tries to add a transaction with a sender that doesn't exist in the network, the CLI will display an error message indicating that the sender is not found. This helps users understand what went wrong and how to fix it.\
 // TODO: image proof
 === Evaluation
-
-While explaining how to use the CLI to William, I drew out the graph that he was actually making on a whiteboard. This has sparked my idea of how I am going to make my GUI. My idea is to make a graph of the users/nodes in the network, and you can click on them to show details or the state of the network.\
+Overall, this iteration is quite successful. I have created a CLI linking everything that I have done so far, and adding features like checking balances of each users in the network. 
+While explaining how to use the CLI to William, I drew out the graph that he was actually making on a whiteboard and added the transactions that he is making below the graph:
+#figure(image("images/whiteboard.jpg", width: 50%), caption: [Whiteboard explanation to William])
+This has sparked my idea of how I am going to make my GUI. My idea is to make a graph of the users/nodes in the network, and you can click on them to show details or the state of the network. This replaces the complex interface that I have made in the Analysis section. More designs of this interface will be continued in Iteration 4. \
 
 == Iteration 4
 In Iteration 4, I will be developing a Graphical User Interface (GUI) for my blockchain simulator. Due to the lack of time and experience in creating graphs visualisation tools. I am going to use a library called vis.js. This is because vis.js is a dynamic, browser-based visualisation library that is easy to use and has a lot of features that can help me to create a more visually appealing and interactive GUI for my blockchain simulator. For example, vis.js allows user to drag the nodes around, zoom in and out, and move the graph back to the centre by default. This will help my stakeholders to navigate the nodes/users structure more easily.\
@@ -2952,25 +2969,26 @@ In Iteration 4, I will be developing a Graphical User Interface (GUI) for my blo
 However, since I am using a library to create the GUI, I will have to modify the requirement for the GUI. Since vis.js doesn't work in canvas but instead only HTML elements, the web app will no longer require canvas, which was mentioned in the initial GUI design (@Initial-GUI-Design).\
 
 === GUI Design
-Over the 3 iterations that I have been through, I have gained more understanding on blockchain technologies and I realised that the @Initial-GUI-Design might not be a very accurate representation of the blockchain simulator that I expected. Therefore I will develop the GUI orienting the design for my CLI.
+Over the 3 iterations that I have been through, I have gained more understanding on blockchain technologies and I realised that the @Initial-GUI-Design might not be the most accurate representation of the blockchain simulator that I expected. Therefore I will develop the GUI orienting the design for my CLI. This image shows 
 === Testing
 === Evaluation
 // TODO: stakeholders
 // William
-// Usability features -- nice aesthetic of graph 
+// Usability features -- nice aesthetic of graph
 // likes the help box
 // all fit on the screen, no need to scroll although he likes scrolling
 // connecting users can be easier (Enter key)
-// 
-// 
+//
+//
 // Everything is used and intuitive with the help box
 == Iteration 5
 // TODO: before unload
 In Iteration 5, I will be focusing on the visualisation of the network propagation and the mining processes. This is because in Iteration 4, I have successfully created a GUI for my blockchain simulator. However, the mining and network propagation processes has not been visualised. Therefore, in this iteration, I will animate these two processes to help my stakeholders understand how blockchain works in a more intuitive way.\
 
-To consider the mining process, I will also be thinking about the difficulty of the network. This is because to 
+To consider the mining process, I will also be thinking about the difficulty of the network. This is because to
 
 === Testing to inform evaluation
+// Thinking ahead
 === End Product Evaluation
 // Section 1: Usability
 // 1. How easy is it to navigate the simulator interface?
@@ -3033,7 +3051,7 @@ To consider the mining process, I will also be thinking about the difficulty of 
 // ☐ Moderately
 // ☐ Mostly
 // ☐ Completely`
-// 
+//
 === Maintenance
 Currently, my teacher Mr Gordon is hosting the website. All the code has been pushed to a repository on GitHub. Therefore, if Mr Gordon stops hosting the website, me or other developers with the repository will be able to host it on a different web server.
 
