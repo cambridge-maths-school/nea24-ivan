@@ -2966,10 +2966,15 @@ This has sparked my idea of how I am going to make my GUI. My idea is to make a 
 == Iteration 4
 In Iteration 4, I will be developing a Graphical User Interface (GUI) for my blockchain simulator. Due to the lack of time and experience in creating graphs visualisation tools. I am going to use a library called vis.js. This is because vis.js is a dynamic, browser-based visualisation library that is easy to use and has a lot of features that can help me to create a more visually appealing and interactive GUI for my blockchain simulator. For example, vis.js allows user to drag the nodes around, zoom in and out, and move the graph back to the centre by default. This will help my stakeholders to navigate the nodes/users structure more easily.\
 \
-However, since I am using a library to create the GUI, I will have to modify the requirement for the GUI. Since vis.js doesn't work in canvas but instead only HTML elements, the web app will no longer require canvas, which was mentioned in the initial GUI design (@Initial-GUI-Design).\
+However, since I am using a library to create the GUI, I will have to modify the requirement for the GUI. Since vis.js doesn't work in canvas but instead only HTML elements, the web app will no longer require canvas, which was previously mentioned in the initial GUI design (@Initial-GUI-Design).\
 
 === GUI Design
-Over the 3 iterations that I have been through, I have gained more understanding on blockchain technologies and I realised that the @Initial-GUI-Design might not be the most accurate representation of the blockchain simulator that I expected. Therefore I will develop the GUI orienting the design for my CLI. This image shows 
+Over the 3 iterations that I have been through, I have gained more understanding on blockchain technologies and I realised that the @Initial-GUI-Design might not be the most accurate representation of the blockchain simulator that I expected. Therefore I will develop the GUI orienting the design for my CLI. This image shows the design of my GUI which is inspired from stakeholder review in Iteration 3.
+
+// The tool tip replaces the introduction page
+// Simpler approach to the solution
+// graphs are undirected, JUSTIFY
+//   
 === Testing
 === Evaluation
 // TODO: stakeholders
