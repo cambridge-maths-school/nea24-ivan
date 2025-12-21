@@ -7,16 +7,13 @@ export function initUI() {
   let usernameInput = document.getElementById(
     "usernameInput"
   ) as HTMLInputElement;
-  let addUserBtn = document.getElementById("addUserBtn")!;
   let connectFromInput = document.getElementById(
     "connectFrom"
   ) as HTMLInputElement;
   let connectToInput = document.getElementById("connectTo") as HTMLInputElement;
-  let connectBtn = document.getElementById("connectBtn")!;
   let txFrom = document.getElementById("txFrom") as HTMLInputElement;
   let txTo = document.getElementById("txTo") as HTMLInputElement;
   let txAmount = document.getElementById("txAmount") as HTMLInputElement;
-  let sendTxBtn = document.getElementById("sendTxBtn")!;
   let mineBtn = document.getElementById("mineBtn")!;
   let mineStatus = document.getElementById("mineStatus")!;
   let propagateBFSBtn = document.getElementById("propagateBFS")!;
@@ -28,12 +25,19 @@ export function initUI() {
     "difficultySlider"
   ) as HTMLInputElement;
   let difficultyValue = document.getElementById("difficultyValue")!;
+  let addUserForm = document.getElementById("addUserForm")!;
+  let connectForm = document.getElementById("connectForm")!;
+  let txForm = document.getElementById("txForm")!;
 
-  // --- ADD USER ---
-  addUserBtn.onclick = () => {
+  // add user to the network
+  addUserForm.addEventListener("submit", (e) => {
+    e.preventDefault();
     let username = usernameInput.value.trim();
     if (!username) return;
-
+    if (Vis.nodes.getIds().includes(username)) {
+      alert("That username already exists.");
+      return;
+    }
     if (Vis.nodes.length > 0 && !Vis.selectedUser) {
       alert("Select a user first to attach the new user!");
       return;
@@ -43,36 +47,43 @@ export function initUI() {
     alert(res);
     Vis.addNode(username, username);
 
+    // Connect to existing user
     if (Vis.selectedUser) {
       Backend.connectUsers(Vis.selectedUser, username);
       Vis.addEdge(Vis.selectedUser, username);
     }
 
     usernameInput.value = "";
-  };
+  });
 
-  // --- CONNECT USERS ---
-  connectBtn.onclick = () => {
-    let from = connectFromInput.value.trim(),
-      to = connectToInput.value.trim();
+  // Connecting existing users in the network
+  connectForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    let from = connectFromInput.value.trim();
+    let to = connectToInput.value.trim();
     if (!from || !to) return alert("Fill both fields");
     Backend.connectUsers(from, to);
     Vis.addEdge(from, to);
     connectFromInput.value = "";
     connectToInput.value = "";
-  };
+  });
 
-  // --- SEND TRANSACTION ---
-  sendTxBtn.onclick = () => {
-    let from = txFrom.value.trim(),
-      to = txTo.value.trim(),
-      amount = parseInt(txAmount.value);
+  // making a transaction
+  txForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    let from = txFrom.value.trim();
+    let to = txTo.value.trim();
+    let amount = parseInt(txAmount.value);
+    if (amount < 0) return alert("Amount has to be positive");
     if (!from || !to || !amount) return alert("Fill all fields");
     alert(Backend.sendTransaction(from, to, amount));
     mempoolDiv.innerHTML = Backend.backend.showMempool().join("<br>");
-  };
+    txFrom.value = "";
+    txTo.value = "";
+    txAmount.value = "";
+  });
 
-  // --- MINING ---
+  // Mining a block
   mineBtn.onclick = async () => {
     if (!Vis.selectedUser) return alert("Select a node first!");
 
@@ -133,7 +144,7 @@ export function initUI() {
     }
   };
 
-  // --- SIDEBAR UPDATE ---
+  // Sidebar
   function updateSidebar() {
     if (!Vis.selectedUser) {
       balancesDiv.innerHTML =
@@ -153,7 +164,7 @@ export function initUI() {
 
   setInterval(updateSidebar, 0);
 
-  // --- PROPAGATION ---
+  // Propagating a block through the network by BFS or DFS
   propagateBFSBtn.onclick = () => {
     if (!Vis.selectedUser) return alert("Select a node first!");
 

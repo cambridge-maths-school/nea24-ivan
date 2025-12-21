@@ -10,7 +10,8 @@ export function initVisNetwork(containerId: string) {
   edges = new vis.DataSet([]);
   let container = document.getElementById(containerId)!;
 
-  //   @ts-ignore
+  // @ts-ignore
+  // Graph properties
   visNetwork = new vis.Network(
     container,
     { nodes, edges },
@@ -38,6 +39,7 @@ export function initVisNetwork(containerId: string) {
     }
   );
 
+  // Selecting/Deselecting node
   visNetwork.on("click", (params: any) => {
     if (params.nodes.length > 0) {
       if (selectedUser) resetNodeColor(selectedUser);
@@ -48,6 +50,22 @@ export function initVisNetwork(containerId: string) {
       selectedUser = null;
     }
   });
+  // addNode("A", "A");
+  // addEdge("A", "B");
+  // addNode("B", "B");
+  // addNode("C", "C");
+  // addEdge("B", "C");
+  // // addNode("D", "D");
+  // // addEdge("B", "D");
+  // // addEdge("D", "B");
+  // // addEdge("C", "C");
+
+  // // for (let i = 0; i < 1000; i++) {
+  // //   addNode(i.toString(), i.toString());
+  // // }
+  // // for (let i = 0; i < 900; i++) {
+  // //   addEdge(i.toString(), (i + 1).toString());
+  // // }
 }
 
 export function addNode(id: string, label: string) {
@@ -71,7 +89,7 @@ interface VisNode {
   label: string;
 }
 
-// Changing colour of  multiple nodes
+// Changing colour of multiple nodes
 export function highlightNodes(
   usernames: string[],
   color: { background: string; border: string }

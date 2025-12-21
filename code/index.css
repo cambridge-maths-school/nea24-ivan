@@ -89,6 +89,10 @@ body {
   color: #fff;
 }
 
+.control-group form {
+  display: contents;
+}
+
 .control-group button:hover {
   background-color: #08c;
 }

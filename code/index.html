@@ -29,7 +29,7 @@
           Balances
           <span
             class="tooltip-icon"
-            data-tooltip="Shows all user/node balances. Select a specific user to see their balance."
+            data-tooltip="Shows all user/node balances. Select a specific user to see their balance. The initial balance for each user is 100. The balance will not update until a block is mined to the blockchain. However, it will still be kept track to prevent overspending or double spending of the same funds."
             >?</span
           >
         </h2>
@@ -44,7 +44,6 @@
           >
         </h2>
         <div id="blockchain"></div>
-
         <h2>
           Mempool
           <span
@@ -65,40 +64,46 @@
         </h2>
 
         <div class="control-group">
-          <input type="text" id="usernameInput" placeholder="New Username" />
-          <div class="button-wrapper">
-            <button id="addUserBtn">Add User</button>
-            <span class="tooltip-icon" data-tooltip="Click to add a new user."
-              >?</span
-            >
-          </div>
+          <form id="addUserForm">
+            <input type="text" id="usernameInput" placeholder="New Username" />
+            <div class="button-wrapper">
+              <button id="addUserBtn" type="submit">Add User</button>
+              <span class="tooltip-icon" data-tooltip="Click to add a new user."
+                >?</span
+              >
+            </div>
+          </form>
         </div>
 
         <div class="control-group">
-          <input type="text" id="connectFrom" placeholder="Connect From" />
-          <input type="text" id="connectTo" placeholder="Connect To" />
-          <div class="button-wrapper">
-            <button id="connectBtn">Connect Users</button>
-            <span
-              class="tooltip-icon"
-              data-tooltip="Connect two existing users in the network. Local copy of blockchain will then be shared by them after propagating block."
-              >?</span
-            >
-          </div>
+          <form id="connectForm">
+            <input type="text" id="connectFrom" placeholder="Connect From" />
+            <input type="text" id="connectTo" placeholder="Connect To" />
+            <div class="button-wrapper">
+              <button id="connectBtn" type="submit">Connect Users</button>
+              <span
+                class="tooltip-icon"
+                data-tooltip="Connect two existing users in the network. Local copy of blockchain will then be shared by them after propagating block."
+                >?</span
+              >
+            </div>
+          </form>
         </div>
 
         <div class="control-group">
-          <input type="text" id="txFrom" placeholder="From" />
-          <input type="text" id="txTo" placeholder="To" />
-          <input type="number" id="txAmount" placeholder="Amount" />
-          <div class="button-wrapper">
-            <button id="sendTxBtn">Send Transaction</button>
-            <span
-              class="tooltip-icon"
-              data-tooltip="Send a transaction from one user to another."
-              >?</span
-            >
-          </div>
+          <form id="txForm">
+            <input type="text" id="txFrom" placeholder="From" />
+            <input type="text" id="txTo" placeholder="To" />
+            <input type="number" id="txAmount" placeholder="Amount" />
+            <div class="button-wrapper">
+              <button id="sendTxBtn">Send Transaction</button>
+              <span
+                class="tooltip-icon"
+                data-tooltip="Send a transaction from one user to another."
+                >?</span
+              >
+            </div>
+          </form>
         </div>
 
         <div class="control-group">
@@ -144,10 +149,9 @@
                 >Network Difficulty: <span id="difficultyValue">3</span></label
               >
               <span
-                class="tooltip-icon"
+                class="tooltip-icon.disabled"
                 data-tooltip="Higher difficulty means mining takes longer."
-                >?</span
-              >
+              ></span>
             </div>
             <input
               type="range"

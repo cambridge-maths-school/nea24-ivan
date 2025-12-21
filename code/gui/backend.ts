@@ -6,15 +6,19 @@ export function setDifficulty(newDifficulty: number) {
   console.log(newDifficulty);
 }
 
-export function addUser(username: string) {
+export function addUser(username: string): string {
   return backend.addUser(username);
 }
 
-export function connectUsers(from: string, to: string) {
+export function connectUsers(from: string, to: string): string {
   return backend.connectUsers(from, to);
 }
 
-export function sendTransaction(from: string, to: string, amount: number) {
+export function sendTransaction(
+  from: string,
+  to: string,
+  amount: number
+): string {
   return backend.addTransaction(from, to, amount);
 }
 
@@ -42,7 +46,7 @@ export function getBalances(username?: string) {
   return backend.showBalances(username);
 }
 
-export function getBlockchain(username: string) {
+export function getBlockchain(username: string): string {
   return backend.showChain(username);
 }
 

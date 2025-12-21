@@ -17,7 +17,7 @@ Blockchain & Networking Simulator
 - Networking features:
 
   - Show how data moves through the network in two ways: packet switching/circuit switching
-  - Visualize network setup, delays, and when data collides or gets lost
+  - Visualise network setup, delays, and when data collides or gets lost
   - Simulate how nodes communicate, resend lost data, and handle slow connections
 
 - Cryptography:
