@@ -22,11 +22,6 @@ export function sendTransaction(
   return backend.addTransaction(from, to, amount);
 }
 
-// export async function mineUser(username: string) {
-//   return backend.mine(username);
-// }
-
-// returns {message, nonce}
 export async function mineUser(username: string) {
   let nodeExists = backend.getNode(username);
   if (!nodeExists) {
@@ -54,7 +49,7 @@ export function propagate(username: string, method: "bfs" | "dfs") {
   return backend.propagate(username, method);
 }
 
-// Finalise a mined block using externally computed nonce/hash (used by UI)
+// Finalise a mined block
 export function finaliseMinedBlock(
   username: string,
   nonce: number,

@@ -64,7 +64,7 @@ async function highDifficultyTest() {
 async function invalidTransactionTest() {
   console.log("\n=== ERRONEOUS TEST: Invalid transaction type ===");
   let myChain = new Blockchain(2);
-    myChain.addTransaction(12345); // Invalid, should be string
+  myChain.addTransaction(12345); // Invalid, should be string
 }
 
 async function tamperedChainTest() {
@@ -95,12 +95,12 @@ async function reMiningTest() {
 // === Run all tests sequentially ===
 async function runAllTests() {
   await normalTest();
-  // await emptyMempoolTest();
-  // await largeBatchTest();
-  // await highDifficultyTest();
-  // await invalidTransactionTest();
-  // await tamperedChainTest();
-  // await reMiningTest();
+  await emptyMempoolTest();
+  await largeBatchTest();
+  await highDifficultyTest();
+  await invalidTransactionTest();
+  await tamperedChainTest();
+  await reMiningTest();
 }
 
 runAllTests();

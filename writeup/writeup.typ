@@ -270,7 +270,7 @@ Output: Valid nonce, block hash\
 3. Return valid nonce and hash H
 `
 
-When a valid nonce (an arbitrary number that can be used only once in a cryptographic communication) is found, the block is 'mined' to the blockchain and broadcasted to the network. There are also other mining algorithms such as the proof of stake algorithm.
+When a valid nonce (an arbitrary number that can be used only once in a cryptographic communication) is found, the block is 'mined' to the blockchain and broadcasted to the network. There are also other mining algorithms such as the proof of stake algorithm #footnote[https://www.investopedia.com/terms/p/proof-stake-pos.asp], which instead of mining the blocks, only validates them. This will save a lot more energy not requiring the mining rigs, but at the same time is less secure as they get attacked way more often than proof of work algorithms.
 \
 \
 
@@ -313,7 +313,7 @@ Output: Network consensus\
 Conceptual Flowchart:\
 I created the flowchart below to visualise the workflow of a blockchain:
 #figure(
-  image("images/blockchain_conceptual_flowchart.png", width: 100%),
+  image("images/blockchain_conceptual_flowchart.png", width: 80%),
   caption: [Conceptual flowchart of blockchain workflow.],
 )
 
@@ -468,7 +468,7 @@ In the project, all the algorithms will be developed using the following computa
 - Problem solving using
   - Visualisation
     - Visualisation is an essential part of my project as the main goal of the entire simulator is to help learners to visualise how blockchain works. Therefore, I will have to think about how to represent different components of the blockchain visually, such as blocks, transactions, and the network. This can help me to develop a more effective and engaging simulator.
-    - Performance modelling is also an important part of my project as I will have to control the performance of the simulator to ensure that it runs smoothly and efficiently, especially when mining a block with multiple threads. Therefore, I will have to think about how to model the performance of the simulator and find the best way to optimise it, e.g. using different number of web workers on different devices to mine blocks in parallel.
+    - Performance modelling is also an important part of my project as I will have to control the performance of the simulator to ensure that it runs smoothly and efficiently, especially when mining a block with multiple threads. Therefore, I will have to think about how to model the performance of the simulator and find the best way to optimise it, e.g. using different number of web workers on different devices to mine blocks in parallel. The computers are processing this far more quickly than humans can visualise it.
 === Technology <technology>
 The simulator will run purely on client side code to reduce server costs and workload, and create a more interactive and responsive user experience\
 Frontend: HTML + CSS + TypeScript \
@@ -2649,7 +2649,7 @@ async mine(username: string): Promise<string> {
 ```
 Since my minePendingTransactions() function connects to startMining function which has a resolve function, I will have to return a Promise #footnote[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise] of string instead of pure strings.\
 \
-Another point to mention is that since each transaction takes in a form of ``` tx = ${from} pays ${to} ${amount} coins`;```, therefore I will have to split them back up into parts to extract the sender/receiver and amount to apply the transaction.\
+Another point to mention is that since each transaction takes in a form of ```ts tx = ${from} pays ${to} ${amount} coins`;```, therefore I will have to split them back up into parts to extract the sender/receiver and amount to apply the transaction.\
 \
 - `connectUsers(user1: string, user2: string): string`
 ```ts
@@ -3051,8 +3051,25 @@ Usability features that I have included in the GUI:
 - Responsive design, allowing the simulator to be used on different scren sizes
 - A dark mode theme, as requested by most stakeholders during a survey regarding their preferences on light/dark mode themes
 
-When hovering over the tool tip icon, a box on the bottom left of the simulator will appear explaining that feature. In @gui, my mouse is hovered over the tool tip box next to the 'Balances' title, therefore showing the introduction to the concepts of balances in a blockchain network.
-#pagebreak()
+When hovering over the tool tip icon, a box on the bottom left of the simulator will appear explaining that feature. In @gui, my mouse is hovered over the tool tip box next to the 'Balances' title, therefore showing the introduction to the concepts of balances in a blockchain network. This is done by some css and simple JavaScript
+```ts
+    <script>
+      let tooltipCircle = document.getElementById("tooltip-circle");
+      let tooltipText = document.getElementById("tooltip-text");
+
+      document.querySelectorAll(".tooltip-icon").forEach((e) => {
+        e.addEventListener("mouseenter", () => {
+          tooltipText.textContent = e.dataset.tooltip;
+          tooltipCircle.style.opacity = "1";
+        });
+        e.addEventListener("mouseleave", () => {
+          tooltipCircle.style.opacity = "0";
+        });
+      });
+    </script>
+```
+This changes the content in tooltip and adjust the visibility (opacity) of the tip box when the mouse is hovering/leaving the tool tip circle.
+
 === Connecting all parts
 Before developing the three files, I will have to connect all the parts together into the main file: app.ts. The app.ts file will be responsible for importing all the other files and connecting them together. This helps me to easily test the code if it is working as I can see it graphically.\
 ```ts
@@ -3147,7 +3164,6 @@ Algorithm (pseudocode) Design for selecting/deselecting node:
 - else:
   - unhighlight current node
   - selectedUser = null
-#pagebreak()
 The code for initVisNetwork is as follows:
 ```ts
 export let selectedUser: string | null = null;
@@ -3637,45 +3653,490 @@ To consider the mining process, I will also be thinking about the difficulty of 
 === Goal 
 Iteration 5 has two simple goals:
 - Visualising the mining process
-- Visualising the network propagation process
+- Visualising the network propagation process 
 === Decomposing Iteration 5 
+#figure(image("images/I5_decomposition.png", width:80%),caption:[Iteration 5 decomposition])
+In this Iteration, The two main tasks:
+- Mining 
+  - Implement a difficulty slider that can change the difficulty of the network
+  - Implement a progress status which visualises the mining in action
+- Propagation
+  - Adjust previous code to output the correct data
+  - Animate the propagating process for visualisation 
+These two features both require a lot of readjustment from previous iterations and new code.
+=== Mining
+The reason that I left mining to Iteration 5 instead of doing it in Iteration 4 is because mining is implemented with more structure than other functions as it represents the point at which the blockchain's global state changes. Transactions are only proposals placed into the mempool and have no effect on balances or consensus until they are included in a block. As a result, they can be created instantly without modelling computation or delay.\
+\
+In contrast, mining is responsible for selecting transactions, linking a new block to the existing chain, and enforcing difficulty. Modelling the nonce search and time delay allows the system to demonstrate why blocks do not appear instantly and why block creation is a costly and competitive process. This makes the distinction between unconfirmed transactions and confirmed blocks explicit, and reflects the role of proof-of-work in regulating block production rather than simply appending blocks on demand.\
+==== Design for mining
+The idea for my design is very simple. I am going to show the different nonces that are being tried to match the network difficulty for visualisation. 
+#figure(image("images/mining-design.png"),caption:[Mining GUI design])
+These will be in the sidebar under all the features made in the Iteration 4. At the top is the 'Mine Block' button with the tool tip circle next to it explaining how mining features work.\
+\
+At the start of the simulator when nothing is being mined. The section below the button will be empty. When the transactions are added and the block is being mined, the section will update into text to display 'Mining...', along with the nonce currently being tested. Because mining runs across multiple worker threads, the nonce updates extremely quickly internally, but the interface only refreshes at around 60 times per second, so the displayed nonce represents the most recent value rather than every individual attempt.\
+\
+When a valid nonce is found and the block is successfully mined, the mining status is replaced with the index of the block in the chain, final nonce, hash, and the time taken for the mining process indicating that the block has been added to the chain.
+==== Difficulty
+To adjust the difficulty in ui.ts, I will have to firstly connect to backend.ts where I process all the backend stuff. This will then be connected to the network.ts where I established the network. The setup for difficulty affecting the number of leading zeros in the target is already implemented from Iteration 2.\
+\
+In ui.ts, I will have to pass the value of difficulty to backend.ts: 
+```ts
+  // Difficulty slider
+  difficultyValue.textContent = Backend.backend.difficulty.toString();
+  difficultySlider.oninput = () => {
+    let newDifficulty = parseInt(difficultySlider.value);
+    Backend.setDifficulty(newDifficulty);
+    difficultyValue.textContent = newDifficulty.toString();
+  };
+```
+The range of that the slider can take is between 1 and 6. This is being validated. It also only takes integers value instead which makes sense as it is the number of leading zeros in the target.\
+\
+This is then passed to Backend (network) to process:
+```ts
+export function setDifficulty(newDifficulty: number) {
+  backend.difficulty = newDifficulty;
+  console.log(newDifficulty);
+}
+```
+When changing the will not create a new network. This is because the `difficulty` variable is only used in the mining process throughout the whole simulator. Therefore, it will not cause any issues in the overall network.
+==== Progress
+In previous iterations, I did not consider visualisation when developing the mining algorithm, as the focus was on functionality and efficiency. To visualise the mining progress, I decided to display the nonce currently being tested in real time, allowing the learners to see how proof of work operates rather than treating it as a black box. Achieving this requires access to the nonces being attempted by the worker threads, which means changes must be made at the core of the mining algorithm itself.\
+\
+As a result, I am going to revisit the original startMining() proof of work algorithm developed in Iteration 1 and introduce an `onProgress` callback #footnote[https://developer.mozilla.org/en-US/docs/Glossary/Callback_function], which is a function passed into another function so it can be executed later when a specific event occurs, in this case allowing the mining algorithm to report progress back to the interface while it is running. Each worker periodically sends the nonce it is currently testing, and the main thread forwards this value to the user interface for display.\
+\
+This approach preserves the original parallel mining behaviour while adding a lightweight mechanism for real time visual feedback.\
+\
+Each worker has to post a message of the nonce that they're trying.
+```ts
+export async function startMining(
+  baseData: string,
+  difficulty: number,
+  onProgress?: (nonce: number) => void
+) {
+...
+return new Promise<{ nonce: number; hash: string; time: number }>(
+    (resolve) => {
+      let workerCode = `
+      ...
+      self.onmessage = (e) => {
+          ...
+          self.postMessage({ nonce }); // live progress
+          if(hash.startsWith(prefix)){
+            self.postMessage({ nonce, hash, found: true });
+            break;
+          }
+        }
+      };
+    `;
+      for (let i = 0; i < NUM_WORKERS; i++) {
+        let blob = new Blob([workerCode], { type: "application/javascript" });
+        let worker = new Worker(URL.createObjectURL(blob));
+        workers.push(worker);
 
+        worker.onmessage = (e) => {
+          ...
+            let runtime = parseInt((endTime - startTime).toFixed(2));
+            stopMining();
+            resolve({ nonce: e.data.nonce, hash: e.data.hash, time: runtime });
+          } else if (onProgress) {
+            onProgress(e.data.nonce);
+          }
+        };
+...
+}
+```
+Another thing that I have changed when revisiting the proof of work code is that I have added the processing time as a variable to be ouput with the nonce and hash. This is because this will be easier for future me to take the processing time into the print message, as currently it's being wrapped in a string message for the CLI.\
+\
+Another file to change so that the progress can be reflected on the GUI is the block.ts mineBlock function. This is because to connect to the GUI, it has to be done through network.ts which takes this function to mine blocks. Therefore, the same callback has to be added in the mineBlock function.\
+```ts
+  async mineBlock(difficulty: number, onProgress?: (nonce: number) => void) {
+    ...
+    let result = await startMining(blockData, difficulty, onProgress);
+    ...
+  }
+}
+```
+==== Initial idea for mining
+My initial idea for developing the mining algorithm is to connect the mining function just like other features, like adding users, using the function from network.ts. This will work as the only issue is to change the output type of the mining function in network.ts from the string message into an object which contains the username, index, hash and nonce:
+```ts
+    let latestBlock = node.blockchain.getLatestBlock();
+    let index = latestBlock.index;
+    let hash = latestBlock.hash;
+    let nonce = latestBlock.nonce;
+    return [{ username }, { index }, { hash }, { nonce }];
+```
+#figure(image("images/mine.png"), caption:[CLI after changing mining output])
+Although this works, it will not display the progress that I have just made. This is because in a CLI, it will be very chaotic to print the nonces in real time and flooding the console.\
+\
+However, I still do want to preserve the functionality of the CLI. Therefore, I will have to redesign the function specifically for the GUI.
+==== Mining GUI
+To design the mining GUI, I will have to consider what actually happens starting from the frontend button. When I press the button, what do I expect the simulator to do?\
+Algorithm deesign:
+- When the 'Mine' Button is clicked, the algorithm checks if there is anything in the mempool: 
+  - If there isn't:
+    - return with an error message
+  - If there is:
+    - Take the transactions in the mempol and all the required data (index, previousHash, timestamp, transactions) and start mining a block with those inputs
+    - After mining, construct a block with the output of mining function and add it to the end of the user's blockchain.
+    - update the balances of users after transactions
+    - print the empty mempool
+Pseducode design:
+```
+mineBtn.onClick = () => {
+  if (!Vis.selectedUser) return alert("Select a node first!")
+  
+  mineStatusDiv = 'Mining...'
+  try {
+    node = Backend.backend.getNode(vis.selectedUser)
+    if (!node) {
+      alert('User not found')
+      return;
+    }
+
+    let mempool = Backend.backend.showMempool()
+    if (mempool.length === 0) {
+      alert('No transactions to mine')
+      mineStatusDiv = ''
+    }
+
+    // Passing inputs to mine block
+    index = node.blockchain.length
+    previousHash = node.blockchain.getLatestBlock().hash
+    timestamp = Date.now()
+    transactions = [...mempool]
+    baseData = index + previousHash + timeStamp + transactions
+    lastNonce = 0
+    result = await startMining( 
+      baseData,
+      Backend.backend.difficulty,
+      (nonce: number) => {
+        // Updating progress
+        mineStatusDiv = `Mining... Nonce: ${lastNonce}`
+        lastNonce = nonce;
+      }
+    )
+
+    Vis.resetNodeColor(Vis.selectedUser)
+    mempoolDiv = Backend.backend.showMempool()
+  } catch (err) {
+    alert('Mining error' + err)
+  }
+  
+}
+``` 
+I have added a few validation, including validating if a user is selected for mining, doing a try and catch in case the mining takes too long and causing errors, checking if mempool is empty.\
+\
+Besides, this time, I have included a function called the finalisMinedBlock. This will be developed in the backend which connects to the network.ts so that the block can be added to the user's local copy of blockchain.\
+\
+The code for mining in ui.ts is as follows:
+```ts
+  // Mining a block
+  mineBtn.onclick = async () => {
+    if (!Vis.selectedUser) return alert("Select a node first!");
+
+    mineStatus.innerHTML = `Mining...`;
+    Vis.highlightNode(Vis.selectedUser!);
+
+    try {
+      let node = Backend.backend.getNode(Vis.selectedUser!);
+      if (!node) {
+        alert(`User ${Vis.selectedUser} not found.`);
+        Vis.resetNodeColor(Vis.selectedUser!);
+        return;
+      }
+
+      let mempool = Backend.backend.showMempool();
+      if (!mempool || mempool.length === 0) {
+        alert("No transactions to mine.");
+        Vis.resetNodeColor(Vis.selectedUser!);
+        mineStatus.innerHTML = "";
+        return;
+      }
+
+      // Passing inputs to mine block
+      let index = node.blockchain.chain.length;
+      let previousHash = node.blockchain.getLatestBlock().hash;
+      let timestamp = Date.now();
+      let transactions = [...mempool];
+      let baseData =
+        index + previousHash + timestamp + JSON.stringify(transactions);
+
+      let lastNonce = 0;
+
+      let result = await startMining(
+        baseData,
+        Backend.backend.difficulty,
+        (nonce: number) => {
+          // Updating Progress
+          mineStatus.innerHTML = `Mining... Nonce: ${lastNonce}`;
+          lastNonce = nonce;
+        }
+      );
+
+      // finalise the mined block in the backend using the produced nonce/hash
+      let finaliseMsg = Backend.finaliseMinedBlock(
+        Vis.selectedUser!,
+        result.nonce,
+        result.hash,
+        timestamp,
+        transactions
+      );
+
+      mineStatus.innerHTML = `${finaliseMsg.replace(/\n/g, "<br>")}<br>
+      Nonce: ${result.nonce}, Mining took ${result.time}ms`;
+
+      setTimeout(() => Vis.resetNodeColor(Vis.selectedUser!), 500);
+
+      mempoolDiv.innerHTML = Backend.backend.showMempool().join("<br>");
+    } catch (err) {
+      alert("Mining error: " + err);
+    }
+  };
+```
+As usability features, I have added some responses from the ui while a user is chosen to be mining: 
+- When a user is chosed to be mining, they will be highlighted.
+- After mining, the user will be reset back to the default colour
+This helps the user to identify which user is currently mining the blockchain.\
+\
+Now I will have to actually add the blockchain into the network by defining the Backend.finaliseMinedBlock() in backend.ts. I want to leave all the adding blocks within the network.ts. Therefore, this will serve as a wrapper function which connects to network.ts to get all the output:
+```ts
+// Finalise a mined block 
+export function finaliseMinedBlock(
+  username: string,
+  nonce: number,
+  hash: string,
+  timestamp: number,
+  transactions: string[]
+) {
+  return backend.finaliseMinedBlock(
+    username,
+    nonce,
+    hash,
+    timestamp,
+    transactions
+  );
+}
+```
+The reason for this function is to exist is that in future maintenance, all the backend code for the GUI can be found in the backend.ts. Therefore, me or other development won't have to spend a lot of time just to find each functions in different files.\
+\
+In network.ts, I will then have to process the new data to put them in a block. The new block should be put under a user in the network, with the essential attributes of a block: nonce, hash, timestamp, and transactions. The majority of this function will be the same with the network.mine function which handles the mining and wrapping data into blocks for my CLI. The only difference for the GUI is that I am processing the mining and the wrapping separately in different modules. \
+\
+Algorithm design: \
+This function should
+- Create a new block by using the new Block() function and adding all the 
+- Apply the transactions so that the transactions in mempool are actually processed
+- Clear the mempool after transactions are being done
+Implementation:
+```ts
+  // GUI: Finalise a mined block using externally computed nonce and hash
+  finaliseMinedBlock(
+    username: string,
+    nonce: number,
+    hash: string,
+    timestamp: number,
+    transactions: string[]
+  ): string {
+    let node = this.getNode(username);
+    if (!node) return `User ${username} not found.`;
+    if (this.mempool.length === 0) return "No transactions to mine.";
+
+    let transactionsToMine = transactions;
+
+    let newBlock = new Block(
+      node.blockchain.chain.length,
+      timestamp,
+      transactionsToMine,
+      node.blockchain.getLatestBlock().hash
+    );
+
+    newBlock.nonce = nonce;
+    newBlock.hash = hash;
+    newBlock.mined = true;
+
+    node.blockchain.chain.push(newBlock);
+
+    // apply transactions
+    for (let tx of transactionsToMine) {
+      let parts = tx.split(" ");
+      let from = parts[0];
+      let to = parts[2];
+      let amount = parseInt(parts[3]);
+      this.balances.applyTransaction(from, to, amount);
+    }
+
+    // miner reward
+    this.balances.applyTransaction("system", username, 10);
+    // clear mempool
+    this.mempool = [];
+
+    return `Block mined by ${username}: Index=${newBlock.index}, Hash=${newBlock.hash}`;
+  }
+}
+```
+Similar with the CLI, I have kept the miner reward as a more realistic feature. This is a good usability feature since it will help learners to learn how new coins can be added into the system.
+
+=== Mining Test
+To test the mining feature in the GUI, I have created a simple network which only contains two nodes, A and B. I made a few example transactions between them and these updated the mempool. Therefore we have transactions in the mempool to mine.
+#figure(image("images/Mining.png"), caption:[Mining in progress])
+The above image shows that mining is in progress, as shown by the nonce being a changing number. This suggests that the onProgress callback that I have made has successfully connected to the frontend and is able to display the nonce that they are trying.
+
+#figure(image("images/Finish-Mining.png"), caption:[Bloick successfully mined])
+When block is successfully mined, the mineStatus div has successfully updated with the details of the block, confirming that the connection from backend to frontend is successful. The blockchain tab for user A (miner) has also been updated with an extra block, showing that it has successfully mined the data using proof of work and added the block with the correct data into the local copy of blockchain. \
+\
+To test the how the difficulty level of the network affect the mining speed, I have tried if the network slider actually affect the mining speed. Firstly, when changing the difficulty, I logged the number of difficulty in the console by adding `console.log(difficulty)`, which has shown properly. 
+#figure(image("images/difficulty_slider.png"), caption:[Difficulty in action])
+To further test if the difficulty has actually changed the mining speed, I added some other transactions after adjusting the difficulty level to 1 from 2. I used the mine button which the mining time decreased from 3310ms to 20ms (shown in console in above image), which shows the network difficulty in action.\
+\
+Erroneous Test:\
+To test invalid block data, I have tried to mine a block when there is no transactions in the mempool:
+#figure(image("images/no_trans.png"), caption:[Mining with no transactions])
+The webpage has successfully validate this and gave me an alert message 'No tranasctions to mine'. Therefore all the data validation for mining is done.
+=== Propagation
+There is a few reasons that I left propagation in Iteration 5 instead of doing it in Iteration 4. One of the reason is that I need the blocks to be mined into the blockchain before propagating them throughout the network. The other reason is that implementing propagation feature isn't as easy as the others like adding users. This is because in Iteration 3, although the I have already built the propagation for the CLI, it doesn't output the correct data type. Therefore a data change is required.
+==== Output from network.ts
+The output of the function for propagation from network.ts returns a string like "DFS/BFS propagation: A -> B -> C -> D" due to the return function being ```ts return `${method.toUpperCase()} propagation: ${order.join(" -> ")}`; ```. This form is very readable for the CLI. However, in order to animate the propagation function, I will have to actually get the list as the output. Therefore the function has to instead ```ts return output``` which is a list rather than a string.\
+\
+However, this change of output of the propagate function will invalid the cli. In order to keep both the CLI and GUI working, I have to slightly adjust the code in cli.ts as well. Since I have deleted the part where the order list is joined within the propagate function, I will have to do that in the cli.ts instead:
+```ts
+// Propagate for both CLI/GUI
+let order = network.propagate(args[0], args[1] as "bfs" | "dfs");
+console.log("Propagation order:", order.join(" -> "));
+```
+Now the propagation function will work for both CLI and GUI.\
+This is a simple manual test for CLI still working fine:
+#figure(image("images/propagation.png", width:70%), caption:[CLI still working])
+
+==== Animating propagation
+Firstly, with a graph, it is much easier to develop a visualisation tool for propagations. I made a sketch of how I am imagining it to look like:
+#figure(image("images/animation_design.png"), caption:[Propagation animation design])
+This diagram is actually taken from Iteration 1 when I developed the BFS and DFS algorithms.\
+After the propagate button is being clicked, the graph will be traversed by either BFS/DFS depending on the input. For each 0.4 seconds, one node will light up until all nodes have been traversed. 1 second after the graph is traversed, the network will goes back to the original state where nothing is highlighted. \
+\
+Although the animation is taking time to show lighted up nodes, the actual block should be sent to all connected nodes instantly. The animation is purely for visualisation purpose.\
+\
+To implement this, propagation animation is handled entirely in ui.ts. This is a deliberate choice: animation is a frontend concern, not a backend one. The network logic computes the traversal order instantly, then passes that order to the UI purely for visualisation.\
+\
+The animatePropagation() function takes the traversal order of the graph (input) and highlights nodes sequentially (output). Previously highlighted nodes stay lit to show cumulative propagation. Once the animation finishes, all affected nodes are reset back to their default state.\
+\
+Algorithm Design:\
++ The algorithm begins by checking whether a valid traversal order is provided. If the order is empty or undefined, it exits immediately to prevent unnecessary UI updates and potential runtime errors. (For data validation)
++ The animation advances using a step based function triggered by a timer rather than a loop. This is necessary because TypeScript is single threaded without web workers: a loop would block rendering, while a timed step function allows the browser to repaint between steps and keeps the UI responsive. Each step highlights exactly one node, while previously highlighted nodes remain active to represent cumulative propagation.
++ Once all nodes in the traversal order have been highlighted, the algorithm pauses briefly so the user can observe the completed propagation, then resets only the affected nodes. This avoids persistent visual clutter and ensures the graph is ready for subsequent animations.\
+Here is the code for `animatePropagation(order:string[])`:
+```ts
+function animatePropagation(order: string[]) {
+  if (!order || order.length === 0) return;
+
+  let i = 0;
+
+  function step() {
+    if (i < order.length) {
+      // Highlight current node, leave previous highlighted nodes as they are
+      Vis.highlightNodes([order[i]], {
+        background: "#12bd1bff",
+        border: "rgba(8, 222, 230, 1)",
+      });
+      i++;
+      setTimeout(step, 400);
+    } else {
+      // After all nodes are highlighted, wait a bit then reset everything
+      setTimeout(() => {
+        Vis.resetNodes(order);
+      }, 1000); // Reset all the nodes back to default colour
+    }
+  }
+
+  step();
+}
+```
+This will allow me to change each nodes background and border colour.\
+\
+Then, to connect my two prebuilt dfs/bfs function, I will connect to backend.ts which can use the propagate function from network.ts which will be the same as the one used in my CLI, which earlier in this Iteration has been proven to be working.\
+\
+Algorithm Design:\
+When clicked on the `propagate BFS` or `propagate DFS` function:\
+- Check if a user is selected for mining (For data validation)
+- Connect to backend.ts to get the order of traversal (requires propagation function in backend.ts)
+- Ensure that the correct output type in case it kept the format from CLI (For data validation)
+- Pass the order into the animation function
+The code to this algorithm is as follows:
+```ts
+// Propagating a block through the network by BFS or DFS
+propagateBFSBtn.onclick = () => {
+  if (!Vis.selectedUser) return alert("Select a node first!");
+
+  let result = Backend.propagate(Vis.selectedUser, "bfs");
+
+  if (typeof result === "string") {
+    alert(result);
+    return;
+  }
+
+  animatePropagation(result);
+};
+
+propagateDFSBtn.onclick = () => {
+  if (!Vis.selectedUser) return alert("Select a node first!");
+
+  let result = Backend.propagate(Vis.selectedUser, "dfs");
+
+  if (typeof result === "string") {
+    alert(result);
+    return;
+  }
+
+  animatePropagation(result);
+};
+```
+
+In backend.ts, to develop the required function, a simple link to the main network will be done by:
+```ts
+export function propagate(username: string, method: "bfs" | "dfs") {
+  return backend.propagate(username, method);
+}
+```
+Now, the 
 === Testing to inform evaluation
 // Thinking ahead
 
-Limitation: I have only done the mining speed test on my two computers, however this might not be representative of all the computers that my stakeholders are using. Therefore, the mining speed might vary on different computers with different hardware specifications. But in general, with an average computer, the mining speed should be around the same as my test results. Therefore still satisfies my SC // TODO
-\
-Another limitation is that I left my stakeholder James idea of exporting and importing the state of the network with JSON files as he suggested in Iteration 3. This is because to implement this feature, instead of strings that my simulator is currently outputting, I will have to refactor a lot of the code to make the classes take in JSON files. This was not ideal since I should be focusing on developing the GUI in Iteration 4 and 5. Therefore, I can consider adding this feature in future maintenance.\
+
 === End Product Evaluation
-// Section 1: Usability
-// 1. Is it easy and intuitive to navigate the simulator interface?
 
-// 2. Which features do you find most useful?
-// ☐ Adding transactions
-// ☐ Mining blocks
-// ☐ Viewing block details
-// ☐ Visualising blockchain structure
-// ☐ Simulating network propagation (BFS/DFS)
-// ☐ Checking chain validity
+==== Stakeholder Final Review
+To take feedbacks from users for the final time in this project, I am going to interview each of them to give me comments about the simulator. These are the questions that I am asking them:
+```
+Section 1: Usability
+1. Is it easy and intuitive to navigate the simulator interface?
 
-// 3. Are there any features that are confusing or need improvement?
+2. Which features do you find most useful?
+☐ Adding transactions
+☐ Mining blocks
+☐ Viewing block details
+☐ Visualising blockchain structure
+☐ Simulating network propagation (BFS/DFS)
 
-// Are you satisfied with the responsiveness of the simulator to your actions (e.g., adding blocks, expanding transactions)?
+3. Are there any features that are confusing or need improvement?
 
-// Section 4: Educational Value
-// 9. How much did you learn about blockchain by using the simulator?
-// 
-// Would you recommend this simulator to other students to learn blockchain concepts?
+Are you satisfied with the responsiveness of the simulator to your actions (e.g., adding blocks, expanding transactions)?
 
-// Section 5: Additional Feedback
-// 11. What improvements would make the simulator more useful or enjoyable?
+Section 4: Educational Value
+9. How much did you learn about blockchain by using the simulator?
 
-// How clear are the visual representations of:
-// Blocks and transactions
-// Blockchain structure (links between blocks)
-// Network propagation
-// Are the tool tips clear enough to understand how to use the simulator?
+Would you recommend this simulator to other students to learn blockchain concepts?
+
+Section 5: Additional Feedback
+11. What improvements would make the simulator more useful or enjoyable?
+
+How clear are the visual representations of:
+Blocks and transactions
+Blockchain structure (links between blocks)
+Network propagation
+Are the tool tips clear enough to understand how to use the simulator?
+```
+After interviewing them, here is a summary of what they have said:\
+All of them agreed that the blockchain simulator is easy and intuitive to navigate simulator. James quite likes idea of the user actions being in order. He said that this is a very good usability feature. All of them have gained more understanding of blockchain technologies from my simulator. Ben really likes the graph being combined into the idea of blockchain as there are no existing simulator with graphs showing how an actual network would be looking like. Most of them find the 
 === Robustness Test
+In later on iterations, I tried to break my own code by inputting invalid data into the input boxes. I have also invited my stakeholders to try break the simulator while trying it out. This can help be raise possible unexpected inputs values so that I can fix them as soon as possible. For example, when Jeremy tried to break my simulator by adding users with very long usernames, my simulator crashed. This is quickly fixed and when he tried it again in Iteration 4, he did not succeed to break my simulator. 
 === SC Review
 #table(
   columns: (64pt, 33pt, auto, auto),
@@ -3821,22 +4282,119 @@ Every features included in the Blockchain simulator has been commented, stating 
 == Test Data <test-data>
 == Data Validation
 = Evaluation <evaluation>
-Limitation:
+== Limitations
+HARDWARE LIMITATIONS 
+SOFTWARE LIMITATIONS
+- Insufficient testing devices
+I have only done the mining speed test on my two computers, however this might not be representative of all the computers that my stakeholders are using. Therefore, the mining speed might vary on different computers with different hardware specifications. But in general, with an average computer, the mining speed should be around the same as my test results. Therefore still satisfies my SC // TODO
+\
+- Import/Export JSON
+Another limitation is that I left my stakeholder James idea of exporting and importing the state of the network with JSON files as he suggested in Iteration 3. This is because to implement this feature, instead of strings that my simulator is currently outputting, I will have to refactor a lot of the code to make the classes take in JSON files. This was not ideal since I should be focusing on developing the GUI in Iteration 4 and 5. Therefore, I can consider adding this feature in future maintenance.\
+\
 - Dynamic difficulty level
+In real life blockchain, 
+\
+- Blockchain forks
+It real life blockchain networks, it is quite often to see more than one blockchain within a network. This is
+\
+- No further guidance
+For passionate learners that want to learn more about blockchain, I will not have the features for them as my simulator might not be 100% accurate in real world. They will have to 
+
+// UI checks for negative/invalid amounts in transactions
+// but the backend doesnt
+// u can bypass via console etc
+// it's impossible to truly stop an end user from bypassing controls via the browser console
+// 
+// Unmet usability features: flexibility for full keyboard control. Adding 
+== Future Maintenance/Development
+How can I tackle with the limitations for future maintenance/development:
+
 === Decomposition
 The decomposition method is used throughout the whole project from breaking down the blockchain technologies from the start, to breaking down the iterations into smaller tasks. This helps me to manage my time and resources effectively, as I can focus on one task at a time and complete it before moving on to the next task. It also helps me to identify any potential issues or challenges that may arise during the development process, allowing me to address them early on. I can also test each component individually before integrating them into the larger system, ensuring that each part functions correctly and meets the project requirements.
 
+#set page(columns: 3, margin: (x: 8pt))
+// format code blocks with a background and margin
 = Appendix
 Here I will attach all the code files that I have written for my blockchain simulator project. They are sorted in alphabetical order for easy navigation.
-// format code blocks with a background and margin
-// #show raw.where(block: true): block.with(inset: 0em)
+#show raw.where(block: true): block.with(inset: 0em)
 
-// #set text(size: 5pt)
-// #set page(columns: 3, margin: (x: 8pt))
-// #set columns(gutter: 5pt)
+#set columns(gutter: 5pt)
+#set text(size: 5pt)
 
-// File `cli.ts`:
+// File `bfs/bfs.ts`:
+// #raw(read("../code/bfs/bfs.ts"), lang: "ts", block: true)
+
+// File `bfs/bfs.test.ts`:
+// #raw(read("../code/bfs/bfs.test.ts"), lang: "ts", block: true)
+
+// File `block/block.ts`:
+// #raw(read("../code/block/block.ts"), lang: "ts", block: true)
+
+// File `block/blockchain.ts`:
+// #raw(read("../code/block/blockchain.ts"), lang: "ts", block: true)
+
+// File `block/main.ts`:
+// #raw(read("../code/block/main.ts"), lang: "ts", block: true)
+
+// File `cli/cli.ts`:
 // #raw(read("../code/cli/cli.ts"), lang: "ts", block: true)
 
-// File `lmc.html`:
-// #raw(read("lmc.html"), lang: "html", block: true)
+// File `dfs/dfs.ts`:
+// #raw(read("../code/dfs/dfs.ts"), lang: "ts", block: true)
+
+// File `dfs/dfs.test.ts`:
+// #raw(read("../code/dfs/dfs.test.ts"), lang: "ts", block: true)
+
+// File `gui/poc/index.html`:
+// #raw(read("../code/gui/poc/index.html"), lang: "html", block: true)
+
+// File `gui/poc/main.ts`:
+// #raw(read("../code/gui/poc/main.ts"), lang: "ts", block: true)
+
+// File `gui/backend.ts`:
+// #raw(read("../code/gui/backend.ts"), lang: "ts", block: true)
+
+// File `gui/ui.ts`:
+// #raw(read("../code/gui/ui.ts"), lang: "ts", block: true)
+
+// File `gui/visManager.ts`:
+// #raw(read("../code/gui/visManager.ts"), lang: "ts", block: true)
+
+// File `network/balances.ts`:
+// #raw(read("../code/network/balances.ts"), lang: "ts", block: true)
+
+// File `network/balances.test.ts`:
+// #raw(read("../code/network/balances.test.ts"), lang: "ts", block: true)
+
+// File `network/network.ts`:
+// #raw(read("../code/network/network.ts"), lang: "ts", block: true)
+
+// File `pow/hash.ts`:
+// #raw(read("../code/pow/hash.ts"), lang: "ts", block: true)
+
+// File `pow/hash.test.ts`:
+// #raw(read("../code/pow/hash.test.ts"), lang: "ts", block: true)
+
+// File `pow/index.html`:
+// #raw(read("../code/pow/index.html"), lang: "html", block: true)
+
+// File `pow/main.ts`:
+// #raw(read("../code/pow/main.ts"), lang: "ts", block: true)
+
+// File `pow/server.ts`:
+// #raw(read("../code/pow/server.ts"), lang: "ts", block: true)
+
+// File `pow/worker.ts`:
+// #raw(read("../code/pow/worker.ts"), lang: "ts", block: true)
+
+// File `pow_with_blob/main.ts`:
+// #raw(read("../code/pow_with_blob/main.ts"), lang: "ts", block: true)
+
+// File `app.ts`:
+// #raw(read("../code/app.ts"), lang: "ts", block: true)
+
+// File `index.css`:
+// #raw(read("../code/index.css"), lang: "css", block: true)
+
+// File `index.html`:
+// #raw(read("../code/index.html"), lang: "html", block: true)

@@ -117,43 +117,6 @@ export class Network {
     return `${user1} and ${user2} are now neighbours.`;
   }
 
-  // BFS/DFS propagation of latest block using imported traversals
-  // propagate(startUsername: string, method: "bfs" | "dfs"): string {
-  //   let startNode = this.getNode(startUsername);
-  //   if (!startNode) {
-  //     return `Start user ${startUsername} not found.`;
-  //   }
-
-  //   let latestBlock = startNode.blockchain.getLatestBlock();
-  //   let targetPrefix = "0".repeat(startNode.blockchain.difficulty);
-
-  //   if (!latestBlock.hash.startsWith(targetPrefix)) {
-  //     return `Cannot propagate: latest block by ${startUsername} is not mined yet.`;
-  //   }
-
-  //   // Build adjacency list for traversal
-  //   let adjacencyList: Record<string, string[]> = {};
-  //   for (let [username, node] of this.nodes.entries()) {
-  //     adjacencyList[username] = node.neighbours.map((n) => n.username);
-  //   }
-
-  //   // Get traversal order
-  //   let order =
-  //     method === "dfs"
-  //       ? dfs_traverse(adjacencyList, startUsername)
-  //       : bfs_traverse(adjacencyList, startUsername);
-
-  //   // Propagate block along traversal order
-  //   for (let username of order) {
-  //     let node = this.getNode(username)!;
-  //     if (node.blockchain.chain.length <= latestBlock.index) {
-  //       node.blockchain.chain.push(latestBlock);
-  //     }
-  //   }
-
-  //   return `${method.toUpperCase()} propagation: ${order.join(" -> ")}`;
-  // }
-
   // Propagate for both GUI and CLI
   propagate(startUsername: string, method: "bfs" | "dfs"): string[] | string {
     let startNode = this.getNode(startUsername);
@@ -276,13 +239,13 @@ export class Network {
     nonce: number,
     hash: string,
     timestamp: number,
-    transactions?: string[]
+    transactions: string[]
   ): string {
     let node = this.getNode(username);
     if (!node) return `User ${username} not found.`;
     if (this.mempool.length === 0) return "No transactions to mine.";
 
-    let transactionsToMine = transactions ?? [...this.mempool];
+    let transactionsToMine = transactions;
 
     let newBlock = new Block(
       node.blockchain.chain.length,

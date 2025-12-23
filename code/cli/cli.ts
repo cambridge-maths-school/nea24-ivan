@@ -54,11 +54,10 @@ async function main() {
           console.log("Usage: propagate <username> <bfs|dfs>");
           break;
         }
-        console.log(network.propagate(args[0], args[1] as "bfs" | "dfs"));
-      // Propagate for bothBlockchain.mineBlock() CLI/GUI
-      // let order = network.propagate(args[0], args[1] as "bfs" | "dfs");
-      // console.log("Propagation order:", order.join(" -> "));
-      // break;
+        // Propagate for CLI/GUI
+        let order = network.propagate(args[0], args[1] as "bfs" | "dfs");
+        console.log("Propagation order:", order.join(" -> "));
+        break;
       case "show_chain":
         console.log(network.showChain(args[0]));
         break;

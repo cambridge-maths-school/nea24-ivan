@@ -106,6 +106,7 @@ export function initUI() {
         return;
       }
 
+      // Passing inputs to mine block
       let index = node.blockchain.chain.length;
       let previousHash = node.blockchain.getLatestBlock().hash;
       let timestamp = Date.now();
@@ -119,6 +120,7 @@ export function initUI() {
         baseData,
         Backend.backend.difficulty,
         (nonce: number) => {
+          // Updating progress
           mineStatus.innerHTML = `Mining... Nonce: ${lastNonce}`;
           lastNonce = nonce;
         }
@@ -134,7 +136,7 @@ export function initUI() {
       );
 
       mineStatus.innerHTML = `${finaliseMsg.replace(/\n/g, "<br>")}<br>
-      Nonce: ${result.nonce}, Hash: ${result.hash}`;
+      Nonce: ${result.nonce}, Mining took ${result.time}ms`;
 
       setTimeout(() => Vis.resetNodeColor(Vis.selectedUser!), 500);
 
