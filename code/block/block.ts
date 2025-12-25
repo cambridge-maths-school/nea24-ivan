@@ -7,7 +7,7 @@ export class Block {
   timestamp: number; // When the block was created
   transactions: string[]; // Transactions included in this block
   previousHash: string; // Hash of previous block
-  nonce: number = 0; // Used for proof-of-work
+  nonce: number = 0; // Used for proof of work
   hash: string; // Hash of this block
   mined: boolean = false;
 

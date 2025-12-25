@@ -1,5 +1,7 @@
 # nea24-ivan
 
+Both writeup and mark scheme mapping are in the root folder.
+
 Hello World!
 
 Project Proposal:

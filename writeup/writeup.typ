@@ -271,7 +271,7 @@ Output: Valid nonce, block hash\
 
 When a valid nonce (an arbitrary number that can be used only once in a cryptographic communication) is found, the block is 'mined' to the blockchain and broadcasted to the network. There are also other mining algorithms such as the proof of stake algorithm #footnote[https://www.investopedia.com/terms/p/proof-stake-pos.asp], which instead of mining the blocks, only validates them. This will save a lot more energy not requiring the mining rigs, but at the same time is less secure as they get attacked way more often than proof of work algorithms.
 \
-\
+#pagebreak()
 
 6. Peer to Peer network
 Blockchain relies on a decentralised peer to peer (P2P) network -- which means no central node. Each node maintains a copy of the blockchain and independently verifies transactions and blocks.\
@@ -308,12 +308,12 @@ Output: Network consensus\
 - Each block contains the hash of the previous block, forming a cryptographically linked chain
 - Mutating a block makes all of its following blocks invalid -- This makes it infeasible to alter blocks
 - Only blocks meeting the proof of work and containing valid transactions are accepted by the network
-
+#pagebreak()
 Conceptual Flowchart:\
 I created the flowchart below to visualise the workflow of a blockchain:
 #figure(
   image("images/blockchain_conceptual_flowchart.png", width: 80%),
-  caption: [Conceptual flowchart of blockchain workflow.],
+  caption: [Conceptual flowchart of blockchain workflow],
 )
 
 A very broad summary of the blockchain network workflow is as follows:
@@ -323,7 +323,8 @@ A very broad summary of the blockchain network workflow is as follows:
 - Miners perform proof of work to find a valid nonce (a number that is added to the block data to be hashed that results in a hash that meets the network difficulty target, which means it should have a certain number of leading zeros in binary) and hash of the new block
 - Once a valid nonce is found, the new block is added to the local copy of blockchain of the miner node and broadcasts to all nodes in the peer to peer network.
 - Each node verifies the new block and appends it to their local copy of the blockchain if valid therefore everyone keeps a synchronised copy of the blockchain
-- This process repeats for each new block being mined
+- This process repeats for each new block being mined\
+\
 Note:
 - The difficulty of mining is set by the network and cannot be changed by miners.
 #pagebreak()
@@ -466,6 +467,7 @@ In the project, all the algorithms will be developed using the following computa
 - Thinking Ahead
   - I will think about the future development of the project while developing. This means that I will have to think about how the code can be extended in the future and how new features can be added without breaking the existing code. This can help me to write more maintainable and extensible code. To achieve this, I will be thinking about the input and output of functions before developing them.
   - Thinking ahead is suitable for my project because I will be developing the same algorithms for firstly a CLI, then a GUI at the end to visualise the blockchain for my stakeholders. Therefore, I will have to think about how to code can be reused and extended for different interfaces. This can save me a lot of time to make redundant code to do the same thing.
+#pagebreak()
 - Problem solving using
   - Visualisation
     - Visualisation is an essential part of my project as the main goal of the entire simulator is to help learners to visualise how blockchain works. Therefore, I will have to think about how to represent different components of the blockchain visually, such as blocks, transactions, and the network. This can help me to develop a more effective and engaging simulator.
@@ -474,17 +476,18 @@ In the project, all the algorithms will be developed using the following computa
 The simulator will run purely on client side code to reduce server costs and workload, and create a more interactive and responsive user experience\
 Frontend: HTML + CSS + TypeScript \
 Graph visualisation: canvas
-=== Device Compatibility
-The blockchain simulator is designed to run entirely in the browser. Therefore a JavaScript supporting browser is required. The simulator will be optimised for modern desktop and laptop environments using Chromium browsers (Google Chrome, Microsoft Edge, Opera). Mobile browsers may support basic interactios, but visualisation features are best experienced on computer systems. The device running to program should have at least a refresh rate of 60Hz to run the `requestAnimationFrame()` function in canvas to visualise blockchain workflow. Since the code for mining will be using multiple threads (>10 logical processors) in the CPU, a computer of a better specification will be more optimised.
+=== Device Compatibility (Software/Hardware requirements)
+The blockchain simulator is designed to run entirely in the browser. Therefore a JavaScript supporting browser is required. The simulator will be optimised for modern desktop and laptop environments using Chromium browsers (Google Chrome, Microsoft Edge, Opera). Mobile browsers may support basic interactios, but visualisation features are best experienced on computer systems. The device running to program should have at least a refresh rate of 60Hz to run the `requestAnimationFrame()` function in canvas to visualise blockchain workflow. Since the code for mining will be using multiple threads (>10 logical processors) in the CPU, a computer of a better specification will be more optimised. The device should also have basic input and output devices, such as monitor which supports 60fps, keyboard and mouse.
 ==== TypeScript
 I will be using TypeScript to develop my blockchain simulator. TypeScript is a superset of JavaScript that adds types, interfaces, and other features to enhance code quality and maintainability. Here are some reasons why TypeScript is a good choice for this project:
 + Type Safety: TypeScript's static typing helps catch errors at compile time, reducing bugs in runtime. This is  important in a complex project like a blockchain simulator where data structures and algorithms need to be precise. It also helps me to think about the input and output of the functions while doing modular coding
-+ Sustainability: TypeScript's type makes it easier to understand and maintain code over time. This is important because it allows other developers to look at the code and understand it to develop new features and improvements
++ Sustainability: TypeScript's type makes it easier to understand and maintain code over time. This is important because it allows other developers to look at the code and understand it to develop new features and improvements\
+\
 However, when the website gets online, the TypeScript code will be transpiled (convert between two high-level languages) into JavaScript, so that it can be run on all Chromium browsers. Therefore, users do not have to install TypeScript on their devices to run the Blockchain Simulator. Their browsers only have to support JavaScript. Since I will be developing in Bun, the TypeScript will be automatically transpiled into JavaScript and I could just plug the file into the html file.
 #pagebreak()
 == Stakeholders <stakeholders>
 External Stakeholders:
-+ Students: My blockchain simulator is aimed at A level student who would like to go beyond the standard A level . This will serve as a great resource for them to gain an insight of what blockchain is, how they can propagate
++ Students: My blockchain simulator is aimed at A level student who would like to go beyond the standard A level . This will serve as a great resource for them to gain an insight of what blockchain is and how a blockchain network will be looking like. They should then be able to apply this knowledge into real life technologies like cryptocurrencies
 + Teachers: They could use it as a teaching tool in lessons or demonstrations.
 \
 Internal Stakeholders
@@ -786,7 +789,7 @@ I have designed the following basic tree (an abstract data type that is a graph 
   label: <normal-test>,
 )
 
-
+#pagebreak()
 Since I am developing in TypeScript, I have to declare the type of my adjacency list. Therefore I have to create an interface for my adjacency lists. Considering my input being the nodes and its neighbours in an array of strings, I will require a key-value pair #footnote[https://experienceleague.adobe.com/en/docs/audience-manager/user-guide/reference/key-value-pairs-explained#:~:text=A%20key%2Dvalue%20pair%20consists,color%20%3D%20green] (a basic data structure that stores data as a collection of unique, constant keys and their corresponding, variable values). Therefore my type AList (adjancency list) takes in 2 parameters, the key as a string --- this will be the nodes and the values as an array of strings --- this will be the neighbours in arrays of strings. The interface can be defined as following:
 ```ts
  interface AList {
@@ -1458,7 +1461,9 @@ This works but it is not ideal for my use case as I want to keep the code in Typ
 #figure(image("images/vite.png"), caption: [Vite Development Server Serving Multiple Files])
 This is not the best approach since I want to keep the code in TypeScript for better type safety and developer experience.
 ==== Approach 2
-Another approach to resolve this issue in Bun is to create a simple HTTP server that serves both `main.ts` and `worker.ts`. This way, when the main thread creates a new worker, it can successfully fetch the `worker.ts` file from the server. Here is how I implemented it:
+Another approach to resolve this issue in Bun is to create a simple HTTP server that serves both `main.ts` and `worker.ts`. This way, when the main thread creates a new worker, it can successfully fetch the `worker.ts` file from the server. Here is how I implemented it:\
+-- See next page
+#pagebreak()
 ```ts
 import { serve } from "bun";
 
@@ -2172,6 +2177,7 @@ async function tamperedChainTest() {
   console.log("Blockchain valid after tampering?", myChain.isChainValid());
 }
 ```
+#pagebreak()
 - Re-mining an already mined block. Expected: chain not valid
 ```ts
 async function reMiningTest() {
@@ -2234,6 +2240,7 @@ if (this.mined) throw new Error("Block has already been mined!");
 ```
 After these are added, the test successfully threw an error which states that the Block has already been mined. \
 \
+#pagebreak()
 Therefore, the blockchain simulator can now:
 - prevent tampering of blocks
 - prevent remining of blocks
@@ -2446,7 +2453,7 @@ Attributes:
 - blockchain: Blockchain -- The local copy of the blockchain
 - neighbours: Node[] -- This includes the users that the new user is connected to in the network
 Method:
-- addNeighbour(node: Node) -- connecting a user in the network to the new user
+- `addNeighbour(node: Node)` -- connecting a user in the network to the new user
 
 The implementation of neighbours store the connected nodes in an array. This is good as it looks like the adjacency list in Iteration 1. This allows me to propagate the local copy of blockchain across the whole network with the DFS/BFS algorithms that I have made in Iteration 1.
 === Design for Node Tests
@@ -2948,7 +2955,7 @@ As mentioned in Analysis section, the simulator is incapable to deal with forked
 Therefore, I will have to redesign the entire simulator to add a global state of the blockchain, which is not in the scope of the simulator, as I have mentioned that this will be ignored in the Analysis section due to abstracting the complexity of blockchain networks. For really passionate learners, I will introduce that a fork chain might happen in real life blockchain networks, including how they work and how consensus algorithms can be used to solve this problem in a descriptive box as a usability feature when developing a GUI.
 
 === Robustness Test
-To test the robustness of the code, I have asked my stakeholders to try crashing my CLI by smashing my keyboard and adding unexpected inputs. This can help me to potentially spot some missing validations in the code. William and James have tried to add in different inputs to try crash it, but my code still manages to work perfectly and output the expected outputs.\
+To test the robustness of the code, I have asked my stakeholders to try crashing my CLI by smashing my keyboard and adding unexpected inputs (penetration testing). This can help me to potentially spot some missing validations in the code. William and James have tried to add in different inputs to try crash it, but my code still manages to work perfectly and output the expected outputs.\
 \
 However, Jeremy has successfully 'crashed' the CLI by adding an extremely long username input. The terminal stops working and he wasn't able to exit the program. Therefore, in the future, except from the input data type, I will also have to validate the length of the input data.\
 \
@@ -3648,7 +3655,7 @@ The ```ts   let addUserBtn = document.getElementById("addUserBtn")!;``` can then
 \
 This process is repeated throughout the functions made in this iterations so that they can be submitted with the enter key. \
 ==== Testing for robustness
-In this iteration, again, I invited my stakeholders to try crashing my code. \
+In this iteration, again, I invited my stakeholders to try crashing my code (penetration testing). \
 - Jeremy: again tried to enter really long usernames, however, this got patched after the evaluation from the next iteration. After trying that, he has no idea how to break my website, fulfilling SC3.4.\
 - Ben: Tried to do Cross Site Scripting attack. However, this has failed as I have specified from every type of my input. This helps blocking weird syntax, including a script tag.\
 - William and James: Attempted to break my simulator, but didn't manage to do it.\
@@ -3663,10 +3670,7 @@ However, this Iteration is missing some 'cool stuff', for example, the balances 
 
 #pagebreak()
 == Iteration 5
-// TODO: before unload
-In Iteration 5, I will be focusing on the visualisation of the network propagation and the mining processes. This is because in Iteration 4, I have successfully created a GUI for my blockchain simulator. However, the mining and network propagation processes has not been developed and visualised. Therefore, in this iteration, I will animate these two processes to help my stakeholders understand how blockchain works in a more intuitive way.\
-
-To consider the mining process, I will also be thinking about the difficulty of the network. This is because to
+In Iteration 5, I will be focusing on the visualisation of the network propagation and the mining processes. This is because in Iteration 4, I have successfully created a GUI for my blockchain simulator. However, the mining and network propagation processes has not been developed and visualised. Therefore, in this iteration, I will animate these two processes to help my stakeholders understand how blockchain works in a more intuitive way.\ 
 === Goal 
 Iteration 5 has two simple goals:
 - Visualising the mining process
@@ -4335,7 +4339,7 @@ Another main unmet criteria is about storing blockchains. I can refactor my code
 \
 Another main unmet criteria is about spamming requests, although me and my stakeholders tested rapid spamming requests and none of us have successfully caused any issues. There might be someone with quicker speed in doing these. Therefore, to prevent this, I can make an algorithm to track how often requests are being made and stop them in making too many requests in a short period of time. 
 === Robustness Test
-In later on iterations, I tried to break my own code by inputting invalid data into the input boxes and different unexpected inputs. I have also invited my stakeholders to try break the simulator while trying it out. This can help be raise possible unexpected inputs values so that I can fix them as soon as possible. For example, when Jeremy tried to break my simulator by adding users with very long usernames, my simulator crashed. This is quickly fixed and when he tried it again in Iteration 4, he did not succeed to break my simulator. I have tested that the blockchain simulator works on every chromium based browsers mentioned in the Analysis section.
+In later on iterations, I tried to break my own code by inputting invalid data into the input boxes and different unexpected inputs. I have also invited my stakeholders to try break the simulator while trying it out (penetration testing). This can help be raise possible unexpected inputs values so that I can fix them as soon as possible. For example, when Jeremy tried to break my simulator by adding users with very long usernames, my simulator crashed. This is quickly fixed and when he tried it again in Iteration 4, he did not succeed to break my simulator. I have tested that the blockchain simulator works on every chromium based browsers mentioned in the Analysis section.
 === Maintenance
 Currently, my teacher Mr Gordon is hosting the website on https://ivan-nea.2024.compsci.me/. All the code has been pushed to a repository on GitHub and the webpage changes automatically when I push the code to the repository within a few seconds. Therefore, if Mr Gordon stops hosting the website, me or other developers with the repository will be able to host it on a different web server. This makes sure that the simulator is sustainable and can be used by future learners.\
 #pagebreak()
@@ -4347,7 +4351,7 @@ I have adapted modular coding throughout the whole project, for example, the BFS
 I have only done the mining speed test on my two computers, however this might not be representative of all the computers that my stakeholders are using. Therefore, the mining speed might vary on different computers with different hardware specifications. But in general, with an average computer, the mining speed should be around the same as my test results.\
 \
 - Import/Export JSON
-Another limitation is that I left my stakeholder James idea of exporting and importing the state of the network with JSON files as he suggested in Iteration 3. This is because to implement this feature, instead of strings that my simulator is currently outputting, I will have to refactor a lot of the code to make the classes take in JSON files. This was not ideal since I should be focusing on developing the GUI in Iteration 4 and 5. Therefore, I can consider adding this feature in future maintenance.\
+Another unmet usability feature is that I left my stakeholder James idea of exporting and importing the state of the network with JSON files as he suggested in Iteration 3. This is because to implement this feature, instead of strings that my simulator is currently outputting, I will have to refactor a lot of the code to make the classes take in JSON files. This was not ideal since I should be focusing on developing the GUI in Iteration 4 and 5. Therefore, I can consider adding this feature in future maintenance.\
 \
 - Dynamic difficulty level
 In real life blockchain, the network difficulty cannot be adjusted by users, but instead dynamically by the system. When less people are mining, the difficulty will decrease and vice versa.\
@@ -4355,7 +4359,7 @@ In real life blockchain, the network difficulty cannot be adjusted by users, but
 - Blockchain forks
 It real life blockchain networks, it is quite often to see more than one blockchain within a network. This is beacuse there might be two miners mining a different block at the same time causing collisions. Although my simulator decides based on the longest chain, which is what the majority blockchain network do, it is not sufficient for a more advanced blockchain network as they will have other algorithms to decide which chain is the correct one.
 \
-- No further guidance
+- No further guidance (unmet usability feature)
 For passionate learners that want to learn more about blockchain, I will not have the features for them as my simulator might not be 100% accurate in real world. They will have to find other resources or to read articles as some of the concepts are not fully explained, for example how the users are connected together by transactions, etc.\
 \
 - Software Limitation
@@ -4385,7 +4389,7 @@ Develop server side code for validation. However, this might cause security issu
 The decomposition method is used throughout the whole project from breaking down the blockchain technologies from the start, to breaking down the iterations into smaller tasks. This helps me to manage my time and resources effectively, as I can focus on one task at a time and complete it before moving on to the next task. It also helps me to identify any potential issues or challenges that may arise during the development process, allowing me to address them early on. I can also test each component individually before integrating them into the larger system, ensuring that each part functions correctly and meets the project requirements. Thinking ahead was also a key part in this as I was thinking of how each module can be reused in the future. Thinking parallel also helped a lot in Iteration 1 while developing web workers working together to find a suitable nonce.
 #pagebreak()
 == What went well (WWW)
-Overall, I am quite satisfied with this project, especially with the fact that it helped my stakeholders to understand blockchain technologies and solving the main problem. I believe that passionate learners and teacher could use this as a great tool to demonstrate how blockchain works and how they can be adapted into the world with other technologies. It also provides a robust and quite good user experience which would encourage students to be staying longer on the website.
+Overall, I am quite satisfied with this project, especially with the fact that it helped my stakeholders to understand blockchain technologies and solving the main problem. I believe that passionate learners and teacher could use this as a great tool to demonstrate how blockchain works and how they can be adapted into the world with other technologies. It also provides a robust and quite good user experience which would encourage students to be staying longer on the website. The solution has met the majority of my success criterias. I have learnt a lot, not only about blockchain technologies, but also different TypeScript syntaxes such as Promise and resolve.
 == Even Better If (EBI)
 I wish that my simulator has more features and detailed explanation of what actually is happening inside each algorithm. However, I would like to do this in an interactive way to interest the students and hoping that they can get something out of it. Some coding challenges could be made to passionate learners so that they can also understand deep in code, how it would look like. A database can be used in the future as well to maintain a sustainable network. To enhance user experience, I could also make a fully keyboard mode, so that user doesn't have to move their mouse around while adding a large network by clicking on nodes to connect them, making it more convenient.
 
@@ -4445,6 +4449,9 @@ File `network/balances.test.ts`:
 
 File `network/network.ts`:
 #raw(read("../code/network/network.ts"), lang: "ts", block: true)
+
+File `network/network.test.ts`:
+#raw(read("../code/network/network.test.ts"), lang: "ts", block: true)
 
 File `pow/hash.ts`:
 #raw(read("../code/pow/hash.ts"), lang: "ts", block: true)
