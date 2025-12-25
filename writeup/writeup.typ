@@ -774,7 +774,7 @@ Breadth First Search is an algorithm to traverse an undirected graph. A BFS algo
 ==== Design of algorithm: BFS
 The idea of layers in BFS refers to how nodes are explored based on their distance from the starting node. The first layer contains the starting node itself, the second layer includes all nodes directly connected to it, and each subsequent layer contains nodes that are one step further away. This structure means BFS explores the graph moving outward one layer at a time. Each node is therefore assigned to a specific layer according to how many edges it takes to reach it from the start.
 
-I will use a queue data structure in my BFS algorithm to keep track of nodes to be explored. The algorithm begins by enqueuing the starting node and marking it as visited. It then enters a loop where it dequeues a node and enqueues all its unvisited neighbours, marking them as visited. This process continues until the queue is empty, meaning all reachable nodes have been visited. To store the data, I will use an adjacency list — a data structure used to store a collection of unordered lists which is used to represent a finite graph.
+I will use a queue data structure in my BFS algorithm to keep track of nodes to be explored. The algorithm begins by enqueuing the starting node and marking it as visited. It then enters a loop where it dequeues a node and enqueues all its unvisited neighbours, marking them as visited. This process continues until the queue is empty, meaning all reachable nodes have been visited. To store the data, I will use an adjacency list -- a data structure used to store a collection of unordered lists which is used to represent a finite graph.
 
 ==== Unit Test for BFS
 For the unit test, I am making a new file `bfs.test.ts` and testing it using Bun. This allows me to test individual functions from the `bfs.ts` file by importing them into the test file.\ \
@@ -1164,7 +1164,7 @@ Summarising this article about cyber security from #link("https://www.simplilear
 + Then add 64 bits of data now to make the final plaintet a multiple of 512. The added data is calculated by applying the modulus to the original cleartext
 + The padded message is then divided into 512 bit blocks, each processed through 64 rounds of bitwise operations such as AND, OR, XOR, and right rotations.
 + Each round uses predefined constants and functions to mix and compress the data, progressively transforming it into a unique 256 bit digest.
-+ The final output, known as the message digest, is deterministic — the same input always produces the same hash — but infeasible to reverse or predict.
++ The final output, known as the message digest, is deterministic -- the same input always produces the same hash -- but infeasible to reverse or predict.
 + This structure ensures the avalanche effect, where even a one-bit change in the input drastically alters the output, making SHA-256 ideal for data integrity and blockchain security.
 
 
@@ -1175,7 +1175,7 @@ Iterate over each character in the input string:
 - Set hash = 0
 - Multiply the current hash by 67; 67 is a prime number, chosen because multiplying by a prime reduces collisions and spreads the effect of each character across the final hash value.
 - Add the character's ASCII code, ensuring each character uniquely influences the hash.
-- Mask with 0xffffffff to keep the result within 32 bits, simulating integer overflow; 0xffffffff—which in binary is 32 ones—keeps only the lowest 32 bits of a number, ensuring the hash behaves like a real 32-bit hash, remains fixed-size, deterministic, and avoids large-number rounding errors in TypeScript.
+- Mask with 0xffffffff to keep the result within 32 bits, simulating integer overflow; 0xffffffff--which in binary is 32 ones--keeps only the lowest 32 bits of a number, ensuring the hash behaves like a real 32-bit hash, remains fixed-size, deterministic, and avoids large-number rounding errors in TypeScript.
 - Convert the 32-bit integer to hexadecimal, producing a fixed-length string representation suitable for comparing against the difficulty target in the PoW simulation.
 - Limitation of simplication: As the result is constrained to 32 bits, this can lead to collisions (different inputs producing the same hash), which is a limitation of this simplified approach.\
 \
@@ -2105,11 +2105,11 @@ On this line:
 ```ts
 console.log(JSON.stringify(myChain.chain, null, 2))
 ```
-The ouptut has to be 'JSONified' since the attribute `myChain.chain` is an array consists of blocks, which contains the methods of `calculateHash()` and `mineBlock()`. Using a `JSONify` doesn't print the functions of the block, increasing the readability of the output. When printed directly, TypeScript doesn't automatically display the full object structure — it just shows `[object Object]`. \
+The ouptut has to be 'JSONified' since the attribute `myChain.chain` is an array consists of blocks, which contains the methods of `calculateHash()` and `mineBlock()`. Using a `JSONify` doesn't print the functions of the block, increasing the readability of the output. When printed directly, TypeScript doesn't automatically display the full object structure -- it just shows `[object Object]`. \
 \
 Using JSON.stringify() #footnote[https://akshaymattoo.medium.com/what-is-null-in-json-stringify-obj-null-2-8282b2e4eee1] converts the object data (its properties and values) into a readable JSON string format that can be shown neatly in the console, making it easier to inspect the entire blockchain state. In `JSON.stringify(myChain.chain, null, 2)`:
 - The first parameter (myChain.chain) is the object or array you want to convert into JSON
-- The second parameter (null) is the replacer, which lets you filter or transform values before converting — null means “include everything as-is.”
+- The second parameter (null) is the replacer, which lets you filter or transform values before converting -- null means “include everything as-is.”
 - The third parameter (2) sets the indentation level, telling the output to use 2 spaces per level for readability.
 2. *Boundary Tests*:
 - Empty mempool to test what would happen when no transaction has to be mined into blocks but user tries to mine a block -- Expected Result: 'No transactions to mine':
@@ -2906,7 +2906,7 @@ After adding this new validation, I reconsidered about the logic of the validati
       return `${from} does not have enough coins.`;
     }
 ```
-This is beacuse `hasFunds()` only checks the sender's confirmed on-chain balance. Before a block is mined, the sender might have already received coins from other users through pending transactions, meaning their actual spendable balance could be higher than what `hasFunds()` sees. Since transactions are only applied during block mining, `hasFunds()` ends up checking the wrong state — it looks at the balance right after the previous block was mined, not the balance that reflects the current pending activity.
+This is beacuse `hasFunds()` only checks the sender's confirmed on-chain balance. Before a block is mined, the sender might have already received coins from other users through pending transactions, meaning their actual spendable balance could be higher than what `hasFunds()` sees. Since transactions are only applied during block mining, `hasFunds()` ends up checking the wrong state -- it looks at the balance right after the previous block was mined, not the balance that reflects the current pending activity.
 
 === Enhancing Features
 After the manual testing, I decided to add a few more features to simulate the blockchain network more realistically. In real world blockchain networks, miners are given rewards for mining new blocks. For example, in Bitcoin, miners are rewarded with newly created bitcoins and transaction fees for successfully mining a block. This gives miners an incentive to participate in the mining process and helps to secure the network.\
