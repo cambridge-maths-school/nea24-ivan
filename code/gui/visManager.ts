@@ -2,7 +2,7 @@ export let visNetwork: any;
 export let nodes: any;
 export let edges: any;
 export let selectedUser: string | null = null;
-
+selectedUser = "A";
 export function initVisNetwork(containerId: string) {
   // @ts-ignore
   nodes = new vis.DataSet([]);

@@ -123,10 +123,6 @@ export class Network {
     if (!startNode) return [];
 
     let latestBlock = startNode.blockchain.getLatestBlock();
-    let targetPrefix = "0".repeat(startNode.blockchain.difficulty);
-
-    // Block must be mined before propagation
-    if (!latestBlock.hash.startsWith(targetPrefix)) return [];
 
     // Build adjacency list
     let adjacencyList: Record<string, string[]> = {};

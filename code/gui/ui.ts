@@ -34,6 +34,10 @@ export function initUI() {
     e.preventDefault();
     let username = usernameInput.value.trim();
     if (!username) return;
+    if (username.length > 100) {
+      alert("Username too long");
+      return;
+    }
     if (Vis.nodes.getIds().includes(username)) {
       alert("That username already exists.");
       return;
@@ -74,6 +78,7 @@ export function initUI() {
     let from = txFrom.value.trim();
     let to = txTo.value.trim();
     let amount = parseInt(txAmount.value);
+    if (to === from) return alert("You cannot do transactions with yourself");
     if (amount < 0) return alert("Amount has to be positive");
     if (!from || !to || !amount) return alert("Fill all fields");
     alert(Backend.sendTransaction(from, to, amount));
@@ -182,9 +187,9 @@ export function initUI() {
 
   propagateDFSBtn.onclick = () => {
     if (!Vis.selectedUser) return alert("Select a node first!");
-
+    console.log("clicked");
     let result = Backend.propagate(Vis.selectedUser, "dfs");
-
+    console.log(result);
     if (typeof result === "string") {
       alert(result);
       return;
@@ -225,4 +230,18 @@ export function initUI() {
     Backend.setDifficulty(newDifficulty);
     difficultyValue.textContent = newDifficulty.toString();
   };
+
+  // Vis.addNode("A", "A");
+  // Backend.addUser("A");
+  // (async () => {
+  //   Backend.setDifficulty(1);
+  //   Vis.visNetwork.selectNodes(["A"]);
+
+  //   for (let i = 0; i < 100; i++) {
+  //     mineBtn.click();
+  //     await new Promise((r) => setTimeout(r, 10)); // let async mining finish
+  //   }
+
+  //   console.log("Mined 100 empty blocks");
+  // })();
 }
