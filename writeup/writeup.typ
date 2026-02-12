@@ -358,9 +358,9 @@ Another blockchain simulator #footnote[https://andersbrownworth.com/blockchain/]
 #figure(image("images/ander-hash.png"), caption: [Anders Brownworth's Simulator Hashing Process])
 This image shows the hashing process of Anders' simulator. It shows you that the block can take in any data, then the hash will automatically be recalculated. The hash is shown to be a fixed length of 64 hexadecmial characters, which is an accurate representation of SHA-256 hash. The avalanche effect is also shown here as changing one character will drastically change the hash output.
 #subpar.grid(
-  figure(image("images/ander-beforeMine.png"), caption:[Block with data before mining]), <a>,
-  figure(image("images/ander-afterMine.png"), caption:[Block with data after mining]), <b>,
-  
+  figure(image("images/ander-beforeMine.png"), caption: [Block with data before mining]), <a>,
+  figure(image("images/ander-afterMine.png"), caption: [Block with data after mining]), <b>,
+
   columns: (1fr, 1fr),
   label: <normal-test>,
 )
@@ -369,11 +369,14 @@ This clearly shows blockchain as ledgers where transactions could be recorded in
 Moreover, the mining here takes less than 1 second to complete, which is probably not actually using SHA-256 to hash the block but maybe a simpler hashing algorithm as mining a block with SHA-256 hash function will take a long time and a lot of processing power, usually requiring mining rigs with multiple high end GPUs. \
 #figure(image("images/anders-blockchain.png"), caption: [Anders' simulator blockchain page])
 The simulator also shows that blockchains are made by blocks being connected together using the previous hash attribute. This is an accurate representation of blockchain. However, there is no concept of mempool where transactions are stored before being mined into a block. Also you are able to change the data in a block that is already mined, and invalidate the block and the following blocks. This is not an accurate representation of blockchain as once a block is mined and added to the blockchain, it is immutable and cannot be changed. \
-#figure(image("images/anders-peers.png", width:60%), caption:[Anders' Simulator showing peers having different copies of blockchains])
+#figure(
+  image("images/anders-peers.png", width: 60%),
+  caption: [Anders' Simulator showing peers having different copies of blockchains],
+)
 The distributed page is just the same as the blockchain page but with multiple users in the network. Each user has their own copy of the blockchain. However, the simulator didn't show any process of propagating the blockchain through the network or how users in the network are connected at all. Instead I have to manually copy the blockchain data from one user to another user, which might not give me the same hash, nonce, and previous hash as the orignal blockchain. Therefore, this is a very inaccurate representation of blockchain network.
-#figure(image("images/anders-tokens.png", width:50%),caption:[Anders' Simulator Tokens page])
+#figure(image("images/anders-tokens.png", width: 50%), caption: [Anders' Simulator Tokens page])
 The tokens page provides a more structured data input, as it provides a template for user to input who is sending tokens to who and how many tokens are being sent. This is a good representation of transactions. However, this is just a repetition of the block page but with a more structured data input. This makes the block page being quite useless as the tokens page provides a better understanding for learners anyways.
-#figure(image("images/anders-coinbase.png", width:50%), caption:[Ander's Simulator Coinbase page])
+#figure(image("images/anders-coinbase.png", width: 50%), caption: [Ander's Simulator Coinbase page])
 Again, the coinbase page is just a repetition of the peers page which contains multiple blockchains which takes in the same data structure as the tokens page. Therefore, this makes the peers page being quite useless as the coinbase page provides a better understanding for learners as they know what goes into the data a block.\
 
 Limitations:
@@ -393,7 +396,7 @@ In this BlockChain Simulator project, I will build a simplified model of blockch
 
 The final project will be running on a browser and has a Graphical User Interface (GUI). The project will be developed in HTML, CSS, and TypeScript with web workers. This allows the nonce to be rendered faster and also better simulate how blockchains are being mined as this is usually being done by a crypto mining rig - a customised personal computer that uses multicore CPU/GPU to solve cryptographic equations and verify transactions on a blockchain.\
 \
-Features:
+Features/Rules:
 1. Core Blockchain Mechanics
 - Block structure \u{27F6} index, timestamp, list of transactions, previous hash, nonce, and current hash, implemented by Object Oriented Programming (OOP)
 - Hashing algorithm \u{27F6} a simplified SHA-256 function
@@ -420,11 +423,11 @@ Features:
 - No forked chains (always extend the longest chain)
 - Assume honest nodes (no attackers)
 
-Controls (buttons):
+Controls (buttons for inputs):
 - "Add Transaction" \u{27F6} enter sender, receiver, amount
 - "Mine Block" \u{27F6} mines transactions into a block
 - "Propagate Transaction" \u{27F6} spreads it across nodes
-- Network view \u{27F6} graph of nodes (circles), with edges showing connections
+- Network view \u{27F6} graph of nodes (circles), with edges showing connections (Output)
 
 Limitations:
 - This is a simplified model of the blockchain, which means that I will abstract the idea of blockchain and ignore a few details. For example, there will not be a handler for colliding blocks (forks) in the blockchain. This is because handling forks requires more complex consensus algorithms and network communication, which is beyond the scope of this project. Instead, I will assume that all nodes are honest and always extend the longest chain. Besides, I will also assume that there will be no attackers in the network, so I will not be implementing any security measures against malicious nodes. This is because implementing security measures would require more complex cryptographic techniques and network protocols, which are beyond the scope of this project.
@@ -576,7 +579,7 @@ Therefore, I aim to create a blockchain simulator that simplifies the blockchain
 // 12. visualisation for the blocks to be linked, represent links between nodes
 
 // James Charles Bouttell -- A level Computer Science student
-// 1. Not at all
+// 1. Not at all  
 // 2. no
 // 3. how the blocks link together
 // 4. how its mined
@@ -753,7 +756,7 @@ These are the initial Success Criteria (SC) which is what I am aiming for while 
   $ 4.6 $,
   [The simulator should be able to run on Bun without using any framework],
   [Bun allows fast development and testing of TypeScript code. Not using any framework reduces complexity and increases maintainability],
-  [Try to run the simulator on Bun and check for any errors]
+  [Try to run the simulator on Bun and check for any errors],
 )
 = Iterations
 == Iteration 1
@@ -2972,7 +2975,7 @@ if (username.length > 100) {
 in the `network.addUser()` function. This also helps me to fulfill my SC2.2 about data validation regarding the length of input.\
 \
 Ben tried to crash my code by code injection #footnote[https://en.wikipedia.org/wiki/Code_injection]. This is a type of attack where an attacker tries to inject malicious code into a program to alter its behaviour. Ben tried to see if this will work and simply made an anonymous function to print `hello world` when adding a new user:
-#figure(image("images/xss.png", width:61%), caption: [code injection attempt by Ben])
+#figure(image("images/xss.png", width: 61%), caption: [code injection attempt by Ben])
 However, this failed since my code treats the input as a string, therefore the code just took the first part of the injection as the username and ignored the rest.\
 \
 In a webpage, which my GUI will be, this kind of attack can become cross-site scripting (XSS) #footnote[https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/XSS]. This means to inject malicious scripts into webpages viewed by other users. However this can be prevented by my simulator since my end product will not have any server side code or shared state, therefore there is no way for an attacker to inject malicious code into my simulator and affect other learners. Additionally, user input is not dynamically evaluated or executed, which further prevents such attacks.\
@@ -3015,7 +3018,10 @@ At 2:18, when I try to propagate the blockchain from user 'B', the CLI did not p
 I have traversed the first block using bfs and the second block using dfs. This shows that both traversal algorithms are working as expected and can propagate the blockchain correctly through the network. Notice that the network that I have set up is actually the same one from Iteration 1 when I developed and tested the bfs and dfs algorithms. This shows that the traversal algorithms are working correctly within the context of the blockchain simulator.\
 \
 To increase usability, I have included clear error messages when invalid inputs are provided. For example, if a user tries to add a transaction with a sender that doesn't exist in the network, the CLI will display an error message indicating that the sender is not found. This helps users understand what went wrong while running the code and know how to fix it.\
-#figure(image("images/no_sender.png", width:70%), caption: [Error message when adding a transaction with a non-existing sender and receiver])
+#figure(
+  image("images/no_sender.png", width: 70%),
+  caption: [Error message when adding a transaction with a non-existing sender and receiver],
+)
 === Evaluation
 Overall, this iteration is quite successful. I have created a CLI linking everything that I have done so far, and adding features like checking balances of each users in the network. All the goals in this Iteration has been met, and the CLI is working as expected. The data validation is quite robust, and the code is able to handle unexpected inputs without crashing.\
 \
@@ -3035,7 +3041,7 @@ Since I am using a library to create the GUI, I will have to modify the requirem
 === Goals
 The goals for Iteration 4 are as follows:
 - Research into vis.js and its features
-- Design a GUI layout 
+- Design a GUI layout
 - Implementing the GUI using vis.js
 === Decomposing Iteration 4
 In Iteration 4, I decomposed the iteration by their files based on their functionalities:
@@ -3065,7 +3071,7 @@ The graphs in the simulator are undirected graphs. This is because in a blockcha
 #pagebreak()
 === HTML and CSS
 The HTML and CSS files #footnote[HTML and CSS code can be found in Appendix at the end of this document] are fairly straightforward to write. This is the interface that I have built:\
-#figure(image("images/GUI.png"),caption:[GUI layout]) <gui>
+#figure(image("images/GUI.png"), caption: [GUI layout]) <gui>
 The GUI contains a graph on the left side, which shows the users/nodes in the network. On the right side, there is a sidebar which contains the details of the node/network on the top, and user actions on the bottom. In the future, when ui.ts is developed, when a user clicks on a node in the graph, the details of that node will be shown on the top of the sidebar instead of the network details, and the network details will be shown when no node is selected.\
 \
 Currently, the GUI doesn't react to any input yet, as this will be handled in the ui.ts file, which has not been developed yet. However, the layout of the GUI is complete and ready for the next step of development. It also doesn't have a graph as the visManager.ts file has not been implemented yet.\
@@ -3109,7 +3115,7 @@ initUI();
 The 'network' is the id of the div element in the HTML file where the graph will be renedered. The `initVisNetwork()` function from visManager.ts will create the vis.js network and render it in the div element. The `initUI()` function from ui.ts will setup all the input/output elements in the GUI using the functions from backend.ts and visManager.ts.
 === Design and Development of visManager.ts
 The visManager has to handle all the visual stuff on the graph. This includes:
-- adding nodes 
+- adding nodes
 - adding edges
 - highlighting nodes
 - 'unhighlighting' nodes
@@ -3167,8 +3173,8 @@ setTimeout(() => {
 ```
 With a basic index.html#footnote[HTML file can be found in Appendix at the end of this document] importing the vis.js library, I am able to then create an initial graph with 3 nodes, then adding 2 nodes with edges connected to A and C in 2 seconds after the initial graph. This shows that I will be able to add nodes and edges to the graph after creation, which is what I needed as I will be adding new users into the blockchain network.
 #subpar.grid(
-figure(image("images/three-nodes.png", width:60%), caption:[Initial graph]), <a>,
-figure(image("images/5-nodes.png", width:100%), caption:[Dynamic Test]), <b>,
+  figure(image("images/three-nodes.png", width: 60%), caption: [Initial graph]), <a>,
+  figure(image("images/5-nodes.png", width: 100%), caption: [Dynamic Test]), <b>,
   columns: (1fr, 1fr),
   label: <normal-test>,
 )
@@ -3180,7 +3186,7 @@ With physics enabled, the nodes will repel each other and the edges will act lik
 #figure(image("images/physics.png"), caption: [Graph with physics enabled])
 Now that I have tried out vis.js, I can start designing visManager.ts. Since the visManager's purpose is to display graph, it should not have any output and all functions are procedures.
 ===== initVisNetwork(containerId: string)
-This will be the main function as it was the one imported into app.ts. It is used to setup the properties of the graph and the appearance of nodes and edges. It will take in the HTML div to render the graph. The only logic part of this function is to selecting/deselecting node by highlighting/'unhighlighting' them. Node selection is managed using a shared state variable (selectedUser) which stores the currently selected node ID. This state is used to ensure that only one node is highlighted at a time. 
+This will be the main function as it was the one imported into app.ts. It is used to setup the properties of the graph and the appearance of nodes and edges. It will take in the HTML div to render the graph. The only logic part of this function is to selecting/deselecting node by highlighting/'unhighlighting' them. Node selection is managed using a shared state variable (selectedUser) which stores the currently selected node ID. This state is used to ensure that only one node is highlighted at a time.
 #pagebreak()
 Algorithm (pseudocode) Design for selecting/deselecting node:
 - on click:
@@ -3269,7 +3275,7 @@ export function highlightNode(id: string) {
 ```
 ===== resetNodeColor(id: string)
 Set the colour of node back to default colours:
-```ts 
+```ts
 export function resetNodeColor(id: string) {
   nodes.update({ id, color: { background: "#0077ff", border: "#fff" } });
 }
@@ -3277,7 +3283,7 @@ export function resetNodeColor(id: string) {
 === visManager.ts testing
 After development, I did some manual testing by adding a few nodes by adding addNodes and addEdges within the `initVisNetwork()` function and set it as the base graph for now, so that I am able to see the nodes on the graph on the GUI.
 
-===== Normal Test 
+===== Normal Test
 For normal testing, I made a very simple linear graph and connected them:
 ```ts
   addNode("A", "A");
@@ -3286,8 +3292,8 @@ For normal testing, I made a very simple linear graph and connected them:
   addNode("C", "C");
   addEdge("B", "C");
 ```
-#figure(image("images/gui-basic.png"), caption:[visManager normal test])
-With this, I also tested the highlight feature, which when I click on C, the node has highlighted with yellow border. When I click on the side of the graph or other nodes in the graph, the yellow border turns back into a white border, which is as expected. 
+#figure(image("images/gui-basic.png"), caption: [visManager normal test])
+With this, I also tested the highlight feature, which when I click on C, the node has highlighted with yellow border. When I click on the side of the graph or other nodes in the graph, the yellow border turns back into a white border, which is as expected.
 
 ===== Boundary Test
 For boundary test, I have decided to try if self loop or two same nodes connecting with two different edges, which worked as expected:
@@ -3302,7 +3308,7 @@ For boundary test, I have decided to try if self loop or two same nodes connecti
   addEdge("D", "B");
   addEdge("C", "C");
 ```
-#figure(image("images/gui-boundary.png", width:70%), caption:[Boundary test for visManager])
+#figure(image("images/gui-boundary.png", width: 70%), caption: [Boundary test for visManager])
 To test more extreme cases with a larger network which I didn't do in Iteration 3, I added 1000 nodes into the network with a for loop (with the original boundary test being there):
 ```ts
   for (let i = 0; i < 1000; i++) {
@@ -3312,16 +3318,16 @@ To test more extreme cases with a larger network which I didn't do in Iteration 
     addEdge(i.toString(), (i + 1).toString());
   }
 ```
-#figure(image("images/1000nodes.png"), caption:[Adding 1000 nodes])
+#figure(image("images/1000nodes.png"), caption: [Adding 1000 nodes])
 This is the zoomed out interface. When it is zoomed in, each nodes and edges remain as clear as the ones with the normal graph:
-#figure(image("images/1000nodes-zoom.png"), caption:[Zoomed in graph with 1000 nodes])
+#figure(image("images/1000nodes-zoom.png"), caption: [Zoomed in graph with 1000 nodes])
 To test if the edges can still be used to connect the graph, I added another for loop to connect part of them:
 ```ts
   for (let i = 0; i < 900; i++) {
     addEdge(i.toString(), (i + 1).toString());
   }
 ```
-#figure(image("images/1000-connected.png"), caption:[1000 nodes partly connected])
+#figure(image("images/1000-connected.png"), caption: [1000 nodes partly connected])
 I have only connected 900 nodes in the for loop, leaving the other 100 nodes on the side floating around. This is as expected and the visManager has passed every tests.
 === Design and Development of backend.ts
 The purpose of backend.ts is to connect the functions from network.ts into the GUI. Therefore, this is easy to build as all I have to do is to setup a new network class in this file and add the features from the CLI. \
@@ -3362,12 +3368,12 @@ In this ui.ts file, I will
 - adding users when the add user button is clicked
 - connect two existing users when connect button is clicked with two users input
 - make a transaction when send transaction button is clicked with a from, to, and value input
-- update sidebar 
+- update sidebar
   - update balance div to global balance when no nodes are selected
   - update balance div to selected user's balance when a node is selected
   - update blockchain div to 'Select a node to see its blockchain' when no nodes are selected
   - update blockchain div to selected user's local copy of blockchain when a node is selected
-  - update mempool when transactions are made 
+  - update mempool when transactions are made
 
 ==== Connect HTML elements
 To connect elements, it is easy to do, since I will just have to declare lots of variable from the HTML using document.getElementById or document.querySelector for each element I need to interact with, such as buttons, input fields, and display divs, so that I can attach event listeners and update the UI dynamically based on user actions and backend data.\
@@ -3408,45 +3414,45 @@ When a user has been selected (selected GUI ; see @GUI-selected):
 - update blockchain div to selected user's local copy of blockchain when a node is selected
 - update mempool
 A lot of the functions at the CLI phase development returns a string message stating the network state, e.g., global mempool. This is due to the change of normal functions to pure functions in Iteration 3. This will be very ideal as I can just put that text into the div sections, with a little modification.\
-\ 
+\
 To update the sidebar, I will have to do an infinite loop that starts when the webpage loads. This ensures the dynamic update as the simulator is running. Therefore I will have to do a `setInterval` to run the `updateSidebar` function. In the updateSidebar function, I will firstly have to consider the output of the functions from network.ts, then put them into HTML friendly style strings.\
 \
 Looking back at network.ts:
 - Balances
   - The print balances functions ```ts return "=== Balances ===\n" + this.balances.printBalances(username);```, where username is optional. This allows the same function to be reused to display either all users' balances (when no username is provided) or a specific user's balance (when a username is given). If there are no users in the network, it returns "No users in network". As a result, the balance-handling logic is already encapsulated within the backend, meaning the UI does not need to duplicate this logic.
   - pseudocode ```
-if (!selectedUser) {
-  balancesDiv = "Global Balances" + Backend.backend.showBalances()
-} else {
-  balancesDiv = `${selectedUser}'s Balance` + Backend.backend.showBalances(selectedUser)
-}
-```
- - The selected username is displayed in the Balances div so that learners can clearly see which user they are currently interacting with. 
- - In `Backend.backend.showBalances()`, the first 'Backend' refers to the imported module from backend.ts, while the second 'backend' refers to the exported singleton instance of the blockchain network created within that module.\
- - Another thing to note that is an example of output from Backend.backend.showBalances is```
-=== Balances ===
-A: 100
-B: 100
-```
- - This will not work in the GUI since the HTML will not be able to read the newline character and instead will have all the users on one line. I can use a very simple regex to deal with this situation `/\n/g` which checks if there are any new lines in the output, and I can use replace() to \<br> which is the standard format for HTML for a new line.
+    if (!selectedUser) {
+      balancesDiv = "Global Balances" + Backend.backend.showBalances()
+    } else {
+      balancesDiv = `${selectedUser}'s Balance` + Backend.backend.showBalances(selectedUser)
+    }
+    ```
+  - The selected username is displayed in the Balances div so that learners can clearly see which user they are currently interacting with.
+  - In `Backend.backend.showBalances()`, the first 'Backend' refers to the imported module from backend.ts, while the second 'backend' refers to the exported singleton instance of the blockchain network created within that module.\
+  - Another thing to note that is an example of output from Backend.backend.showBalances is```
+    === Balances ===
+    A: 100
+    B: 100
+    ```
+  - This will not work in the GUI since the HTML will not be able to read the newline character and instead will have all the users on one line. I can use a very simple regex to deal with this situation `/\n/g` which checks if there are any new lines in the output, and I can use replace() to \<br> which is the standard format for HTML for a new line.
 - Blockchain
   - In network.ts, the showChain(username) function must take in a username, which makes sense. Therefore I am going to give a default warning string if no username is being input. Pseudocode```
-  if (!selectedUser) {
-  blockchainDiv = "Select a node to see its blockchain"
-} else {
-  blockchainDiv = Backend.backend.showChain(selectedUser)
-}
-  ```
+      if (!selectedUser) {
+      blockchainDiv = "Select a node to see its blockchain"
+    } else {
+      blockchainDiv = Backend.backend.showChain(selectedUser)
+    }
+    ```
   - In network.ts, the showChain(username) function returns a string in the form of ```
-===== A's Blockchain =====
+    ===== A's Blockchain =====
 
-Index: 0, Hash: 36a6625a, Nonce: 0
-Transactions: Genesis Block
+    Index: 0, Hash: 36a6625a, Nonce: 0
+    Transactions: Genesis Block
 
-Index: 1, Hash: 00c912ee, Nonce: 2490000
-Transactions: A pays B 21 coins
-...
-```
+    Index: 1, Hash: 00c912ee, Nonce: 2490000
+    Transactions: A pays B 21 coins
+    ...
+    ```
     Therefore, again I will have to use the same regex `/\n/g` to replace the new lines into \<br>s.
 - mempool
   - The mempool should update no matter whether a node is selected
@@ -3482,29 +3488,31 @@ Before developing the code for siderbar, I have made a two tests to try checking
   Vis.addEdge("A", "B");
 ```
 Another test is a boundary test where I create more nodes:
-```ts 
+```ts
   for (let i = 0; i < 100; i++) {
     Vis.addNode(i.toString(), i.toString());
   }
 ```
 After development, I tried it out. The user A successfully rendered on the graph. However, when I select node A, it didn't work. Instead a runtime error is returned:
-#figure(image("images/A_not_found.png", width:38%))
+#figure(image("images/A_not_found.png", width: 38%))
 This is weird. It says that user A is not found when I clearly declared and visually showing on the screen. However, I came to realise that although the node is being created, it is not being added to the network class, therefore balances aren't being tracked. This can be done by ```ts
 Backend.addUser("A")
 ```
 Therefore this is just a mistake in the test code. After adding this line, both the normal test and the boundary test has passed perfectly. This is a good spot of mistake as I will also need to consider adding user to the network to track their balances and process other actions.
 #subpar.grid(
-  figure(image("images/default_gui.png"), caption:[Balances and Blockchain div updates in default GUI]), <a>,
-  figure(image("images/selected_GUI.png", width: 93%), caption:[Balances and Blockchain div updates in selected GUI]), <b>,
+  figure(image("images/default_gui.png"), caption: [Balances and Blockchain div updates in default GUI]), <a>,
+  figure(image("images/selected_GUI.png", width: 93%), caption: [Balances and Blockchain div updates in selected GUI]),
+  <b>,
+
   columns: (1fr, 1fr),
   label: <gui-balances>,
 )
 The left figure shows that the balance div becomes global and the blockchain div becomes the default reminder string. The right figure shows that the balance div becomes the balance of the selected node and the blockchain becomes the local copy of blockchain of the selected node.
-#figure(image("images/multiplenodes.png", width: 50%), caption:[Larger network])
+#figure(image("images/multiplenodes.png", width: 50%), caption: [Larger network])
 With a larger network, the balances and blockchain divs work the same way. I can scroll down on the global balance div to see all user's balances. it is easier to click on a specific user on the graph to check for specific user's balance.\
 \
 However, since there isn't a function dealing with transaction yet, I am not able to test if the tranasactions are being dealt properly and mempool is being updated. This will be tested further when the transaction feature has been added to the simulator
-=== Adding users 
+=== Adding users
 Aim: From the HTML, take the new user's username and add it to the graph, and tracking its balance.
 To achieve this, I will need an event handler that deal with `addUserBtn` when its clicked.\
 \
@@ -3553,11 +3561,11 @@ in the pseudocode. This is because I want the new user to be attached to a user 
 I have done more data validations here with exiting if there isn't a username, trimming the username to prevent whitespaces on sides to make long usernames, and resetting the input text box at the end for better usability experience. The alert is to show the action performed.
 ==== addUser test
 This test will be manually inputting new usernames into the username input box. Then clicking the add user button to add them onto the graph. The check is visual. This is a basic graph I created using this feature:
-#figure(image("images/addUser.png"), caption:[Adding users to the GUI])
+#figure(image("images/addUser.png"), caption: [Adding users to the GUI])
 This shows that the add user feature has been successfully developed.\
 \
 However, while manual testing, I found out that if I add two users with the same username, the website crashes and gives this simple error:
-#figure(image("images/null_error.png"), caption:[Website crashes when I add two users with exactly the same username])
+#figure(image("images/null_error.png"), caption: [Website crashes when I add two users with exactly the same username])
 To enhance robustness, I have to add a data validation on repeated usernames:
 ```ts
 if (Vis.nodes.getIds().includes(username)) {
@@ -3592,7 +3600,7 @@ connectBtn.onclick = () => {
 I have validated the input data with an alert message if either the connect from or connect to user doesn't exist.
 === Connecting users test
 With this features being added, now I can make graphs more than a tree. I can now make circular graphs. For example, when I was testing by manually creating different graphs, I can now create:
-#figure(image("images/circular.png", width:40%), caption:[Circular graph])
+#figure(image("images/circular.png", width: 40%), caption: [Circular graph])
 A circular graph between A, B and C, with a self loop at C. This has opened infinite possibilities as it can now take in any graphs.
 === Transactions
 To add a transaction within the network:\
@@ -3629,15 +3637,14 @@ sendTxBtn.onclick = () => {
   };
 };
 ```
-The input data, again is being validated by its existence. There will be no type issues since my 'to' and 'from' are only taking in strings whereas my transaction amount is being flagged as an integer in the HTML check, with the TypeScript annotations, there is no way to input other types of data. The existence of user in the graph is being checked within `Backend.sendTransaction()`.  
+The input data, again is being validated by its existence. There will be no type issues since my 'to' and 'from' are only taking in strings whereas my transaction amount is being flagged as an integer in the HTML check, with the TypeScript annotations, there is no way to input other types of data. The existence of user in the graph is being checked within `Backend.sendTransaction()`.
 ==== Transaction testing
-By manually adding transactions into the mempool from the GUI, it shows that the transactions are successful, and that the 
+By manually adding transactions into the mempool from the GUI, it shows that the transactions are successful, and that the
 #subpar.grid(
- figure(image("images/mempool.png", width:100%), caption:[Transactions successfully added to mempool]), <a>,
- figure(image("images/side.png"), caption: [sidebar zoomed in]), <b>,
-   columns: (1fr, 1fr),
-  label: <normal-test>
-
+  figure(image("images/mempool.png", width: 100%), caption: [Transactions successfully added to mempool]), <a>,
+  figure(image("images/side.png"), caption: [sidebar zoomed in]), <b>,
+  columns: (1fr, 1fr),
+  label: <normal-test>,
 )
 With this test, it doesn't only proof that the sendTxBtn work, but also the mempool successfully showing the correct transaction. The balances are also correct as they have not been changed before the mining process. I have also tested with overspending and double spending by sending coins which exceeds the sender's balance, and this got successfully alerted and disallowed. This is all from the check in `Backend.sendTransaction()` from previous Iterations.
 #pagebreak()
@@ -3645,7 +3652,7 @@ With this test, it doesn't only proof that the sendTxBtn work, but also the memp
 ==== Stakeholders' feedback
 I have let all my stakeholders to try out my GUI and give feedbacks.:\
 - Ben, with some prior knowledge of blockchain, says that my GUI accurately represents the users in a network in the real world. He said he has never seen a blockchain simulator which a graph as a GUI, therefore he is looking forward to the animation of mining and propagation which I mentioned to him will be done in Iteration 5.\
-- Jeremy and James said that they really like the tool tip features. This is because they didn't understand blockchain technologies. With the aid of some instructions, they are able to figure out how the simulator works and how this is working in the real world. James mentioned that he likes the fact that everything fits on the screen, therefore there is no need for him to scroll just to see all the features.\ 
+- Jeremy and James said that they really like the tool tip features. This is because they didn't understand blockchain technologies. With the aid of some instructions, they are able to figure out how the simulator works and how this is working in the real world. James mentioned that he likes the fact that everything fits on the screen, therefore there is no need for him to scroll just to see all the features.\
 - William also mentioned that he likes the aesthetic of the graph as he initially requested for a graph in the stakeholders interview in the Analysis section. He mentioned that this is a really good usability feature. However, he said that clicking the add user, connect, and send transaction button is quite inconvenience, especially with setting up large networks. Instead, he would like to hit the enter key and the actions can be performed.\
 - All of them really like the fact that the simulator brings you a step by step hands on experience to introduce blockchain technologies, they mentioned that every features is being used and intuitive with the help of the tool tips. \
 \
@@ -3674,28 +3681,28 @@ However, this Iteration is missing some 'cool stuff', for example, the balances 
 
 #pagebreak()
 == Iteration 5
-In Iteration 5, I will be focusing on the visualisation of the network propagation and the mining processes. This is because in Iteration 4, I have successfully created a GUI for my blockchain simulator. However, the mining and network propagation processes has not been developed and visualised. Therefore, in this iteration, I will animate these two processes to help my stakeholders understand how blockchain works in a more intuitive way.\ 
-=== Goal 
+In Iteration 5, I will be focusing on the visualisation of the network propagation and the mining processes. This is because in Iteration 4, I have successfully created a GUI for my blockchain simulator. However, the mining and network propagation processes has not been developed and visualised. Therefore, in this iteration, I will animate these two processes to help my stakeholders understand how blockchain works in a more intuitive way.\
+=== Goal
 Iteration 5 has two simple goals:
 - Visualising the mining process
-- Visualising the network propagation process 
-=== Decomposing Iteration 5 
-#figure(image("images/I5_decomposition.png", width:80%),caption:[Iteration 5 decomposition])
+- Visualising the network propagation process
+=== Decomposing Iteration 5
+#figure(image("images/I5_decomposition.png", width: 80%), caption: [Iteration 5 decomposition])
 In this Iteration, The two main tasks:
-- Mining 
+- Mining
   - Implement a difficulty slider that can change the difficulty of the network
   - Implement a progress status which visualises the mining in action
 - Propagation
   - Adjust previous code to output the correct data
-  - Animate the propagating process for visualisation 
+  - Animate the propagating process for visualisation
 These two features both require a lot of readjustment from previous iterations and new code.
 === Mining
 The reason that I left mining to Iteration 5 instead of doing it in Iteration 4 is because mining is implemented with more structure than other functions as it represents the point at which the blockchain's global state changes. Transactions are only proposals placed into the mempool and have no effect on balances or consensus until they are included in a block. As a result, they can be created instantly without modelling computation or delay.\
 \
 In contrast, mining is responsible for selecting transactions, linking a new block to the existing chain, and enforcing difficulty. Modelling the nonce search and time delay allows the system to demonstrate why blocks do not appear instantly and why block creation is a costly and competitive process. This makes the distinction between unconfirmed transactions and confirmed blocks explicit, and reflects the role of proof-of-work in regulating block production rather than simply appending blocks on demand.\
 ==== Design for mining
-The idea for my design is very simple. I am going to show the different nonces that are being tried to match the network difficulty for visualisation. 
-#figure(image("images/mining-design.png"),caption:[Mining GUI design])
+The idea for my design is very simple. I am going to show the different nonces that are being tried to match the network difficulty for visualisation.
+#figure(image("images/mining-design.png"), caption: [Mining GUI design])
 These will be in the sidebar under all the features made in the Iteration 4. At the top is the 'Mine Block' button with the tool tip circle next to it explaining how mining features work.\
 \
 At the start of the simulator when nothing is being mined. The section below the button will be empty. When the transactions are added and the block is being mined, the section will update into text to display 'Mining...', along with the nonce currently being tested. Because mining runs across multiple worker threads, the nonce updates extremely quickly internally, but the interface only refreshes at around 60 times per second, so the displayed nonce represents the most recent value rather than every individual attempt.\
@@ -3704,7 +3711,7 @@ When a valid nonce is found and the block is successfully mined, the mining stat
 ==== Difficulty
 To adjust the difficulty in ui.ts, I will have to firstly connect to backend.ts where I process all the backend stuff. This will then be connected to the network.ts where I established the network. The setup for difficulty affecting the number of leading zeros in the target is already implemented from Iteration 2.\
 \
-In ui.ts, I will have to pass the value of difficulty to backend.ts: 
+In ui.ts, I will have to pass the value of difficulty to backend.ts:
 ```ts
   // Difficulty slider
   difficultyValue.textContent = Backend.backend.difficulty.toString();
@@ -3790,14 +3797,14 @@ My initial idea for developing the mining algorithm is to connect the mining fun
     let nonce = latestBlock.nonce;
     return [{ username }, { index }, { hash }, { nonce }];
 ```
-#figure(image("images/mine.png"), caption:[CLI after changing mining output])
+#figure(image("images/mine.png"), caption: [CLI after changing mining output])
 Although this works, it will not display the progress that I have just made. This is because in a CLI, it will be very chaotic to print the nonces in real time and flooding the console.\
 \
 However, I still do want to preserve the functionality of the CLI. Therefore, I will have to redesign the function specifically for the GUI.
 ==== Mining GUI
 To design the mining GUI, I will have to consider what actually happens starting from the frontend button. When I press the button, what do I expect the simulator to do?\
 Algorithm deesign:
-- When the 'Mine' Button is clicked, the algorithm checks if there is anything in the mempool: 
+- When the 'Mine' Button is clicked, the algorithm checks if there is anything in the mempool:
   - If there isn't:
     - return with an error message
   - If there is:
@@ -3809,7 +3816,7 @@ Pseducode design:
 ```
 mineBtn.onClick = () => {
   if (!Vis.selectedUser) return alert("Select a node first!")
-  
+
   mineStatusDiv = 'Mining...'
   try {
     node = Backend.backend.getNode(vis.selectedUser)
@@ -3831,7 +3838,7 @@ mineBtn.onClick = () => {
     transactions = [...mempool]
     baseData = index + previousHash + timeStamp + transactions
     lastNonce = 0
-    result = await startMining( 
+    result = await startMining(
       baseData,
       Backend.backend.difficulty,
       (nonce: number) => {
@@ -3846,9 +3853,9 @@ mineBtn.onClick = () => {
   } catch (err) {
     alert('Mining error' + err)
   }
-  
+
 }
-``` 
+```
 I have added a few validation, including validating if a user is selected for mining, doing a try and catch in case the mining takes too long and causing errors, checking if mempool is empty.\
 \
 Besides, this time, I have included a function called the `finalisMinedBlock()`. This will be developed in the backend which connects to the network.ts so that the block can be added to the user's local copy of blockchain.\
@@ -3918,14 +3925,14 @@ The code for mining in ui.ts is as follows:
     }
   };
 ```
-As usability features, I have added some responses from the ui while a user is chosen to be mining: 
+As usability features, I have added some responses from the ui while a user is chosen to be mining:
 - When a user is chosed to be mining, they will be highlighted.
 - After mining, the user will be reset back to the default colour
 This helps the user to identify which user is currently mining the blockchain.\
 \
 Now I will have to actually add the blockchain into the network by defining the `Backend.finaliseMinedBlock()` in backend.ts. I want to leave all the adding blocks within the network.ts. Therefore, this will serve as a wrapper function which connects to network.ts to get all the output:
 ```ts
-// Finalise a mined block 
+// Finalise a mined block
 export function finaliseMinedBlock(
   username: string,
   nonce: number,
@@ -3948,7 +3955,7 @@ In network.ts, I will then have to process the new data to put them in a block. 
 \
 Algorithm design: \
 This function should
-- Create a new block by using the `new Block()` function and adding all the 
+- Create a new block by using the `new Block()` function and adding all the
 - Apply the transactions so that the transactions in mempool are actually processed
 - Clear the mempool after transactions are being done
 Implementation:
@@ -4002,19 +4009,19 @@ Similar with the CLI, I have kept the miner reward as a more realistic feature. 
 
 === Mining Test
 To test the mining feature in the GUI, I have created a simple network which only contains two nodes, A and B. I made a few example transactions between them and these updated the mempool. Therefore we have transactions in the mempool to mine.
-#figure(image("images/Mining.png"), caption:[Mining in progress])
+#figure(image("images/Mining.png"), caption: [Mining in progress])
 The above image shows that mining is in progress, as shown by the nonce being a changing number. This suggests that the onProgress callback that I have made has successfully connected to the frontend and is able to display the nonce that they are trying.
 
-#figure(image("images/Finish-Mining.png"), caption:[Bloick successfully mined])
+#figure(image("images/Finish-Mining.png"), caption: [Bloick successfully mined])
 When block is successfully mined, the mineStatus div has successfully updated with the details of the block, confirming that the connection from backend to frontend is successful. The blockchain tab for user A (miner) has also been updated with an extra block, showing that it has successfully mined the data using proof of work and added the block with the correct data into the local copy of blockchain. \
 \
-To test the how the difficulty level of the network affect the mining speed, I have tried if the network slider actually affect the mining speed. Firstly, when changing the difficulty, I logged the number of difficulty in the console by adding `console.log(difficulty)`, which has shown properly. 
-#figure(image("images/difficulty_slider.png"), caption:[Difficulty in action])
+To test the how the difficulty level of the network affect the mining speed, I have tried if the network slider actually affect the mining speed. Firstly, when changing the difficulty, I logged the number of difficulty in the console by adding `console.log(difficulty)`, which has shown properly.
+#figure(image("images/difficulty_slider.png"), caption: [Difficulty in action])
 To further test if the difficulty has actually changed the mining speed, I added some other transactions after adjusting the difficulty level to 1 from 2. I used the mine button which the mining time decreased from 3310ms to 20ms (shown in console in above image), which shows the network difficulty in action.\
 \
 Erroneous Test:\
 To test invalid block data, I have tried to mine a block when there is no transactions in the mempool:
-#figure(image("images/no_trans.png"), caption:[Mining with no transactions])
+#figure(image("images/no_trans.png"), caption: [Mining with no transactions])
 The webpage has successfully validate this and gave me an alert message 'No tranasctions to mine'. Therefore all the data validation for mining is done.
 === Propagation
 There is a few reasons that I left propagation in Iteration 5 instead of doing it in Iteration 4. One of the reason is that I need the blocks to be mined into the blockchain before propagating them throughout the network. The other reason is that implementing propagation feature isn't as easy as the others like adding users. This is because in Iteration 3, although the I have already built the propagation for the CLI, it doesn't output the correct data type. Therefore a data change is required.
@@ -4029,11 +4036,11 @@ console.log("Propagation order:", order.join(" -> "));
 ```
 Now the propagation function will work for both CLI and GUI.\
 This is a simple manual test for CLI still working fine:
-#figure(image("images/propagation.png", width:70%), caption:[CLI still working])
+#figure(image("images/propagation.png", width: 70%), caption: [CLI still working])
 
 ==== Animating propagation
 Firstly, with a graph, it is much easier to develop a visualisation tool for propagations. I made a sketch of how I am imagining it to look like:
-#figure(image("images/animation_design.png"), caption:[Propagation animation design])
+#figure(image("images/animation_design.png"), caption: [Propagation animation design])
 This diagram is actually taken from Iteration 1 when I developed the BFS and DFS algorithms.\
 After the propagate button is being clicked, the graph will be traversed by either BFS/DFS depending on the input. For each 0.4 seconds, one node will light up until all nodes have been traversed. 1 second after the graph is traversed, the network will goes back to the original state where nothing is highlighted. This animation design fits the evaluation from Iteration 4 where I mentioned that the simulator is not interactive enough.\
 \
@@ -4139,7 +4146,7 @@ This is the last iteration in this project. I have invited all my stakeholders t
 \
 Meanwhile, Ben is more interested in the mining algorithm where he is very interested in the mining feature as it shows the nonce that the miners are trying in real time, this visualise the proof of work algorithm.\
 \
-In the development in Iteration 5, I realised that I could do transactions with myself. Although this is technically not a bug, as it is not prohibited, it doesn't really make sense to send money to yourself on the same account in a real blockchain network. Therefore, I have added another data validation in the addTransaction function ```ts     if (to === from) return alert("You cannot do transactions with yourself");```. This removes the confusion for learners when they're trying to transact with themselves.  
+In the development in Iteration 5, I realised that I could do transactions with myself. Although this is technically not a bug, as it is not prohibited, it doesn't really make sense to send money to yourself on the same account in a real blockchain network. Therefore, I have added another data validation in the addTransaction function ```ts     if (to === from) return alert("You cannot do transactions with yourself");```. This removes the confusion for learners when they're trying to transact with themselves.
 
 === Robustenss Test
 I have attempted on each feature to click random keys rapidly, try clicking on different spaces of the webpage, but none seems to actually break the webpage. Therefore, again, I invited my stakeholders to try 'hack' me. However, none of the attempts were successful due to the validations of each functions. Therefore, I believe that the blockchain simulator overall is quite robust.
@@ -4161,7 +4168,7 @@ I believe that this simulator could give a beginner some knowledge of how a bloc
 \
 
 To test SC1.3, I have created a spreadsheet and ran the simulator at different difficulty level and finding the mean.
-#figure(image("images/mine-time.png"),caption:[time taken for mining])
+#figure(image("images/mine-time.png"), caption: [time taken for mining])
 The simulator shows a great range of value but increasing mean runtime as the difficulty increases. This means that it has shown that a mining nonce is found randomly, but the average runtime will go up. The mean of the simulator at difficulty level 1 is 1752.5ms, which is less than 5 seconds, satisfying SC1.3. While running these tests, due to their long period of runtime at higher difficulties, I unfocused the tab and the simulator still runs, fulfilling SC 4.3.\
 \
 To test SC4.2, I have coded a loop for mining for 100 times and looked at its storage in the Memory page of the website. This is the code for testing it:
@@ -4179,7 +4186,7 @@ To test SC4.2, I have coded a loop for mining for 100 times and looked at its st
   })();
 ```
 It is an async loop which creates 100 blocks by mining them one by one. I removed the empty validation for mining temporarily to prevent the mining to cause issues.
-#figure(image("images/memory.png", width:50%), caption:[SC4.2 Test])
+#figure(image("images/memory.png", width: 50%), caption: [SC4.2 Test])
 It shows that there is no storage being used. Although this seems odd. However, this is completely normal because I am not storing any blocks in the server, which means if you refresh the page, all the blocks wil be gone. Therefore it will be passing SC4.2.
 == Stakeholder Final Review
 To take feedbacks from users for the final time in this project, I am going to interview each of them to give me comments about the simulator. These are the questions that I am asking them:
@@ -4206,7 +4213,39 @@ I am reviewing which success criterias I have met/unmet and justifying them in t
   inset: 5pt,
   align: horizon,
   fill: (x, y) => {
-    if  (y==13) or (y == 23){red} else if (y == 2 and x == 1) or (y == 1 and x == 1) or (y == 1 and x == 2) or (y == 1 and x == 3) or (y==2) or (y==3) or (y==4) or (y==5) or (y==6) or (y==7) or (x == 1 and y==8) or (x == 2 and y == 8) or (x == 3 and y == 8) or (y==9) or (y==11) or (y==12) or (x == 1 and y==14) or (x == 2 and y ==14) or (x==3 and y == 14) or (y==16) or (y==17) or (y==18) or (y==19) or (x==1 and y==20) or (x==2 and y==20) or (x==3 and y == 20) or (y==21) or (y==22) or (y==24) or (y==25) {green} else if (y==10) or (y == 15){gray} else {white}},
+    if (y == 13) or (y == 23) { red } else if (
+      (y == 2 and x == 1)
+        or (y == 1 and x == 1)
+        or (y == 1 and x == 2)
+        or (y == 1 and x == 3)
+        or (y == 2)
+        or (y == 3)
+        or (y == 4)
+        or (y == 5)
+        or (y == 6)
+        or (y == 7)
+        or (x == 1 and y == 8)
+        or (x == 2 and y == 8)
+        or (x == 3 and y == 8)
+        or (y == 9)
+        or (y == 11)
+        or (y == 12)
+        or (x == 1 and y == 14)
+        or (x == 2 and y == 14)
+        or (x == 3 and y == 14)
+        or (y == 16)
+        or (y == 17)
+        or (y == 18)
+        or (y == 19)
+        or (x == 1 and y == 20)
+        or (x == 2 and y == 20)
+        or (x == 3 and y == 20)
+        or (y == 21)
+        or (y == 22)
+        or (y == 24)
+        or (y == 25)
+    ) { green } else if (y == 10) or (y == 15) { gray } else { white }
+  },
   table.header([*Category*], [*SC*], [*Target*], [*SC Met?*]),
   table.cell(
     rowspan: 7,
@@ -4341,7 +4380,7 @@ A main unmet criteria is about the chain validity, I can develop a feature to sh
 \
 Another main unmet criteria is about storing blockchains. I can refactor my code into inputting and outputting JSON files so that it be saved in the localStorage and used later even after refreshing the page.\
 \
-Another main unmet criteria is about spamming requests, although me and my stakeholders tested rapid spamming requests and none of us have successfully caused any issues. There might be someone with quicker speed in doing these. Therefore, to prevent this, I can make an algorithm to track how often requests are being made and stop them in making too many requests in a short period of time. 
+Another main unmet criteria is about spamming requests, although me and my stakeholders tested rapid spamming requests and none of us have successfully caused any issues. There might be someone with quicker speed in doing these. Therefore, to prevent this, I can make an algorithm to track how often requests are being made and stop them in making too many requests in a short period of time.
 === Robustness Test
 In later on iterations, I tried to break my own code by inputting invalid data into the input boxes and different unexpected inputs. I have also invited my stakeholders to try break the simulator while trying it out (penetration testing). This can help be raise possible unexpected inputs values so that I can fix them as soon as possible. For example, when Jeremy tried to break my simulator by adding users with very long usernames, my simulator crashed. This is quickly fixed and when he tried it again in Iteration 4, he did not succeed to break my simulator. I have tested that the blockchain simulator works on every chromium based browsers mentioned in the Analysis section.
 === Maintenance
@@ -4349,7 +4388,7 @@ Currently, my teacher Mr Gordon is hosting the website on https://ivan-nea.2024.
 #pagebreak()
 The code of every features included in the Blockchain simulator has been commented, stating what the functions do. This is useful for sustainability of my code as other developers or me in the future will still be able to understand what is going on with the code. They will then be able to pick up where I left off and add more features or fix bugs in the code.\
 \
-I have adapted modular coding throughout the whole project, for example, the BFS folder contains the BFS algorithm 
+I have adapted modular coding throughout the whole project, for example, the BFS folder contains the BFS algorithm
 == Limitations
 - Hardware Limitation: Insufficient testing devices
 I have only done the mining speed test on my two computers, however this might not be representative of all the computers that my stakeholders are using. Therefore, the mining speed might vary on different computers with different hardware specifications. But in general, with an average computer, the mining speed should be around the same as my test results.\
@@ -4388,7 +4427,7 @@ I can include links for the learners to articles which explain each algorithms. 
 \
 - Software Limitation
 Develop server side code for validation. However, this might cause security issues if not well maintained and performance issues. Therefore, I believe that it is better to stick with the current solution.\
- \
+\
 === Decomposition
 The decomposition method is used throughout the whole project from breaking down the blockchain technologies from the start, to breaking down the iterations into smaller tasks. This helps me to manage my time and resources effectively, as I can focus on one task at a time and complete it before moving on to the next task. It also helps me to identify any potential issues or challenges that may arise during the development process, allowing me to address them early on. I can also test each component individually before integrating them into the larger system, ensuring that each part functions correctly and meets the project requirements. Thinking ahead was also a key part in this as I was thinking of how each module can be reused in the future. Thinking parallel also helped a lot in Iteration 1 while developing web workers working together to find a suitable nonce.
 #pagebreak()
