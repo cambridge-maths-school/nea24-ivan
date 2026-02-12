@@ -107,7 +107,7 @@
 
 = Analysis <sec:introduction>
 == The Problem <the-problem>
-Blockchain is a rapidly growing technology that powers cryptocurrencies, NFTs, and secure digital record-keeping. Blockchain and Cryptography area mong the most in-demand STEM skills in the post web economy. According to a new report from the UK Parliament, nearly half of engineering and tech businesses are struggling to recruit skilled talent. The shortage for STEM skills are costing the UK economy £1.5 billion per year [#footnote[source: medium (https://britblockchain.medium.com/uk-faces-stem-talent-shortage-as-demand-for-blockchain-skills-surges-says-parliamentary-report-ca626c0f5928)]]. Despite its increasing importance in finance, computing, and data security, not a lot of students in the UK are learning it. In addition, understanding how blockchain works is conceptually challenging for most students, especially with the lack of the resources online. Key concepts such as blockchain being decentralised distributed ledgers, mining, proof of work, hashing, and peer to peer (p2p) networks are often abstract and difficult to visualise. This creates a barrier to learn, especially when students encounter blockchain only through media or cryptocurrency hype, without practical experience. Consequently, there is a need for an educational tool which allows students to interact with. This can help them to visualise blockchain mechanics in a safe, simplified, and engaging way.
+Blockchain is a rapidly growing technology that powers cryptocurrencies, NFTs, and secure digital record-keeping. Blockchain and Cryptography are among the most in-demand STEM skills in the post web economy. According to a new report from the UK Parliament, nearly half of engineering and tech businesses are struggling to recruit skilled talent. The shortage for STEM skills are costing the UK economy £1.5 billion per year [#footnote[source: medium (https://britblockchain.medium.com/uk-faces-stem-talent-shortage-as-demand-for-blockchain-skills-surges-says-parliamentary-report-ca626c0f5928)]]. Despite its increasing importance in finance, computing, and data security, not a lot of students in the UK are learning it. In addition, understanding how blockchain works is conceptually challenging for most students, especially with the lack of the resources online. Key concepts such as blockchain being decentralised distributed ledgers, mining, proof of work, hashing, and peer to peer (p2p) networks are often abstract and difficult to visualise. This creates a barrier to learn, especially when students encounter blockchain only through media or cryptocurrency hype, without practical experience. Consequently, there is a need for an educational tool which allows students to interact with. This can help them to visualise blockchain mechanics in a safe, simplified, and engaging way.
 #pagebreak()
 
 == Research <research>
@@ -436,8 +436,9 @@ This is my initial rough sketch on the graphical user interface (GUI) design of 
   Intial Design for User interface of the blockchain simulator.
 ]) <Initial-GUI-Design>
 
+The usability features of the blockchain simulator includes multi page user interface and interactive visualisation for the simulator. Settings can be changed such as the dark mode to adapt users preferences. The blocks are colour coded so that users can easily identify the network flow.
 === Project Management Methodology
-The solution will be developed in an agile way. This means that it will be developed in different iterations. The analysis of requirements has been done in this section (Section 1).
+The solution will be developed in an agile way. This means that it will be developed in iterations. The analysis of requirements has been done in this section (Section 1).
 In each iterations I will
 - Design the prototype for that iteration
 - Design tests for that prototype
@@ -1028,6 +1029,7 @@ Within the while loop, I also added a check to ensure the current node exists in
 ```
 After applying these fixes, all unit tests passed successfully. The BFS algorithm now correctly handles normal, boundary, and erroneous cases without crashing, demonstrating that it is robust, reliable, and behaves as expected across a wide range of scenarios.
 #figure(image("images/bfs_pass_test.png", width: 100%), caption: [BFS Test Results - All Tests Passed Successfully])
+In future iterations, I can reuse these sets of testing data and set network to test if the BFS algorithm successfully broadcast a blockchain to the whole network. This will be done in Iteration 4 and 5 where the GUI and the visualisation of the simulator is developed.
 #pagebreak()
 === Proof of Concept: DFS
 Depth First Serch is another algorithm to traverse an undirected graph. A DFS algorithm also starts at a selected node (the 'root' node) and explores as far as possible along each branch before backtracking. This means that DFS goes deep into the graph, visiting a node and then recursively visiting one of its unvisited neighbours until it reaches a node with no unvisited neighbours. At this point, the algorithm backtracks to the most recent node that has unvisited neighbours and continues the process until all nodes have been visited.
@@ -2244,6 +2246,8 @@ After these are added, the test successfully threw an error which states that th
 Therefore, the blockchain simulator can now:
 - prevent tampering of blocks
 - prevent remining of blocks
+
+In future iterations, the same test data can be used to test the same features, which includes the reMining test. This will allow me to make sure that the features are still working after I have added more features in the future iterations.
 === Iteration 2 Evaluation
 I have invited one of my stakeholders, Ben, to review my prototype -- blockchain core structure. This is because Ben has some prior knowledge about blockchain technologies and he has also used some blockchain simulators and developed some proof of stake algorithm before. Therefore he would be able to understand what I have been doing and give me some feedback on my work, since there isn't a CLI for this iteration yet. He enjoys seeing the blockchain structures and the mining actually happening in web workers using multiple threads/logical processors in the CPU. This can give a more efficient mining speed. He also says the blockchain core structure has included everything about blockchain that he knows. He believes that with the structure, it gives a very full on introduction to students that have never been exposed to blockchain before.\
 \

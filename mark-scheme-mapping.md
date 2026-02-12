@@ -21,7 +21,7 @@ Please don't forget to watch the videos sir! They are being mentioned in the doc
 - D4: p17, p54, p87, p90, p95, p98, p107, p109, p113, p114, p121, p123, p131
 - D5: #1-5 Identify key variables, class, data types before implementing every algorithms
 - D6: TypeScript types annotations, boundary/invalid tests in #1,2,3,4
-- D7: p125, #3 changing most functions from #2 to output strings, #3 changing addTransaction() from #2 to pass in mempool as parameter, #5 changing startMining() function from #1 to show progress and runtime
+- D7: p33, p69, p125, #3 changing most functions from #2 to output strings, #3 changing addTransaction() from #2 to pass in mempool as parameter, #5 changing startMining() function from #1 to show progress and runtime
 
 # Coding/development - 15 marks
 
