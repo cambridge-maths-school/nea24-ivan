@@ -2,9 +2,7 @@
 
 Both writeup and mark scheme mapping are in the root folder.
 
-Project Proposal:
-
-Blockchain Simulator
+Project Proposal: Blockchain Simulator
 
 Building and running code
 
